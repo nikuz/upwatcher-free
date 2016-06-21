@@ -5,11 +5,14 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity,
   Navigator
 } from 'react-native';
 import * as config from '../config';
 import Feeds from './feeds/code';
 import OverlaysManager from './../views/overlays-manager/code';
+import * as appStateActions from '../actions/state';
+import appStore from '../store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style';
 
@@ -17,7 +20,7 @@ import logo from '../../images/logo.png';
 
 class Main extends React.Component {
   onSettingsClick = () => {
-
+    appStore.dispatch(appStateActions.change('settings'));
   };
   back = () => {
     this.refs.navigator.pop();
@@ -69,7 +72,7 @@ class Main extends React.Component {
         }
       },
       RightButton: (route) => {
-        if (route.id === 'settings') {
+        if (route.id !== 'settings') {
           return (
             <TouchableOpacity style={styles.icon_wrap} onPress={this.onSettingsClick}>
               <Icon name="sliders" style={styles.icon} />
