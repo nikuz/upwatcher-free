@@ -1,18 +1,17 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-var styles = StyleSheet.create({
+export default stylesGenerator({
   container: {
     flex: 1
   },
   gap: {
-    height: device.size(38)
+    height: 38
   },
   foldersContainer: {
     flex: 1,
-    marginTop: device.size(65),
+    marginTop: 65,
     backgroundColor: '#FFF'
   },
   navigator: {
@@ -21,52 +20,51 @@ var styles = StyleSheet.create({
   },
   title: {
     backgroundColor: '#6FDA44',
-    height: device.size(45)
+    height: 45
   },
   title_blank: {
     width: 2000,
-    fontSize: device.fontSize(18),
-    lineHeight: device.fontSize(32)
+    fontSize: 18,
+    lineHeight: 32
   },
   title_plain: {
-    fontSize: device.fontSize(18),
+    fontSize: 18,
     color: '#4c4b4d',
     textAlign: 'center',
     fontWeight: 'bold',
-    lineHeight: device.fontSize(34)
+    lineHeight: 34
   },
   title_item: {
     position: 'absolute',
     left: 0,
     right: 0,
-    top: device.size(6),
-    fontSize: device.fontSize(18),
+    top: 6,
+    fontSize: 18,
     color: '#4c4b4d',
     textAlign: 'center',
     fontWeight: 'bold',
-    lineHeight: device.fontSize(27)
+    lineHeight: 27
   },
   title_folder: {
-    top: device.size(-100)
+    top: -100
   },
   title_logo: {
-    lineHeight: device.fontSize(32)
+    lineHeight: 32
   },
   logo: {
-    width: device.size(138),
-    height: device.size(30)
+    width: 138,
+    height: 30
   },
   crumbIconPlaceholder: {
     flex: 1,
-    height: device.size(145),
-    paddingTop: device.size(10),
-    paddingRight: device.size(10),
-    paddingLeft: device.size(10)
+    height: 145,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingLeft: 10
   },
   crumbIcon: {
-    fontSize: device.fontSize(26),
+    fontSize: 26,
     color: '#FFF'
   }
 });
 
-export default styles;

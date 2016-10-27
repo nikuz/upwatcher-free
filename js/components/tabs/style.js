@@ -1,13 +1,12 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   tabs: {
-    height: device.size(50),
-    paddingLeft: device.size(20),
-    paddingRight: device.size(20),
+    height: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: 'row',
     backgroundColor: '#eee',
     borderTopWidth: 1,
@@ -16,18 +15,18 @@ const styles = StyleSheet.create({
   tab_item: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: device.size(7)
+    paddingTop: 7
   },
   tab_cont: {
     alignItems: 'center'
   },
   icon: {
-    fontSize: device.fontSize(22),
+    fontSize: 22,
     marginBottom: 2,
     color: '#585759'
   },
   name: {
-    fontSize: device.fontSize(11),
+    fontSize: 11,
     color: '#585759'
   },
   tab_active_color: {
@@ -48,5 +47,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   }
 });
-
-export default styles;

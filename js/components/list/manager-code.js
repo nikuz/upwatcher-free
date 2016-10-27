@@ -12,7 +12,7 @@ import * as device from '../../modules/device';
 import styles from './style';
 
 const positionOnScreen = 0,
-  hiddenPositionOnScreen = device.size(-40),
+  hiddenPositionOnScreen = -40,
   animationDuration = 300;
 
 class ListManager extends React.Component {

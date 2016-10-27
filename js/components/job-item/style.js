@@ -1,12 +1,11 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   wrap: {
     flex: 1,
-    marginTop: device.size(65),
+    marginTop: 65,
     backgroundColor: '#FFF'
   },
   menu: {
@@ -16,37 +15,37 @@ const styles = StyleSheet.create({
     right: 0
   },
   cont: {
-    marginTop: device.size(39),
-    paddingTop: device.size(10),
-    paddingBottom: device.size(10),
-    paddingLeft: device.size(13),
-    paddingRight: device.size(13),
+    marginTop: 39,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 13,
+    paddingRight: 13,
     flex: 1
   },
   title: {
-    fontSize: device.fontSize(18),
+    fontSize: 18,
     color: '#494949'
   },
   column: {
     flexDirection: 'row',
-    paddingTop: device.size(10),
-    paddingBottom: device.size(20)
+    paddingTop: 10,
+    paddingBottom: 20
   },
   column_item: {
     flex: 1
   },
   column_title: {
-    marginBottom: device.size(3)
+    marginBottom: 3
   },
   separator_wrap: {
-    marginTop: device.size(15),
-    marginBottom: device.size(15),
-    marginLeft: device.size(-13),
-    marginRight: device.size(-13),
-    paddingTop: device.size(10),
-    paddingBottom: device.size(10),
-    paddingLeft: device.size(13),
-    paddingRight: device.size(13),
+    marginTop: 15,
+    marginBottom: 15,
+    marginLeft: -13,
+    marginRight: -13,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 13,
+    paddingRight: 13,
     borderTopWidth: 1,
     borderTopColor: '#EDEDED',
     borderBottomWidth: 1,
@@ -54,18 +53,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9'
   },
   separator: {
-    fontSize: device.fontSize(15)
+    fontSize: 15
   },
   margin: {
-    marginTop: device.size(5),
-    marginBottom: device.size(5)
+    marginTop: 5,
+    marginBottom: 5
   },
   big: {
-    fontSize: device.fontSize(17),
-    lineHeight: device.fontSize(20)
+    fontSize: 17,
+    lineHeight: 20
   },
   small: {
-    fontSize: device.fontSize(11)
+    fontSize: 11
   },
   bold: {
     fontWeight: 'bold'
@@ -80,38 +79,38 @@ const styles = StyleSheet.create({
   description: {
     borderTopWidth: 1,
     borderTopColor: '#EDEDED',
-    marginLeft: device.size(-13),
-    marginRight: device.size(-13),
-    paddingTop: device.size(15),
-    paddingLeft: device.size(13),
-    paddingRight: device.size(13),
-    paddingBottom: device.size(10)
+    marginLeft: -13,
+    marginRight: -13,
+    paddingTop: 15,
+    paddingLeft: 13,
+    paddingRight: 13,
+    paddingBottom: 10
   },
   description_text: {
-    fontSize: device.fontSize(14),
-    lineHeight: device.fontSize(20)
+    fontSize: 14,
+    lineHeight: 20
   },
   apply: {
-    marginTop: device.size(10),
-    marginBottom: device.size(10),
-    paddingTop: device.size(12),
-    paddingBottom: device.size(12),
-    borderRadius: device.size(3),
+    marginTop: 10,
+    marginBottom: 10,
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderRadius: 3,
     backgroundColor: '#5bbc2e',
     alignItems: 'center'
   },
   apply_text: {
     color: '#FFF',
     fontWeight: '500',
-    fontSize: device.fontSize(18)
+    fontSize: 18
   },
   attachment: {
     alignSelf: 'flex-start',
-    marginTop: device.size(10),
-    marginBottom: device.size(10)
+    marginTop: 10,
+    marginBottom: 10
   },
   attachment_icon: {
-    fontSize: device.fontSize(15)
+    fontSize: 15
   },
   feedback: {
     backgroundColor: '#e9e9e9'
@@ -120,31 +119,29 @@ const styles = StyleSheet.create({
     color: '#222'
   },
   edur: {
-    paddingTop: device.size(10)
+    paddingTop: 10
   },
   edur_title: {
     color: '#919191',
-    fontSize: device.fontSize(11)
+    fontSize: 11
   },
   feedback_wrap: {
     flex: 1,
-    paddingTop: device.size(10),
-    paddingBottom: device.size(10),
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: '#FFF'
   },
   feedback_item: {
     borderBottomWidth: 1,
     borderBottomColor: '#EDEDED',
-    paddingTop: device.size(16),
-    paddingBottom: device.size(16),
-    paddingLeft: device.size(13),
-    paddingRight: device.size(13),
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 13,
+    paddingRight: 13,
     flexDirection: 'row'
   },
   fi_cont: {
     flex: 1,
-    paddingRight: device.size(20)
+    paddingRight: 20
   }
 });
-
-export default styles;

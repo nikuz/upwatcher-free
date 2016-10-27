@@ -1,32 +1,29 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   wrap: {
-    marginTop: device.size(65),
+    marginTop: 65,
     backgroundColor: '#FFF'
   },
   item: {
     borderBottomWidth: 1,
     borderBottomColor: '#d4d4d4',
-    paddingTop: device.size(10),
-    paddingBottom: device.size(10),
-    paddingLeft: device.size(13),
-    paddingRight: device.size(13)
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 13,
+    paddingRight: 13
   },
   item_disabled: {
     opacity: .4
   },
   item_title: {
-    fontSize: device.fontSize(18),
-    marginBottom: device.size(3)
+    fontSize: 18,
+    marginBottom: 3
   },
   item_value: {
-    fontSize: device.fontSize(14),
+    fontSize: 14,
     color: '#999'
   }
 });
-
-export default styles;

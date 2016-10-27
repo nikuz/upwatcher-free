@@ -1,12 +1,11 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../../modules/device';
+import stylesGenerator from '../../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   overlay: {
     flex: 1,
-    padding: device.size(8),
+    padding: 8,
     paddingBottom: 0,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
@@ -15,46 +14,44 @@ const styles = StyleSheet.create({
     flex: 1
   },
   overlay_title: {
-    marginBottom: device.size(10),
-    fontSize: device.fontSize(18),
+    marginBottom: 10,
+    fontSize: 18,
     color: '#FFF',
     textAlign: 'center'
   },
   select: {
     backgroundColor: '#FFF',
-    borderRadius: device.size(6)
+    borderRadius: 6
   },
   buttons: {
     flexDirection: 'row'
   },
   btn: {
     flex: 1,
-    height: device.size(46),
+    height: 46,
     backgroundColor: '#FFF',
     borderColor: '#FFF',
     borderWidth: 1,
-    borderRadius: device.size(6),
-    paddingTop: device.size(5),
-    paddingBottom: device.size(5),
-    marginTop: device.size(10),
-    marginBottom: device.size(10),
+    borderRadius: 6,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
   btn_cancel: {
-    marginLeft: device.size(5)
+    marginLeft: 5
   },
   btn_save: {
-    marginRight: device.size(5)
+    marginRight: 5
   },
   btn_text: {
     color: '#999',
     alignSelf: 'center',
-    fontSize: device.fontSize(22)
+    fontSize: 22
   },
   btn_text_save: {
     color: '#5CA838'
   }
 });
-
-export default styles;

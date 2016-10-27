@@ -1,25 +1,24 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   wrap: {
     flex: 1
   },
   navigator: {
-    paddingTop: device.size(30),
-    paddingBottom: device.size(10),
+    paddingTop: 30,
+    paddingBottom: 10,
     flexDirection: 'row',
     backgroundColor: '#6FDA44'
   },
   navigator_icon_wrap: {
-    width: device.size(50),
-    paddingRight: device.size(10),
-    paddingLeft: device.size(10)
+    width: 50,
+    paddingRight: 10,
+    paddingLeft: 10
   },
   navigator_icon: {
-    fontSize: device.fontSize(26),
+    fontSize: 26,
     color: '#FFF'
   },
   navigator_icon_close: {
@@ -30,16 +29,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   navigator_title_text: {
-    fontSize: device.fontSize(18),
+    fontSize: 18,
     color: '#4c4b4d',
     textAlign: 'center',
     fontWeight: 'bold',
-    lineHeight: device.fontSize(26)
+    lineHeight: 26
   },
   cont: {
     flex: 1,
     backgroundColor: '#FFF'
   }
 });
-
-export default styles;

@@ -1,14 +1,11 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   container: {
     flex: 1,
-    // marginTop: device.size(65),
+    // marginTop: 65,
     backgroundColor: '#FFF'
   }
 });
-
-export default styles;

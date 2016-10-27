@@ -1,21 +1,20 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../../modules/device';
+import stylesGenerator from '../../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   search: {
     position: 'absolute',
     left: 0,
     right: 0,
-    height: device.size(39),
+    height: 39,
     backgroundColor: '#FFF'
   },
   searchField: {
-    height: device.size(38),
-    paddingRight: device.size(50),
-    paddingLeft: device.size(10),
-    fontSize: device.size(15)
+    height: 38,
+    paddingRight: 50,
+    paddingLeft: 10,
+    fontSize: 15
   },
   submit_wrap: {
     position: 'absolute',
@@ -23,26 +22,26 @@ const styles = StyleSheet.create({
     top: 0
   },
   submit: {
-    width: device.size(50),
-    height: device.size(38),
-    paddingTop: device.size(8),
-    fontSize: device.fontSize(20),
+    width: 50,
+    height: 38,
+    paddingTop: 8,
+    fontSize: 20,
     color: '#999',
     textAlign: 'center'
   },
   submit_loader: {
     position: 'absolute',
-    right: device.size(16),
-    top: device.size(9)
+    right: 16,
+    top: 9
   },
   cancel: {
     position: 'absolute',
     top: 0,
-    height: device.size(39),
-    paddingTop: device.size(5),
-    paddingBottom: device.size(5),
-    paddingLeft: device.size(10),
-    paddingRight: device.size(10),
+    height: 39,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     borderLeftWidth: 1,
     borderLeftColor: '#CCC',
     backgroundColor: '#f9f9f9',
@@ -52,12 +51,10 @@ const styles = StyleSheet.create({
   cancel_text: {
     color: '#666',
     alignSelf: 'center',
-    fontSize: device.fontSize(15)
+    fontSize: 15
   },
   separator: {
     backgroundColor: '#CCC',
     height: 1
   }
 });
-
-export default styles;

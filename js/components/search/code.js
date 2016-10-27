@@ -19,9 +19,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style';
 
 const positionOnScreen = 0,
-  hiddenPositionOnScreen = device.size(-40),
+  hiddenPositionOnScreen = -40,
   cancelPositionOnScreen = 0,
-  cancelWidth = device.size(80),
+  cancelWidth = 80,
   cancelHiddenPositionOnScreen = -(cancelWidth + 1),
   animationDuration = 300;
 

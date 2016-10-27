@@ -139,13 +139,13 @@ class appNavigator extends React.Component {
       }
       this[activeTitle].setNativeProps({
         style: {
-          top: device.size(6)
+          top: 6
         }
       });
       _.each(_.without(titles, activeTitle), (item) => {
         this[item].setNativeProps({
           style: {
-            top: device.size(-100)
+            top: -100
           }
         });
       });

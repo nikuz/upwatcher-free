@@ -1,45 +1,44 @@
 'use strict';
 
-import {StyleSheet} from 'react-native';
-import * as device from '../modules/device';
+import stylesGenerator from '../../styles/generator';
 
-const styles = StyleSheet.create({
+export default stylesGenerator({
   container: {
     flex: 1
   },
   navigator: {
     flex: 1,
-    paddingTop: device.size(55),
+    paddingTop: 55,
     backgroundColor: '#6FDA44'
   },
   nav_bar: {
-    height: device.size(40)
+    height: 40
   },
   title: {
-    height: device.size(40),
+    height: 40,
     alignItems: 'center'
   },
   title_text: {
-    fontSize: device.fontSize(18),
+    fontSize: 18,
     color: '#4c4b4d',
     fontWeight: 'bold',
-    lineHeight: device.fontSize(34)
+    lineHeight: 34
   },
   logo: {
-    width: device.size(138),
-    height: device.size(30)
+    width: 138,
+    height: 30
   },
   icon_wrap: {
     flex: 1,
-    height: device.size(40),
-    paddingTop: device.size(10),
-    paddingRight: device.size(10),
-    paddingLeft: device.size(10)
+    // borderWidth: 1,
+    // borderColor: '#000',
+    height: 40,
+    paddingTop: 2,
+    paddingRight: 10,
+    paddingLeft: 10
   },
   icon: {
-    fontSize: device.fontSize(26),
+    fontSize: 26,
     color: '#FFF'
   }
 });
-
-export default styles;
