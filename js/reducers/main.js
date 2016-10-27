@@ -5,7 +5,8 @@ import settingsReducers from './settings';
 
 function appReducers(state = {}, action) {
   return {
-    state: appStateReducer(state.state, action)
+    state: appStateReducer(state.state, action),
+    settings: settingsReducers(state.state, action)
   }
 }
 

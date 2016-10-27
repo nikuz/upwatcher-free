@@ -9,7 +9,8 @@ import {
   Navigator
 } from 'react-native';
 import * as config from '../config';
-import Feeds from './feeds/code';
+import Feeds from './feeds/controller';
+import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/code';
 import * as appStateActions from '../actions/state';
 import appStore from '../store';
@@ -19,12 +20,38 @@ import styles from './style';
 import logo from '../../images/logo.png';
 
 class Main extends React.Component {
-  onSettingsClick = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'inbox',
+      prevName: ''
+    };
+    this.stateChangeListener = this.stateChangeListener.bind(this);
+    this.back = this.back.bind(this);
+    this.renderNavBar = this.renderNavBar.bind(this);
+  }
+  stateChangeListener() {
+    var stateName = appStore.getState().state.name;
+    if (stateName !== this.state.name) {
+      this.setState({
+        name: stateName,
+        prevName: this.name
+      });
+      this.refs.navigator.push({
+        title: stateName.substring(0, 1).toUpperCase() + stateName.substring(1, stateName.length),
+        id: stateName
+      });
+    }
+  }
+  onSettingsClick() {
     appStore.dispatch(appStateActions.change('settings'));
-  };
-  back = () => {
+  }
+  back() {
+    this.setState({
+      name: this.prevName
+    });
     this.refs.navigator.pop();
-  };
+  }
   renderScene(route, navigator) {
     var component;
     switch (route.id) {
@@ -40,9 +67,9 @@ class Main extends React.Component {
     }
     return component;
   }
-  renderNavBar = () => {
+  renderNavBar() {
     return {
-      LeftButton: function(route) {
+      LeftButton: (route) => {
         if (route.id !== 'inbox') {
           return (
             <TouchableOpacity style={styles.icon_wrap} onPress={this.back}>
@@ -83,7 +110,11 @@ class Main extends React.Component {
         }
       }
     }
-  };
+  }
+  shouldComponentUpdate = () => false;
+  componentDidMount() {
+    appStore.subscribe(this.stateChangeListener);
+  }
   render() {
     return (
       <View style={styles.container}>

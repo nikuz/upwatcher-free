@@ -5,10 +5,10 @@ import {
   View,
   Text,
   PickerIOS,
-  ActivityIndicatorIOS,
   TouchableHighlight,
   TouchableOpacity,
-  Modal
+  Modal,
+  ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
 import Selector from '../selector/code';
@@ -120,11 +120,7 @@ class List extends React.Component {
       } else if (!values.length) {
         selectorContent = (
           <View style={styles.waiting}>
-            <ActivityIndicatorIOS
-              animating={true}
-              size="large"
-              color="#43AC12"
-            />
+            <ActivityIndicator color="#43AC12" size="large" />
           </View>
         );
       } else if (this.state.opened) {
@@ -181,7 +177,8 @@ class List extends React.Component {
     return (
       <View>
         {disabled ?
-          <View style={commonStyles.item}>{previewCont}</View> :
+          <View style={commonStyles.item}>{previewCont}</View>
+          :
           <TouchableHighlight style={commonStyles.item} onPress={this.openHandler} underlayColor="#EDEDED">
             {previewCont}
           </TouchableHighlight>

@@ -30,8 +30,6 @@ export default stylesGenerator({
   },
   icon_wrap: {
     flex: 1,
-    // borderWidth: 1,
-    // borderColor: '#000',
     height: 40,
     paddingTop: 2,
     paddingRight: 10,

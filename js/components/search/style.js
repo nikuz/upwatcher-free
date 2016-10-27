@@ -1,19 +1,20 @@
 'use strict';
 
+import * as device from '../../modules/device';
 import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
-  search: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 39,
+  container: {
     backgroundColor: '#FFF'
   },
-  searchField: {
-    height: 38,
+  field: {
+    height: device.isAndroid() ? 40 : 35,
+    padding: 0,
     paddingRight: 50,
     paddingLeft: 10,
+    backgroundColor: '#FFF',
+    textAlignVertical: 'center',
+    color: '#333',
     fontSize: 15
   },
   submit_wrap: {
@@ -33,28 +34,5 @@ export default stylesGenerator({
     position: 'absolute',
     right: 16,
     top: 9
-  },
-  cancel: {
-    position: 'absolute',
-    top: 0,
-    height: 39,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderLeftWidth: 1,
-    borderLeftColor: '#CCC',
-    backgroundColor: '#f9f9f9',
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  },
-  cancel_text: {
-    color: '#666',
-    alignSelf: 'center',
-    fontSize: 15
-  },
-  separator: {
-    backgroundColor: '#CCC',
-    height: 1
   }
 });

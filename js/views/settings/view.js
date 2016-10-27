@@ -3,14 +3,13 @@
 import React from 'react';
 import {
   Text,
-  ActivityIndicatorIOS,
   ScrollView
 } from 'react-native';
 import * as _ from 'underscore';
 import * as EventManager from '../../modules/events';
 import * as config from '../../config';
 import * as settings from '../../modules/settings';
-import * as request from '../../modules/request';
+// import * as request from '../../modules/request';
 import * as logs from '../../modules/logs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import List from './list/code';
@@ -20,56 +19,43 @@ import Time from './time/code';
 import styles from './style';
 
 class Settings extends React.Component {
-  state = {
-    data: null
-  };
-  getCategoriesHandler = (callback) => {
-    var cb = callback || _.noop,
-      sData = this.state.data;
-
-    if (!sData.category2.values.length) {
-      this.categoriesRequest = true;
-      request.get({
-        url: config.UPWORK_JOBS_CATEGORIES
-      }, (err, response) => {
-        if (err) {
-          cb(err);
-          logs.captureError(err);
-        } else if (!response) {
-          cb(null, null);
-        } else if (this.categoriesRequest) {
-          this.categoriesRequest = null;
-          var categories = _.pluck(response.categories, 'title');
-          categories.unshift('All');
-          _.each(categories, item => {
-            let category = {};
-            category[item] = item;
-            sData.category2.values.push(category);
-          });
-          settings.set(sData);
-          cb(null, sData.category2.values);
-        }
-      });
-    }
-  };
+  // getCategoriesHandler = (callback) => {
+  //   var cb = callback || _.noop,
+  //     sData = this.state.data;
+  //
+  //   if (!sData.category2.values.length) {
+  //     this.categoriesRequest = true;
+  //     request.get({
+  //       url: config.UPWORK_JOBS_CATEGORIES
+  //     }, (err, response) => {
+  //       if (err) {
+  //         cb(err);
+  //         logs.captureError(err);
+  //       } else if (!response) {
+  //         cb(null, null);
+  //       } else if (this.categoriesRequest) {
+  //         this.categoriesRequest = null;
+  //         var categories = _.pluck(response.categories, 'title');
+  //         categories.unshift('All');
+  //         _.each(categories, item => {
+  //           let category = {};
+  //           category[item] = item;
+  //           sData.category2.values.push(category);
+  //         });
+  //         settings.set(sData);
+  //         cb(null, sData.category2.values);
+  //       }
+  //     });
+  //   }
+  // };
   handlerChange = (values) => {
     values = values || [];
     _.each(values, item => {
       this.state.data[item.name].value = item.value;
     });
   };
-  componentDidMount = () => {
-    settings.get(null, (err, response) => {
-      if (err) {
-        return logs.captureError(err);
-      }
-      this.setState({
-        data: response
-      });
-    });
-  };
   componentWillUnmount = () => {
-    this.categoriesRequest = null;
+    /*this.categoriesRequest = null;
     settings.get(null, (err, cur_settings) => {
       if (err) {
         return logs.captureError(err);
@@ -95,18 +81,11 @@ class Settings extends React.Component {
           needToUpdateCache
         });
       }
-    });
+    });*/
   };
   render() {
-    if (!this.state.data) {
-      return <ActivityIndicatorIOS
-        animating={true}
-        size="large"
-        color="#43AC12"
-      />;
-    }
-
-    var sData = this.state.data;
+    var sData = this.props.settings;
+    console.log(this.props);
     return (
       <ScrollView style={styles.wrap} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <List
@@ -174,5 +153,9 @@ class Settings extends React.Component {
     );
   }
 }
+
+Settings.propTypes = {
+  settings: React.PropTypes.object.isRequired
+};
 
 export default Settings;
