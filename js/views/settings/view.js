@@ -3,7 +3,8 @@
 import React from 'react';
 import {
   Text,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
 import * as EventManager from '../../modules/events';
@@ -49,10 +50,10 @@ class Settings extends React.Component {
   //   }
   // };
   handlerChange = (values) => {
-    values = values || [];
-    _.each(values, item => {
-      this.state.data[item.name].value = item.value;
-    });
+    // values = values || [];
+    // _.each(values, item => {
+    //   this.state.data[item.name].value = item.value;
+    // });
   };
   componentWillUnmount = () => {
     /*this.categoriesRequest = null;
@@ -84,8 +85,11 @@ class Settings extends React.Component {
     });*/
   };
   render() {
+    // if (!this.state.data) {
+    //   return <ActivityIndicator color="#43AC12" size="large" />;
+    // }
+
     var sData = this.props.settings;
-    console.log(this.props);
     return (
       <ScrollView style={styles.wrap} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <List

@@ -5,62 +5,45 @@ import {
   View,
   Text,
   TouchableHighlight,
-  DatePickerIOS
+  DatePickerIOS,
+  DatePickerAndroid
 } from 'react-native';
-import Selector from '../selector/code';
-import * as EventManager from '../../../modules/events';
+import * as device from '../../../modules/device';
 import commonStyles from '../style';
 import styles from './style';
 
 class Time extends React.Component {
-  state = {
-    disabled: this.props.disabled || false,
-    opened: false,
-    activeType: null,
-    from: '',
-    to: '',
-    tempValue: null
-  };
-  static propTypes = {
-    handler: React.PropTypes.func.isRequired,
-    from: React.PropTypes.string.isRequired,
-    to: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    disabled: React.PropTypes.bool.isRequired
-  };
-  getDate = () => {
-    if (this.state.tempValue) {
-      return this.state.tempValue;
-    } else {
-      var type = this.state.activeType,
-        value = this.state[type] || this.props[type],
-        date = new Date();
-
-      value = value.split(':');
-      date = date.setHours(Number(value[0]), Number(value[1]));
-
-      return new Date(date);
-    }
-  };
-  getId = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: this.props.disabled || false,
+      opened: false,
+      activeType: null,
+      from: '',
+      to: ''
+    };
+    this.getId = this.getId.bind(this);
+    this.saveHandler = this.saveHandler.bind(this);
+    this.cancelHandler = this.cancelHandler.bind(this);
+  }
+  getId() {
     var type = this.state.activeType;
     type = type.charAt(0).toUpperCase() + type.slice(1);
     return `${this.props.name}${type}`;
-  };
-  openHandler = (type) => {
+  }
+  openHandler(type) {
     this.setState({
       opened: true,
       activeType: type
     });
-  };
-  changeHandler = (value) => {
+  }
+  cancelHandler() {
     this.setState({
-      tempValue: value
+      opened: false
     });
-  };
-  saveHandler = () => {
-    var date = this.state.tempValue,
-      hour = date.getHours(),
+  }
+  saveHandler(date) {
+    var hour = date.getHours(),
       minutes = date.getMinutes(),
       value;
 
@@ -77,58 +60,24 @@ class Time extends React.Component {
       value: value
     }]);
     var state = {
-      tempValue: null,
       opened: false
     };
     state[this.state.activeType] = value;
     this.setState(state);
-  };
-  cancelHandler = () => {
-    this.setState({
-      tempValue: null,
-      opened: false
-    });
-  };
-  relationCheckHandler = (options) => {
-    var opts = options || {};
-    if (this.props.relations && this.props.relations === opts.relations) {
-      this.setState({
-        disabled: !opts.checked
-      });
-    }
-  };
-  componentDidUpdate() {
-    if (this.state.opened) {
-      let props = this.props,
-        content = (
-          <View style={styles.datepicker_wrap}>
-            <DatePickerIOS
-              mode="time"
-              date={this.getDate()}
-              onDateChange={this.changeHandler}
-            />
-          </View>
-        );
-
-      EventManager.trigger('overlayOpen', {
-        navigator: false,
-        transparent: true,
-        component: <Selector
-          title={`${props.title} (${this.state.activeType})`}
-          content={content}
-          saveHandler={this.saveHandler}
-          cancelHandler={this.cancelHandler}
-        />
-      });
-    } else {
-      EventManager.trigger('overlayClose');
-    }
   }
-  componentDidMount = () => {
-    EventManager.on('stngSwitcherChange', this.relationCheckHandler);
-  };
-  componentWillUnmount = () => {
-    EventManager.off('stngSwitcherChange', this.relationCheckHandler);
+  componentDidUpdate = async () => {
+    if (this.state.opened) {
+      let props = this.props;
+
+      if (device.isAndroid()) {
+        const {action, year, month, day} = await DatePickerAndroid.open({
+          date: new Date(props.date)
+        });
+        if (action !== DatePickerAndroid.dismissedAction) {
+          this.saveHandler(new Date(year, month, day));
+        }
+      }
+    }
   };
   render() {
     var props = this.props,
@@ -149,7 +98,7 @@ class Time extends React.Component {
               <View style={styles.time}>
                 {fromCont}
               </View> :
-              <TouchableHighlight style={styles.time} onPress={this.openHandler.bind(null, 'from')} underlayColor="#EDEDED">
+              <TouchableHighlight style={styles.time} onPress={this.openHandler.bind(this, 'from')} underlayColor="#EDEDED">
                 {fromCont}
               </TouchableHighlight>
             }
@@ -158,7 +107,7 @@ class Time extends React.Component {
               <View style={styles.time}>
                 {toCont}
               </View> :
-              <TouchableHighlight style={styles.time} onPress={this.openHandler.bind(null, 'to')} underlayColor="#EDEDED">
+              <TouchableHighlight style={styles.time} onPress={this.openHandler.bind(this, 'to')} underlayColor="#EDEDED">
                 {toCont}
               </TouchableHighlight>
             }
@@ -168,5 +117,13 @@ class Time extends React.Component {
     );
   }
 }
+
+Time.propTypes = {
+  handler: React.PropTypes.func.isRequired,
+  from: React.PropTypes.string.isRequired,
+  to: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired,
+  disabled: React.PropTypes.bool.isRequired
+};
 
 export default Time;

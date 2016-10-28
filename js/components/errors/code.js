@@ -27,7 +27,7 @@ class Errors extends React.Component {
     return {
       network: false,
       inbox: false
-    }
+    };
   }
   show = (state) => {
     var curRoute = navigatorHelpers.getCurRoute(this.props.navigator);

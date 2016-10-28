@@ -4,7 +4,7 @@ import React from 'react';
 import {
   View,
   Text,
-  PickerIOS,
+  Picker,
   TouchableHighlight,
   TouchableOpacity,
   Modal,
@@ -12,30 +12,31 @@ import {
 } from 'react-native';
 import * as _ from 'underscore';
 import Selector from '../selector/code';
+import * as device from '../../../modules/device';
 import * as EventManager from '../../../modules/events';
 import commonStyles from '../style';
 import styles from './style';
 
 class List extends React.Component {
-  static propTypes = {
-    name: React.PropTypes.string.isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number
-    ]),
-    values: React.PropTypes.array.isRequired,
-    handler: React.PropTypes.func.isRequired,
-    openHandler: React.PropTypes.func
-  };
-  state = {
-    disabled: this.props.disabled || false,
-    opened: false,
-    err: null,
-    values: [],
-    selectedValue: null,
-    tempValue: null
-  };
-  openHandler = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: this.props.disabled || false,
+      opened: false,
+      err: null,
+      values: [],
+      selectedValue: null,
+      tempValue: null
+    };
+    this.openHandler = this.openHandler.bind(this);
+    this.downloadAgainHandler = this.downloadAgainHandler.bind(this);
+    this.pickerGenerator = this.pickerGenerator.bind(this);
+    this.changeHandler = this.changeHandler.bind(this);
+    this.saveHandler = this.saveHandler.bind(this);
+    this.cancelHandler = this.cancelHandler.bind(this);
+    this.relationCheckHandler = this.relationCheckHandler.bind(this);
+  }
+  openHandler() {
     this.setState({
       opened: true
     });
@@ -57,20 +58,46 @@ class List extends React.Component {
         this.setState(state);
       });
     }
-  };
-  downloadAgainHandler = () => {
+  }
+  downloadAgainHandler() {
     this.setState({
       err: null,
       values: []
     });
     this.openHandler();
-  };
-  changeHandler = (value) => {
+  }
+  pickerGenerator() {
+    var props = this.props,
+      value = this.state.selectedValue || props.value;
+
+    return (
+      <Picker
+        selectedValue={this.state.tempValue || value}
+        onValueChange={this.changeHandler}
+        mode="dialog" // Android
+        prompt={props.title} // Android
+      >
+        {props.values.map(item => {
+          var key = _.keys(item)[0],
+            value = _.values(item)[0];
+
+          return (
+            <Picker.Item
+              key={key}
+              value={value}
+              label={value}
+            />
+          );
+        })}
+      </Picker>
+    );
+  }
+  changeHandler(value) {
     this.setState({
       tempValue: value
     });
-  };
-  saveHandler = () => {
+  }
+  saveHandler() {
     var value = this.state.tempValue;
     this.setState({
       selectedValue: value,
@@ -83,26 +110,25 @@ class List extends React.Component {
         value: value
       }]);
     }
-  };
-  cancelHandler = () => {
+  }
+  cancelHandler() {
     this.setState({
       tempValue: null,
       opened: false
     });
-  };
-  relationCheckHandler = (options) => {
+  }
+  relationCheckHandler(options) {
     var opts = options || {};
     if (this.props.relations && this.props.relations === opts.relations) {
       this.setState({
         disabled: !opts.checked
       });
     }
-  };
+  }
   componentDidUpdate() {
     if (this.state.opened) {
       let props = this.props,
         values = props.values,
-        value = this.state.selectedValue || props.value,
         selectorContent;
 
       if (!values.length) {
@@ -124,23 +150,9 @@ class List extends React.Component {
           </View>
         );
       } else if (this.state.opened) {
-        selectorContent = (
-          <PickerIOS selectedValue={this.state.tempValue || value} onValueChange={this.changeHandler}>
-            {values.map(item => {
-              var key = _.keys(item)[0],
-                value = _.values(item)[0];
-
-              return (
-                <PickerIOS.Item
-                  key={key}
-                  value={value}
-                  label={value}
-                />
-              );
-            })}
-          </PickerIOS>
-        );
+        selectorContent = this.pickerGenerator();
       }
+
       EventManager.trigger('overlayOpen', {
         navigator: false,
         transparent: true,
@@ -155,12 +167,12 @@ class List extends React.Component {
       EventManager.trigger('overlayClose');
     }
   }
-  componentDidMount = () => {
+  componentDidMount() {
     EventManager.on('stngSwitcherChange', this.relationCheckHandler);
-  };
-  componentWillUnmount = () => {
+  }
+  componentWillUnmount() {
     EventManager.off('stngSwitcherChange', this.relationCheckHandler);
-  };
+  }
   render() {
     var props = this.props,
       value = this.state.selectedValue || props.value,
@@ -187,5 +199,16 @@ class List extends React.Component {
     );
   }
 }
+
+List.propTypes = {
+  name: React.PropTypes.string.isRequired,
+  value: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]),
+  values: React.PropTypes.array.isRequired,
+  handler: React.PropTypes.func.isRequired,
+  openHandler: React.PropTypes.func
+};
 
 export default List;

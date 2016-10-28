@@ -4,25 +4,20 @@ import React from 'react';
 import {
   View,
   Text,
-  SliderIOS
+  Slider
 } from 'react-native';
-import * as _ from 'underscore';
 import commonStyles from '../style';
 
-class Slider extends React.Component {
-  static propTypes = {
-    handler: React.PropTypes.func.isRequired,
-    values: React.PropTypes.array.isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number
-    ])
-  };
-  state = {
-    value: null,
-    sliderStep: 100
-  };
-  changeHandler = (value) => {
+class SliderEl extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+      sliderStep: 100
+    };
+    this.changeHandler = this.changeHandler.bind(this);
+  }
+  changeHandler(value) {
     this.setState({
       value: value
     });
@@ -47,7 +42,7 @@ class Slider extends React.Component {
       <View style={commonStyles.item}>
         <Text style={commonStyles.item_title}>{this.props.title}</Text>
         {valueStr}
-        <SliderIOS
+        <Slider
           value={value}
           minimumValue={0}
           maximumValue={maxValue}
@@ -61,4 +56,13 @@ class Slider extends React.Component {
   }
 }
 
-export default Slider;
+SliderEl.propTypes = {
+  handler: React.PropTypes.func.isRequired,
+  values: React.PropTypes.array.isRequired,
+  value: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ])
+};
+
+export default SliderEl;

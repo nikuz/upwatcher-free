@@ -21,9 +21,7 @@ function getOrientationName(orientation) {
   return orientation;
 }
 
-Orientation.getOrientation((err, orientation) => {
-  curOrientation = getOrientationName(orientation);
-});
+curOrientation = getOrientationName(Orientation.getInitialOrientation());
 
 Orientation.addOrientationListener(function(orientation) {
   curOrientation = getOrientationName(orientation);

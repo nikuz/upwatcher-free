@@ -4,7 +4,6 @@ import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
   wrap: {
-    marginTop: 65,
     backgroundColor: '#FFF'
   },
   item: {

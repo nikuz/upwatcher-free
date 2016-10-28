@@ -11,16 +11,14 @@ import * as EventManager from '../../../modules/events';
 import styles from './style';
 
 class Switcher extends React.Component {
-  static propTypes = {
-    handler: React.PropTypes.func.isRequired,
-    name: React.PropTypes.string.isRequired,
-    checked: React.PropTypes.bool.isRequired,
-    relations: React.PropTypes.string
-  };
-  state = {
-    checked: null
-  };
-  changeHandler = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: null
+    };
+    this.changeHandler = this.changeHandler.bind(this);
+  }
+  changeHandler() {
     var checked = this.state.checked;
     if (checked === null) {
       checked = !this.props.checked;
@@ -40,7 +38,7 @@ class Switcher extends React.Component {
         checked: checked
       });
     }
-  };
+  }
   render() {
     var checked = this.state.checked !== null ? this.state.checked : this.props.checked;
     return (
@@ -53,5 +51,12 @@ class Switcher extends React.Component {
     );
   }
 }
+
+Switcher.propTypes = {
+  handler: React.PropTypes.func.isRequired,
+  name: React.PropTypes.string.isRequired,
+  checked: React.PropTypes.bool.isRequired,
+  relations: React.PropTypes.string
+};
 
 export default Switcher;

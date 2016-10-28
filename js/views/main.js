@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import * as config from '../config';
 import Feeds from './feeds/controller';
+import JobView from './settings/controller';
 import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/code';
 import * as appStateActions from '../actions/state';
@@ -109,7 +110,7 @@ class Main extends React.Component {
           return null;
         }
       }
-    }
+    };
   }
   shouldComponentUpdate = () => false;
   componentDidMount() {
