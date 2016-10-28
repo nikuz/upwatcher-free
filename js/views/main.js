@@ -3,9 +3,6 @@
 import React from 'react';
 import {
   View,
-  Text,
-  Image,
-  TouchableOpacity,
   Navigator
 } from 'react-native';
 import * as config from '../config';
@@ -13,12 +10,10 @@ import Feeds from './feeds/controller';
 import JobView from './settings/controller';
 import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/code';
+import NavigatorBar from './../components/navigator-bar/code';
 import * as appStateActions from '../actions/state';
 import appStore from '../store';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style';
-
-import logo from '../../images/logo.png';
 
 class Main extends React.Component {
   constructor(props) {
@@ -29,7 +24,6 @@ class Main extends React.Component {
     };
     this.stateChangeListener = this.stateChangeListener.bind(this);
     this.back = this.back.bind(this);
-    this.renderNavBar = this.renderNavBar.bind(this);
   }
   stateChangeListener() {
     var stateName = appStore.getState().state.name;
@@ -40,7 +34,8 @@ class Main extends React.Component {
       });
       this.refs.navigator.push({
         title: stateName.substring(0, 1).toUpperCase() + stateName.substring(1, stateName.length),
-        id: stateName
+        id: stateName,
+        backButton: true
       });
     }
   }
@@ -68,70 +63,26 @@ class Main extends React.Component {
     }
     return component;
   }
-  renderNavBar() {
-    return {
-      LeftButton: (route) => {
-        if (route.id !== 'inbox') {
-          return (
-            <TouchableOpacity style={styles.icon_wrap} onPress={this.back}>
-              <Icon name="arrow-left" style={styles.icon} />
-            </TouchableOpacity>
-          );
-        } else {
-          return null;
-        }
-      },
-      Title: (route) => {
-        if (route.id === 'inbox') {
-          return (
-            <View style={styles.title}>
-              <Image
-                style={styles.logo}
-                source={logo}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <View style={styles.title}>
-              <Text style={styles.title_text}>{route.title}</Text>
-            </View>
-          );
-        }
-      },
-      RightButton: (route) => {
-        if (route.id !== 'settings') {
-          return (
-            <TouchableOpacity style={styles.icon_wrap} onPress={this.onSettingsClick}>
-              <Icon name="sliders" style={styles.icon} />
-            </TouchableOpacity>
-          );
-        } else {
-          return null;
-        }
-      }
-    };
-  }
   shouldComponentUpdate = () => false;
   componentDidMount() {
     appStore.subscribe(this.stateChangeListener);
   }
   render() {
+    var initialRoute = {
+      title: config.APP_NAME,
+      initial: true,
+      type: 'tab',
+      id: 'inbox',
+      onRightButtonClick: this.onSettingsClick
+    };
     return (
       <View style={styles.container}>
         <Navigator
           ref="navigator"
-          initialRoute={{
-            title: config.APP_NAME,
-            type: 'tab',
-            id: 'inbox'
-          }}
+          initialRoute={initialRoute}
           renderScene={this.renderScene}
           navigationBar={
-            <Navigator.NavigationBar
-              routeMapper={this.renderNavBar()}
-              style={styles.nav_bar}
-            />
+            <NavigatorBar route={initialRoute} />
           }
           style={styles.navigator}
         />
