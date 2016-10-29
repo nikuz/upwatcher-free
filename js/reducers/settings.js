@@ -9,18 +9,6 @@ const DEFAULT = {
     search: true
   },
   budgetFrom: {
-    values: [
-      0,
-      100,
-      200,
-      300,
-      500,
-      1000,
-      2000,
-      3000,
-      5000,
-      10000
-    ],
     value: 0,
     search: true
   },

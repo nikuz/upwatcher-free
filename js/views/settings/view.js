@@ -105,7 +105,6 @@ class Settings extends React.Component {
           title="Budget"
           name="budget"
           value={sData.budgetFrom.value}
-          values={sData.budgetFrom.values}
         />
         <List
           handler={this.handlerChange}

@@ -7,13 +7,15 @@ import {
   Slider
 } from 'react-native';
 import commonStyles from '../style';
+import styles from './style';
 
 class SliderEl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: null,
-      sliderStep: 100
+      sliderStep: 100,
+      maxValue: 10000
     };
     this.changeHandler = this.changeHandler.bind(this);
   }
@@ -27,26 +29,21 @@ class SliderEl extends React.Component {
     }]);
   };
   render() {
-    var value = this.state.value || this.props.value,
-      valueStr = '',
-      values = this.props.values,
-      maxValue = Number(values[values.length - 1]);
-
-    if (value !== 10000) {
-      valueStr = <Text style={commonStyles.item_value}>{value} &mdash; 10&thinsp;000+</Text>;
-    } else {
-      valueStr = <Text style={commonStyles.item_value}>10&thinsp;000+</Text>;
-    }
+    var state = this.state,
+      props = this.props,
+      value = state.value || props.value;
 
     return (
-      <View style={commonStyles.item}>
-        <Text style={commonStyles.item_title}>{this.props.title}</Text>
-        {valueStr}
+      <View style={styles.wrapper}>
+        <View style={styles.cont}>
+          <Text style={commonStyles.item_title}>{props.title}</Text>
+          <Text style={commonStyles.item_value}>{value}+</Text>
+        </View>
         <Slider
           value={value}
           minimumValue={0}
-          maximumValue={maxValue}
-          step={this.state.sliderStep}
+          maximumValue={state.maxValue}
+          step={state.sliderStep}
           minimumTrackTintColor="#CCC"
           maximumTrackTintColor="#6fda44"
           onSlidingComplete={this.changeHandler}
@@ -58,11 +55,7 @@ class SliderEl extends React.Component {
 
 SliderEl.propTypes = {
   handler: React.PropTypes.func.isRequired,
-  values: React.PropTypes.array.isRequired,
-  value: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
-  ])
+  value: React.PropTypes.number.isRequired
 };
 
 export default SliderEl;
