@@ -19,7 +19,7 @@ class PickerAndroid extends Component {
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var values = deepClone(props.values);
     _.each(values, function(item) {
-      if (_.keys(item)[0] === props.value) {
+      if (_.keys(item)[0] == props.value) {
         item.current = true;
       }
     });

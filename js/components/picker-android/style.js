@@ -26,6 +26,7 @@ export default stylesGenerator({
     paddingTop: 3
   },
   item_icon: {
-    fontSize: 20
+    fontSize: 20,
+    color: '#009385'
   }
 });

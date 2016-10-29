@@ -4,8 +4,6 @@ import stylesGenerator from '../../../../styles/generator';
 
 export default stylesGenerator({
   wrap: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#d4d4d4',
     padding: 13
   },
   cont: {

@@ -17,7 +17,7 @@ class App extends React.Component {
       <Provider store={AppStore}>
         <View style={{flex: 1}}>
           <StatusBar
-            backgroundColor="#6FDA44"
+            backgroundColor="#67be44"
           />
           <Main />
         </View>

@@ -24,7 +24,7 @@ export default stylesGenerator({
   },
   button: {
     padding: 10,
-    paddingTop: 8
+    paddingTop: 7
   },
   button_icon: {
     fontSize: 26,
@@ -37,6 +37,7 @@ export default stylesGenerator({
   },
   title: {
     padding: 10,
+    paddingTop: 7,
     alignSelf: 'center'
   },
   prev_title: {
