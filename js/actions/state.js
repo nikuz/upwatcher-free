@@ -1,12 +1,20 @@
 'use strict';
 
-function change(state) {
+function push(state) {
   return {
-    type: 'APP_STATE_CHANGE',
+    type: 'APP_STATE_PUSH',
+    state
+  };
+}
+
+function pop(state) {
+  return {
+    type: 'APP_STATE_POP',
     state
   };
 }
 
 export {
-  change
+  push,
+  pop
 };

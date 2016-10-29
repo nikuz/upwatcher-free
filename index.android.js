@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux';
 import AppStore from './js/store';
-import Main from './js/views/main';
+import Main from './js/views/main-controller';
 
 class App extends React.Component {
   render() {

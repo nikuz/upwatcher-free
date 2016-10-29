@@ -9,10 +9,8 @@ import * as config from '../config';
 import Feeds from './feeds/controller';
 import JobView from './settings/controller';
 import Settings from './settings/controller';
-import OverlaysManager from './../views/overlays-manager/code';
+import OverlaysManager from './../views/overlays-manager/controller';
 import NavigatorBar from './../components/navigator-bar/code';
-import * as appStateActions from '../actions/state';
-import appStore from '../store';
 import styles from './style';
 
 class Main extends React.Component {
@@ -22,32 +20,36 @@ class Main extends React.Component {
       name: 'inbox',
       prevName: ''
     };
-    this.stateChangeListener = this.stateChangeListener.bind(this);
+    this.onSettingsClick = this.onSettingsClick.bind(this);
     this.back = this.back.bind(this);
   }
-  stateChangeListener() {
-    var stateName = appStore.getState().state.name;
-    if (stateName !== this.state.name) {
+  onSettingsClick() {
+    this.props.pushState('settings');
+  }
+  back() {
+    this.props.popState(this.state.prevName);
+  }
+  componentWillReceiveProps(nextProps) {
+    var stateName = nextProps.state.name;
+    if (nextProps.state.type === 'push') {
       this.setState({
         name: stateName,
-        prevName: this.name
+        prevName: this.state.name
       });
       this.refs.navigator.push({
         title: stateName.substring(0, 1).toUpperCase() + stateName.substring(1, stateName.length),
         id: stateName,
         backButton: true
       });
+    } else if (nextProps.state.type === 'pop') {
+      this.setState({
+        name: stateName,
+        prevName: null
+      });
+      this.refs.navigator.pop();
     }
   }
-  onSettingsClick() {
-    appStore.dispatch(appStateActions.change('settings'));
-  }
-  back() {
-    this.setState({
-      name: this.prevName
-    });
-    this.refs.navigator.pop();
-  }
+  shouldComponentUpdate = () => false;
   renderScene(route, navigator) {
     var component;
     switch (route.id) {
@@ -62,10 +64,6 @@ class Main extends React.Component {
         break;
     }
     return component;
-  }
-  shouldComponentUpdate = () => false;
-  componentDidMount() {
-    appStore.subscribe(this.stateChangeListener);
   }
   render() {
     var initialRoute = {
@@ -94,5 +92,11 @@ class Main extends React.Component {
     );
   }
 }
+
+Main.propTypes = {
+  state: React.PropTypes.object.isRequired,
+  pushState: React.PropTypes.func.isRequired,
+  popState: React.PropTypes.func.isRequired
+};
 
 export default Main;

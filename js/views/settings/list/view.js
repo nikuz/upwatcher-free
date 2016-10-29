@@ -144,9 +144,9 @@ class List extends React.Component {
     }
   }
   componentDidUpdate() {
+    var props = this.props;
     if (this.state.opened) {
-      let props = this.props,
-        values = props.values,
+      let values = props.values,
         selectorContent;
 
       if (!values.length) {
@@ -171,7 +171,7 @@ class List extends React.Component {
         selectorContent = this.pickerGenerator();
       }
 
-      EventManager.trigger('overlayOpen', {
+      props.overlayOpen({
         navigator: false,
         transparent: true,
         component: <Selector
@@ -182,7 +182,7 @@ class List extends React.Component {
         />
       });
     } else {
-      EventManager.trigger('overlayClose');
+      props.overlayClose();
     }
   }
   componentDidMount() {
@@ -226,7 +226,9 @@ List.propTypes = {
   ]),
   values: React.PropTypes.array.isRequired,
   handler: React.PropTypes.func.isRequired,
-  openHandler: React.PropTypes.func
+  openHandler: React.PropTypes.func,
+  overlayOpen: React.PropTypes.func.isRequired,
+  overlayClose: React.PropTypes.func.isRequired
 };
 
 export default List;

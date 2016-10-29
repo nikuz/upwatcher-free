@@ -8,7 +8,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import * as _ from 'underscore';
-import * as EventManager from '../../modules/events';
 import Orientation from 'react-native-orientation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './style';
@@ -47,18 +46,24 @@ class Overlay extends React.Component {
       this.close(orientation);
     }
   }
+  componentWillReceiveProps(nextProps) {
+    var props = nextProps.overlay;
+    this.setState({
+      visible: props.status === 'open',
+      component: props.component,
+      navigator: props.navigator,
+      transparent: props.transparent,
+      title: props.title
+    });
+  }
   componentDidMount() {
     Orientation.getOrientation((err, orientation) => {
       this.setState({orientation});
     });
     Orientation.addOrientationListener(this.orientationChangedHandler);
-    EventManager.on('overlayOpen', this.openHandler);
-    EventManager.on('overlayClose', this.close);
   }
   componentWillUnmount() {
     Orientation.removeOrientationListener(this.orientationChangedHandler);
-    EventManager.off('overlayOpen', this.openHandler);
-    EventManager.off('overlayClose', this.close);
   }
   render() {
     var state = this.state;
@@ -89,5 +94,9 @@ class Overlay extends React.Component {
     );
   }
 }
+
+Overlay.propTypes = {
+  overlay: React.PropTypes.object.isRequired
+};
 
 export default Overlay;

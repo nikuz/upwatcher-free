@@ -13,7 +13,7 @@ import * as settings from '../../modules/settings';
 // import * as request from '../../modules/request';
 import * as logs from '../../modules/logs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import List from './list/code';
+import List from './list/controller';
 import Switcher from './switcher/code';
 import Slider from './slider/code';
 import Time from './time/code';

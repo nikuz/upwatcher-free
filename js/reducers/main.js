@@ -1,13 +1,14 @@
 'use strict';
 
-import appStateReducer from './state';
-import settingsReducers from './settings';
+import { combineReducers } from 'redux';
+import appState from './state';
+import settings from './settings';
+import overlay from './overlay';
 
-function appReducers(state = {}, action) {
-  return {
-    state: appStateReducer(state.state, action),
-    settings: settingsReducers(state.state, action)
-  };
-}
+const todoApp = combineReducers({
+  state: appState,
+  settings,
+  overlay
+});
 
-export default appReducers;
+export default todoApp;
