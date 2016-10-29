@@ -1,13 +1,13 @@
 'use strict';
 
 import stylesGenerator from '../../../../styles/generator';
+import * as device from '../../../modules/device';
 
 export default stylesGenerator({
   overlay: {
     flex: 1,
     padding: 8,
-    paddingBottom: 0,
-    justifyContent: 'flex-end',
+    paddingBottom: device.isIos() ? 0 : 8,
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   overlay_gap: {

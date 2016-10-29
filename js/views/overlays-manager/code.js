@@ -68,7 +68,7 @@ class Overlay extends React.Component {
         transparent={state.transparent}
         visible={state.visible}
         style={styles.wrap}
-        onRequestClose={() => {}}
+        onRequestClose={this.close}
       >
         {state.navigator ?
           <View style={styles.navigator}>

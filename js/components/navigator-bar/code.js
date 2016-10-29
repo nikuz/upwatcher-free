@@ -44,6 +44,7 @@ class NavigatorBar extends Component {
       this.props.backHandler();
       return true;
     }
+    return false;
   }
   leftButtonRender(route) {
     if (route.backButton) {

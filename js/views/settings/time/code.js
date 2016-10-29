@@ -6,7 +6,7 @@ import {
   Text,
   TouchableHighlight,
   DatePickerIOS,
-  DatePickerAndroid
+  TimePickerAndroid
 } from 'react-native';
 import * as device from '../../../modules/device';
 import commonStyles from '../style';
@@ -67,14 +67,19 @@ class Time extends React.Component {
   }
   componentDidUpdate = async () => {
     if (this.state.opened) {
-      let props = this.props;
+      let props = this.props,
+        state = this.state,
+        value = (state[state.activeType] || props[state.activeType]).split(':');
 
       if (device.isAndroid()) {
-        const {action, year, month, day} = await DatePickerAndroid.open({
-          date: new Date(props.date)
+        const {action, hour, minute} = await TimePickerAndroid.open({
+          hour: parseInt(value[0]),
+          minute: parseInt(value[1]),
+          is24Hour: false
         });
-        if (action !== DatePickerAndroid.dismissedAction) {
-          this.saveHandler(new Date(year, month, day));
+        if (action !== TimePickerAndroid.dismissedAction) {
+          let d = new Date();
+          this.saveHandler(new Date(d.getFullYear(), d.getMonth(), d.getDate(), hour, minute));
         }
       }
     }

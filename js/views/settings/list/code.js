@@ -11,8 +11,9 @@ import {
   ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
-import Selector from '../selector/code';
 import * as device from '../../../modules/device';
+import Selector from '../selector/code';
+import PickerAndroid from '../../../components/picker-android/code';
 import * as EventManager from '../../../modules/events';
 import commonStyles from '../style';
 import styles from './style';
@@ -70,32 +71,49 @@ class List extends React.Component {
     var props = this.props,
       value = this.state.selectedValue || props.value;
 
-    return (
-      <Picker
-        selectedValue={this.state.tempValue || value}
+    if (device.isAndroid()) {
+      return <PickerAndroid
+        values={props.values}
+        value={this.state.tempValue || value}
         onValueChange={this.changeHandler}
-        mode="dialog" // Android
-        prompt={props.title} // Android
-      >
-        {props.values.map(item => {
-          var key = _.keys(item)[0],
-            value = _.values(item)[0];
+      />
+    } else {
+      return (
+        <Picker
+          selectedValue={this.state.tempValue || value}
+          onValueChange={this.changeHandler}
+        >
+          {props.values.map(item => {
+            var key = _.keys(item)[0],
+              value = _.values(item)[0];
 
-          return (
-            <Picker.Item
-              key={key}
-              value={value}
-              label={value}
-            />
-          );
-        })}
-      </Picker>
-    );
+            return (
+              <Picker.Item
+                key={key}
+                value={value}
+                label={value}
+              />
+            );
+          })}
+        </Picker>
+      );
+    }
   }
   changeHandler(value) {
     this.setState({
       tempValue: value
     });
+    if (device.isAndroid()) {
+      this.setState({
+        selectedValue: value,
+        tempValue: null,
+        opened: false
+      });
+      this.props.handler([{
+        name: this.props.name,
+        value: value
+      }]);
+    }
   }
   saveHandler() {
     var value = this.state.tempValue;
