@@ -1,17 +1,20 @@
 'use strict';
 
-export default function overlayReducers(state, action) {
+const DEFAULT = {
+  status: 'close'
+};
+
+export default function overlayReducers(state = DEFAULT, action) {
   switch (action.type) {
     case 'OVERLAY_OPEN':
-      action.props.status = 'open';
-      return Object.assign({}, state, action.props);
+      let newState = Object.assign({}, state, action.props);
+      newState.status = 'open';
+      return newState;
     case 'OVERLAY_CLOSE':
       return {
         status: 'close'
       };
     default:
-      return {
-        status: 'close'
-      };
+      return state;
   }
 };

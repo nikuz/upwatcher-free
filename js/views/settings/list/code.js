@@ -14,7 +14,8 @@ import * as _ from 'underscore';
 import * as device from '../../../modules/device';
 import Selector from '../selector/code';
 import PickerAndroid from '../../../components/picker-android/code';
-import * as EventManager from '../../../modules/events';
+import * as overlayActions from '../../../actions/overlay';
+import appStore from '../../../store';
 import commonStyles from '../style';
 import styles from './style';
 
@@ -144,9 +145,9 @@ class List extends React.Component {
     }
   }
   componentDidUpdate() {
-    var props = this.props;
     if (this.state.opened) {
-      let values = props.values,
+      let props = this.props,
+        values = props.values,
         selectorContent;
 
       if (!values.length) {
@@ -171,7 +172,7 @@ class List extends React.Component {
         selectorContent = this.pickerGenerator();
       }
 
-      props.overlayOpen({
+      appStore.dispatch(overlayActions.open({
         navigator: false,
         transparent: true,
         component: <Selector
@@ -180,16 +181,10 @@ class List extends React.Component {
           saveHandler={this.saveHandler}
           cancelHandler={this.cancelHandler}
         />
-      });
+      }));
     } else {
-      props.overlayClose();
+      appStore.dispatch(overlayActions.close());
     }
-  }
-  componentDidMount() {
-    EventManager.on('stngSwitcherChange', this.relationCheckHandler);
-  }
-  componentWillUnmount() {
-    EventManager.off('stngSwitcherChange', this.relationCheckHandler);
   }
   render() {
     var props = this.props,
@@ -226,9 +221,7 @@ List.propTypes = {
   ]),
   values: React.PropTypes.array.isRequired,
   handler: React.PropTypes.func.isRequired,
-  openHandler: React.PropTypes.func,
-  overlayOpen: React.PropTypes.func.isRequired,
-  overlayClose: React.PropTypes.func.isRequired
+  openHandler: React.PropTypes.func
 };
 
 export default List;

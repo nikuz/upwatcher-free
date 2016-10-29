@@ -72,9 +72,9 @@ const DEFAULT = {
   }
 };
 
-export default function settingsReducers(state, action) {
+export default function settingsReducers(state = DEFAULT, action) {
   switch (action.type) {
     default:
-      return DEFAULT;
+      return state;
   }
 };

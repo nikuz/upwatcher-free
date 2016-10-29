@@ -13,7 +13,7 @@ import * as settings from '../../modules/settings';
 // import * as request from '../../modules/request';
 import * as logs from '../../modules/logs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import List from './list/controller';
+import List from './list/code';
 import Switcher from './switcher/code';
 import Slider from './slider/code';
 import Time from './time/code';
@@ -55,6 +55,7 @@ class Settings extends React.Component {
     //   this.state.data[item.name].value = item.value;
     // });
   };
+  shouldComponentUpdate = () => false;
   componentWillUnmount = () => {
     /*this.categoriesRequest = null;
     settings.get(null, (err, cur_settings) => {
@@ -85,10 +86,6 @@ class Settings extends React.Component {
     });*/
   };
   render() {
-    // if (!this.state.data) {
-    //   return <ActivityIndicator color="#43AC12" size="large" />;
-    // }
-
     var sData = this.props.settings;
     return (
       <ScrollView style={styles.wrap} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>

@@ -1,11 +1,11 @@
 'use strict';
 
-const DEFAULT_STATE = {
+const DEFAULT = {
   name: 'inbox',
   type: null
 };
 
-export default function appStateReducers(state, action) {
+export default function appStateReducers(state = DEFAULT, action) {
   switch (action.type) {
     case 'APP_STATE_PUSH':
       return Object.assign({}, state, {
@@ -18,6 +18,6 @@ export default function appStateReducers(state, action) {
         type: 'pop'
       });
     default:
-      return DEFAULT_STATE;
+      return state;
   }
 };
