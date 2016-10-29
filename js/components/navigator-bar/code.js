@@ -41,7 +41,7 @@ class NavigatorBar extends Component {
   }
   back() {
     if (this.state.leftButton) {
-      this.props.navigator.pop();
+      this.props.backHandler();
       return true;
     }
   }

@@ -1,7 +1,6 @@
 'use strict';
 
 import stylesGenerator from '../../../styles/generator';
-import * as device from '../../modules/device';
 
 export default stylesGenerator({
   navbar: {
@@ -9,7 +8,7 @@ export default stylesGenerator({
     top: 0,
     left: 0,
     right: 0,
-    height: 40,
+    height: 43,
     backgroundColor: '#6FDA44'
   },
   navbar_animated: {
@@ -24,7 +23,8 @@ export default stylesGenerator({
     top: 0
   },
   button: {
-    padding: 10
+    padding: 10,
+    paddingTop: 8
   },
   button_icon: {
     fontSize: 26,
@@ -37,7 +37,6 @@ export default stylesGenerator({
   },
   title: {
     padding: 10,
-    paddingTop: device.isAndroid() ? 7 : 9,
     alignSelf: 'center'
   },
   prev_title: {
@@ -46,10 +45,10 @@ export default stylesGenerator({
     right: 0
   },
   title_text: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#4c4b4d',
     fontWeight: 'bold',
-    textAlign: device.isIos() ? 'center' : 'left'
+    textAlign: 'center'
   },
   logo: {
     width: 138,

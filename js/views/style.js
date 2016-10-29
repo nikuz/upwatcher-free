@@ -8,7 +8,6 @@ export default stylesGenerator({
   },
   navigator: {
     flex: 1,
-    paddingTop: 35,
-    backgroundColor: '#6FDA44'
+    paddingTop: 43
   }
 });

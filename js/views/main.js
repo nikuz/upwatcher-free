@@ -82,7 +82,10 @@ class Main extends React.Component {
           initialRoute={initialRoute}
           renderScene={this.renderScene}
           navigationBar={
-            <NavigatorBar route={initialRoute} />
+            <NavigatorBar
+              route={initialRoute}
+              backHandler={this.back}
+            />
           }
           style={styles.navigator}
         />
