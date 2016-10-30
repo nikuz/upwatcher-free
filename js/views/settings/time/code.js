@@ -15,84 +15,46 @@ import styles from './style';
 class Time extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      disabled: this.props.disabled || false,
-      opened: false,
-      activeType: null,
-      from: '',
-      to: ''
-    };
     this.getId = this.getId.bind(this);
     this.saveHandler = this.saveHandler.bind(this);
-    this.cancelHandler = this.cancelHandler.bind(this);
   }
-  getId() {
-    var type = this.state.activeType;
+  getId(type) {
     type = type.charAt(0).toUpperCase() + type.slice(1);
     return `${this.props.name}${type}`;
   }
-  openHandler(type) {
-    this.setState({
-      opened: true,
-      activeType: type
-    });
-  }
-  cancelHandler() {
-    this.setState({
-      opened: false
-    });
-  }
-  saveHandler(date) {
-    var hour = date.getHours(),
-      minutes = date.getMinutes(),
-      value;
-
+  saveHandler(type, hour, minute) {
     if (hour < 10) {
       hour = `0${hour}`;
     }
-    if (minutes < 10) {
-      minutes = `0${minutes}`;
+    if (minute < 10) {
+      minute = `0${minute}`;
     }
-    value = `${hour}:${minutes}`;
 
-    this.props.handler([{
-      name: this.getId(),
-      value: value
-    }]);
-    var state = {
-      opened: false
-    };
-    state[this.state.activeType] = value;
-    this.setState(state);
+    this.props.changeHandler(this.getId(type), `${hour}:${minute}`);
   }
-  componentDidUpdate = async () => {
-    if (this.state.opened) {
-      let props = this.props,
-        state = this.state,
-        value = (state[state.activeType] || props[state.activeType]).split(':');
+  openHandler = async (type) => {
+    let props = this.props,
+      value = props[type].split(':');
 
-      if (device.isAndroid()) {
-        const {action, hour, minute} = await TimePickerAndroid.open({
-          hour: parseInt(value[0]),
-          minute: parseInt(value[1]),
-          is24Hour: false
-        });
-        if (action !== TimePickerAndroid.dismissedAction) {
-          let d = new Date();
-          this.saveHandler(new Date(d.getFullYear(), d.getMonth(), d.getDate(), hour, minute));
-        }
+    if (device.isAndroid()) {
+      const {action, hour, minute} = await TimePickerAndroid.open({
+        hour: parseInt(value[0]),
+        minute: parseInt(value[1]),
+        is24Hour: false
+      });
+      if (action !== TimePickerAndroid.dismissedAction) {
+        this.saveHandler(type, hour, minute);
       }
     }
   };
   render() {
     var props = this.props,
-      state = this.state,
-      disabled = this.state.disabled,
+      disabled = props.disabled,
       fromCont,
       toCont;
 
-    fromCont = <Text style={styles.time_text}>{state.from || props.from}</Text>;
-    toCont = <Text style={styles.time_text}>{state.to || props.to}</Text>;
+    fromCont = <Text style={styles.time_text}>{props.from}</Text>;
+    toCont = <Text style={styles.time_text}>{props.to}</Text>;
 
     return (
       <View style={styles.wrap}>
@@ -124,7 +86,7 @@ class Time extends React.Component {
 }
 
 Time.propTypes = {
-  handler: React.PropTypes.func.isRequired,
+  changeHandler: React.PropTypes.func.isRequired,
   from: React.PropTypes.string.isRequired,
   to: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,

@@ -18,16 +18,16 @@ class SliderEl extends React.Component {
       maxValue: 10000
     };
     this.changeHandler = this.changeHandler.bind(this);
+    this.completeHandler = this.completeHandler.bind(this);
   }
   changeHandler(value) {
     this.setState({
       value: value
     });
-    this.props.handler([{
-      name: 'budgetFrom',
-      value: value
-    }]);
-  };
+  }
+  completeHandler() {
+    this.props.changeHandler('budgetFrom', this.state.value);
+  }
   render() {
     var state = this.state,
       props = this.props,
@@ -46,7 +46,8 @@ class SliderEl extends React.Component {
           step={state.sliderStep}
           minimumTrackTintColor="#CCC"
           maximumTrackTintColor="#6fda44"
-          onSlidingComplete={this.changeHandler}
+          onValueChange={this.changeHandler}
+          onSlidingComplete={this.completeHandler}
         />
       </View>
     );
@@ -54,7 +55,7 @@ class SliderEl extends React.Component {
 }
 
 SliderEl.propTypes = {
-  handler: React.PropTypes.func.isRequired,
+  changeHandler: React.PropTypes.func.isRequired,
   value: React.PropTypes.number.isRequired
 };
 

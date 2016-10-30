@@ -1,37 +1,25 @@
 'use strict';
 
 import * as _ from 'underscore';
-import constants from './constants';
-import * as storage from './storage';
+import constants from '../modules/constants';
+import * as storage from '../modules/storage';
+import {deepClone} from '../modules/object';
 
-var settingsName = 'settings';
+const settingsName = 'settings';
 
-// search - it is mean, that change this field will refresh search results
-var initialSettings = {
+const DEFAULT = {
   category2: {
     values: [],
     value: 'All',
     search: true
   },
   budgetFrom: {
-    values: [
-      0,
-      100,
-      200,
-      300,
-      500,
-      1000,
-      2000,
-      3000,
-      5000,
-      10000
-    ],
     value: 0,
     search: true
   },
   budgetTo: {
     value: 1000000,
-    search: true
+    search: true // it is mean, that change this field will refresh search results
   },
   notifyInterval: {
     values: [
@@ -89,13 +77,9 @@ var initialSettings = {
   }
 };
 
-function clone() {
-  return JSON.parse(JSON.stringify(initialSettings)); // full clone
-}
-
 (async function() {
   var settingsData = await storage.get(settingsName);
-  if (settingsData && !_.isEqual(_.keys(settingsData), _.keys(initialSettings))) {
+  if (settingsData && !_.isEqual(_.keys(settingsData), _.keys(DEFAULT))) {
     storage.remove(settingsName);
   }
 })();
@@ -107,8 +91,9 @@ function clone() {
 async function get(field) {
   field = _.isString(field) ? field : null;
   var settings = await storage.get(settingsName);
+  console.log(settings);
   if (!settings) {
-    settings = clone();
+    settings = deepClone(DEFAULT);
   }
   if (field) {
     settings = settings[field];
@@ -140,6 +125,7 @@ async function set(field, data) {
 // ---------
 
 export {
+  DEFAULT as DEFAULT_DATA,
   get,
   set
 };

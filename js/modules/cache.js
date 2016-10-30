@@ -3,7 +3,7 @@
 import * as _ from 'underscore';
 import * as config from '../config';
 import * as storage from './storage';
-import * as settings from './settings';
+import * as settings from '../models/settings';
 import * as upworkController from '../controllers/upwork';
 import * as EventManager from './events';
 

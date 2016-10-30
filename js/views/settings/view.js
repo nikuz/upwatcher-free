@@ -2,17 +2,12 @@
 
 import React from 'react';
 import {
-  Text,
-  ScrollView,
-  ActivityIndicator
+  ScrollView
 } from 'react-native';
 import * as _ from 'underscore';
-import * as EventManager from '../../modules/events';
 import * as config from '../../config';
-import * as settings from '../../modules/settings';
 // import * as request from '../../modules/request';
 import * as logs from '../../modules/logs';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import List from './list/code';
 import Switcher from './switcher/code';
 import Slider from './slider/code';
@@ -20,6 +15,11 @@ import Time from './time/code';
 import styles from './style';
 
 class Settings extends React.Component {
+  constructor(props) {
+    super(props);
+    this.categoriesRequest = null;
+    // this.getCategoriesHandler = this.getCategoriesHandler.bind(this);
+  }
   // getCategoriesHandler = (callback) => {
   //   var cb = callback || _.noop,
   //     sData = this.state.data;
@@ -49,48 +49,18 @@ class Settings extends React.Component {
   //     });
   //   }
   // };
-  handlerChange = (values) => {
-    // values = values || [];
-    // _.each(values, item => {
-    //   this.state.data[item.name].value = item.value;
-    // });
-  };
-  shouldComponentUpdate = () => false;
-  componentWillUnmount = () => {
-    /*this.categoriesRequest = null;
-    settings.get(null, (err, cur_settings) => {
-      if (err) {
-        return logs.captureError(err);
-      }
-
-      var needToUpdateCache = false,
-        changed = false;
-
-      _.each(cur_settings, (item, key) => {
-        if (item.value !== this.state.data[key].value) {
-          if (item.search) {
-            needToUpdateCache = true;
-          }
-          changed = true;
-        }
-      });
-      if (changed) {
-        settings.set(this.state.data);
-      }
-      if (changed || needToUpdateCache) {
-        EventManager.trigger('settingsSaved', {
-          changed,
-          needToUpdateCache
-        });
-      }
-    });*/
+  componentWillUnmount() {
+    this.categoriesRequest = null;
+    this.props.saveHandler(this.props.settings);
   };
   render() {
-    var sData = this.props.settings;
+    var props = this.props,
+      sData = props.settings;
+
     return (
       <ScrollView style={styles.wrap} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
         <List
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Category"
           name="category2"
           value={sData.category2.value}
@@ -98,52 +68,49 @@ class Settings extends React.Component {
           // openHandler={this.getCategoriesHandler}
         />
         <Slider
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Budget"
           name="budget"
           value={sData.budgetFrom.value}
         />
         <List
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Job type"
           name="jobType"
           value={sData.jobType.value}
           values={sData.jobType.values}
         />
         <List
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Duration"
           name="duration"
           value={sData.duration.value}
           values={sData.duration.values}
         />
         <List
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Workload"
           name="workload"
           value={sData.workload.value}
           values={sData.workload.values}
         />
         <Switcher
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Allow notifications"
-          relations="notifications"
           name="notifyAllow"
           checked={sData.notifyAllow.value}
         />
         <List
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Notify every"
-          relations="notifications"
           name="notifyInterval"
           value={sData.notifyInterval.value}
           values={sData.notifyInterval.values}
           disabled={!sData.notifyAllow.value}
         />
         <Time
-          handler={this.handlerChange}
+          changeHandler={props.changeHandler}
           title="Do not disturb"
-          relations="notifications"
           name="dnd"
           from={sData.dndFrom.value}
           to={sData.dndTo.value}
@@ -155,7 +122,9 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  settings: React.PropTypes.object.isRequired
+  settings: React.PropTypes.object.isRequired,
+  changeHandler: React.PropTypes.func.isRequired,
+  saveHandler: React.PropTypes.func.isRequired
 };
 
 export default Settings;

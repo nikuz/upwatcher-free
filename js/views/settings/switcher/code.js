@@ -7,7 +7,6 @@ import {
   TouchableHighlight,
   Switch
 } from 'react-native';
-import * as EventManager from '../../../modules/events';
 import styles from './style';
 
 class Switcher extends React.Component {
@@ -25,19 +24,7 @@ class Switcher extends React.Component {
     } else {
       checked = !checked;
     }
-    this.setState({
-      checked: checked
-    });
-    this.props.handler([{
-      name: this.props.name,
-      value: checked
-    }]);
-    if (this.props.relations) {
-      EventManager.trigger('stngSwitcherChange', {
-        relations: this.props.relations,
-        checked: checked
-      });
-    }
+    this.props.changeHandler(this.props.name, checked);
   }
   render() {
     var checked = this.state.checked !== null ? this.state.checked : this.props.checked;
@@ -53,7 +40,7 @@ class Switcher extends React.Component {
 }
 
 Switcher.propTypes = {
-  handler: React.PropTypes.func.isRequired,
+  changeHandler: React.PropTypes.func.isRequired,
   name: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
   relations: React.PropTypes.string

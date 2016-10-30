@@ -9,7 +9,7 @@ import {
   series as asyncSeries,
 } from 'async';
 import * as config from '../config';
-import * as settings from './settings';
+import * as settings from '../models/settings';
 import * as storage from './storage';
 import * as EventManager from './events';
 import * as ajax from './ajax';

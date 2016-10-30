@@ -23,65 +23,28 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: this.props.disabled || false,
-      opened: false,
-      err: null,
-      values: [],
-      selectedValue: null,
-      tempValue: null
+      err: null
     };
     this.openHandler = this.openHandler.bind(this);
     this.downloadAgainHandler = this.downloadAgainHandler.bind(this);
     this.pickerGenerator = this.pickerGenerator.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
     this.saveHandler = this.saveHandler.bind(this);
-    this.cancelHandler = this.cancelHandler.bind(this);
-    this.relationCheckHandler = this.relationCheckHandler.bind(this);
-  }
-  openHandler() {
-    this.setState({
-      opened: true
-    });
-    var openHandler = this.props.openHandler;
-    if (openHandler && !this.props.values.length) {
-      openHandler((err, response) => {
-        var state = {
-          err: null
-        };
-        if (err) {
-          state.err = err;
-        } else {
-          response = response || [];
-          _.extend(state, {
-            values: response,
-            selectedValue: _.keys(response[0])[0]
-          });
-        }
-        this.setState(state);
-      });
-    }
-  }
-  downloadAgainHandler() {
-    this.setState({
-      err: null,
-      values: []
-    });
-    this.openHandler();
   }
   pickerGenerator() {
     var props = this.props,
-      value = this.state.selectedValue || props.value;
+      value = props.value;
 
     if (device.isAndroid()) {
       return <PickerAndroid
         values={props.values}
-        value={this.state.tempValue || value}
+        value={value}
         onValueChange={this.changeHandler}
       />
     } else {
       return (
         <Picker
-          selectedValue={this.state.tempValue || value}
+          selectedValue={value}
           onValueChange={this.changeHandler}
         >
           {props.values.map(item => {
@@ -100,97 +63,98 @@ class List extends React.Component {
       );
     }
   }
+  openHandler() {
+    // if (this.state.opened) {
+    //
+    // } else {
+    //   appStore.dispatch(overlayActions.close());
+    // }
+    let props = this.props,
+      values = props.values,
+      selectorContent;
+
+    // if (this.state.err) {
+    //   selectorContent = (
+    //     <View style={styles.error}>
+    //       <Text style={styles.error_text}>Something went wrong, please try again</Text>
+    //       <TouchableHighlight style={styles.retry_btn} onPress={this.downloadAgainHandler} underlayColor="#69cb3c">
+    //         <Text style={styles.retry_btn_text}>Try again</Text>
+    //       </TouchableHighlight>
+    //     </View>
+    //   );
+    // } else if (!values.length) {
+    if (!values.length) {
+      selectorContent = (
+        <View style={styles.waiting}>
+          <ActivityIndicator color="#43AC12" size="large" />
+        </View>
+      );
+    } else {
+      selectorContent = this.pickerGenerator();
+    }
+
+    appStore.dispatch(overlayActions.open({
+      navigator: false,
+      transparent: true,
+      component: <Selector
+        title={props.title}
+        content={selectorContent}
+        saveHandler={this.saveHandler}
+        cancelHandler={this.cancelHandler}
+      />
+    }));
+
+    // var openHandler = this.props.openHandler;
+    // if (openHandler && !this.props.values.length) {
+    //   openHandler((err, response) => {
+    //     var state = {
+    //       err: null
+    //     };
+    //     if (err) {
+    //       state.err = err;
+    //     } else {
+    //       response = response || [];
+    //       _.extend(state, {
+    //         values: response,
+    //         selectedValue: _.keys(response[0])[0]
+    //       });
+    //     }
+    //     this.setState(state);
+    //   });
+    // }
+  }
+  downloadAgainHandler() {
+    // this.setState({
+    //   err: null,
+    //   values: []
+    // });
+    // this.openHandler();
+  }
   changeHandler(value) {
-    this.setState({
-      tempValue: value
-    });
     if (device.isAndroid()) {
+      this.props.changeHandler(this.props.name, value);
+      appStore.dispatch(overlayActions.close());
+    } else {
       this.setState({
-        selectedValue: value,
-        tempValue: null,
-        opened: false
+        tempValue: value
       });
-      this.props.handler([{
-        name: this.props.name,
-        value: value
-      }]);
     }
   }
   saveHandler() {
     var value = this.state.tempValue;
-    this.setState({
-      selectedValue: value,
-      tempValue: null,
-      opened: false
-    });
     if (value) {
-      this.props.handler([{
-        name: this.props.name,
-        value: value
-      }]);
-    }
-  }
-  cancelHandler() {
-    this.setState({
-      tempValue: null,
-      opened: false
-    });
-  }
-  relationCheckHandler(options) {
-    var opts = options || {};
-    if (this.props.relations && this.props.relations === opts.relations) {
-      this.setState({
-        disabled: !opts.checked
-      });
-    }
-  }
-  componentDidUpdate() {
-    if (this.state.opened) {
-      let props = this.props,
-        values = props.values,
-        selectorContent;
-
-      if (!values.length) {
-        values = this.state.values;
-      }
-      if (this.state.err) {
-        selectorContent = (
-          <View style={styles.error}>
-            <Text style={styles.error_text}>Something went wrong, please try again</Text>
-            <TouchableHighlight style={styles.retry_btn} onPress={this.downloadAgainHandler} underlayColor="#69cb3c">
-              <Text style={styles.retry_btn_text}>Try again</Text>
-            </TouchableHighlight>
-          </View>
-        );
-      } else if (!values.length) {
-        selectorContent = (
-          <View style={styles.waiting}>
-            <ActivityIndicator color="#43AC12" size="large" />
-          </View>
-        );
-      } else if (this.state.opened) {
-        selectorContent = this.pickerGenerator();
-      }
-
-      appStore.dispatch(overlayActions.open({
-        navigator: false,
-        transparent: true,
-        component: <Selector
-          title={props.title}
-          content={selectorContent}
-          saveHandler={this.saveHandler}
-          cancelHandler={this.cancelHandler}
-        />
-      }));
-    } else {
+      this.props.changeHandler(this.props.name, value);
       appStore.dispatch(overlayActions.close());
     }
   }
+  cancelHandler() {
+    appStore.dispatch(overlayActions.close());
+  }
   render() {
     var props = this.props,
-      value = this.state.selectedValue || props.value,
+      value = props.value,
       previewCont,
-      disabled = this.state.disabled;
+      disabled = this.props.disabled;
 
     previewCont = (
       <View style={disabled ? commonStyles.item_disabled : null}>
@@ -220,7 +184,7 @@ List.propTypes = {
     React.PropTypes.number
   ]),
   values: React.PropTypes.array.isRequired,
-  handler: React.PropTypes.func.isRequired,
+  changeHandler: React.PropTypes.func.isRequired,
   openHandler: React.PropTypes.func
 };
 

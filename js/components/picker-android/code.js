@@ -33,15 +33,6 @@ class PickerAndroid extends Component {
   }
   onValueChange(value) {
     this.props.onValueChange(value);
-    var values = this.state.values;
-    _.each(values, function(item) {
-      item.current = _.keys(item)[0] === value;
-    });
-    this.setState({
-      values,
-      curValue: value,
-      dataSource: this.ds.cloneWithRows(values)
-    });
   }
   renderRow(item) {
     var key = _.keys(item)[0],
