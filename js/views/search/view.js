@@ -55,13 +55,14 @@ class Search extends React.Component {
           onChangeText={this.onChangeText}
           onSubmitEditing={this.submitHandler}
           enablesReturnKeyAutomatically={true}
+          underlineColorAndroid="transparent"
           returnKeyType="search"
         />
         {props.search.loading ?
           <ActivityIndicator size="small" />
           :
           <TouchableOpacity style={styles.submit_wrap} onPress={this.submitHandler}>
-            <MaterialIcons name="search" style={styles.submit} />
+            <MaterialIcons name="search" style={styles.submit_icon} />
           </TouchableOpacity>
         }
       </View>

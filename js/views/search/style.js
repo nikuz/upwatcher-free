@@ -4,7 +4,8 @@ import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
   container: {
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+    elevation: 1
   },
   field: {
     height: 40,
@@ -19,13 +20,13 @@ export default stylesGenerator({
   submit_wrap: {
     position: 'absolute',
     right: 0,
-    top: 0
+    top: 1
   },
-  submit: {
+  submit_icon: {
     width: 50,
     height: 38,
     paddingTop: 8,
-    fontSize: 20,
+    fontSize: 24,
     color: '#999',
     textAlign: 'center'
   },
