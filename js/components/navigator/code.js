@@ -13,7 +13,7 @@ import * as _ from 'underscore';
 import * as config from '../../config';
 import * as EventManager from '../../modules/events';
 import * as device from '../../modules/device';
-import Search from '../search/code';
+import Search from '../../views/search/code';
 import List from '../list/code';
 import ListManager from '../list/manager-code';
 import Errors from '../errors/code';

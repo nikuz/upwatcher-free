@@ -10,7 +10,7 @@ import {
 import * as _ from 'underscore';
 import {deepClone} from '../../modules/object';
 import * as device from '../../modules/device';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 class PickerAndroid extends Component {
@@ -49,12 +49,10 @@ class PickerAndroid extends Component {
             <View style={styles.item_cont_text_wrap}>
               <Text style={styles.item_text}>{value}</Text>
             </View>
-            <View style={styles.item_cont_icon}>
-              {item.current ?
-                <Icon name="check" style={styles.item_icon} />
-                : null
-              }
-            </View>
+            {item.current ?
+              <MaterialIcons name="check" style={styles.item_icon} />
+              : null
+            }
           </View>
         </TouchableHighlight>
       </View>

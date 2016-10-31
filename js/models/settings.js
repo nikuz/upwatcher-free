@@ -91,7 +91,6 @@ const DEFAULT = {
 async function get(field) {
   field = _.isString(field) ? field : null;
   var settings = await storage.get(settingsName);
-  console.log(settings);
   if (!settings) {
     settings = deepClone(DEFAULT);
   }

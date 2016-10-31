@@ -12,7 +12,7 @@ import {
 import * as _ from 'underscore';
 import * as device from '../../modules/device';
 import * as InteractionManager from '../../modules/interactions';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 import logo from '../../../images/logo.png';
@@ -50,7 +50,7 @@ class NavigatorBar extends Component {
     if (route.backButton) {
       return (
         <TouchableOpacity style={styles.button} onPress={this.back}>
-          <Icon name="arrow-left" style={styles.button_icon} />
+          <MaterialIcons name="arrow-back" style={styles.button_icon} />
         </TouchableOpacity>
       );
     } else {
@@ -79,7 +79,7 @@ class NavigatorBar extends Component {
     if (route.id !== 'settings') {
       return (
         <TouchableOpacity style={styles.button} onPress={route.onRightButtonClick}>
-          <Icon name="sliders" style={styles.button_icon} />
+          <MaterialIcons name="menu" style={styles.button_icon} />
         </TouchableOpacity>
       );
     } else {

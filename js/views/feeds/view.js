@@ -3,7 +3,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import * as _ from 'underscore';
-import Search from '../../components/search/code';
+import Search from '../search/controller';
 import styles from './style';
 
 class Feeds extends React.Component {

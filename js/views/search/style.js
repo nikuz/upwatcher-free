@@ -1,6 +1,5 @@
 'use strict';
 
-import * as device from '../../modules/device';
 import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
@@ -8,7 +7,7 @@ export default stylesGenerator({
     backgroundColor: '#FFF'
   },
   field: {
-    height: device.isAndroid() ? 40 : 35,
+    height: 40,
     padding: 0,
     paddingRight: 50,
     paddingLeft: 10,

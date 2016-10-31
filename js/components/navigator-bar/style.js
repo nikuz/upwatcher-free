@@ -27,7 +27,7 @@ export default stylesGenerator({
     paddingTop: 7
   },
   button_icon: {
-    fontSize: 26,
+    fontSize: 32,
     color: '#FFF'
   },
   right_button_container: {
