@@ -13,7 +13,6 @@ export default stylesGenerator({
   },
   title: {
     flex: 1,
-    marginTop: 5,
     fontSize: 18
   }
 });

@@ -3,10 +3,17 @@ package com.upwatcher;
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.yamill.orientation.OrientationPackage;
+import com.cboy.rn.splashscreen.SplashScreen;
+import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
 
 public class MainActivity extends ReactActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
 
     /**
      * Returns the name of the main component registered from JavaScript.

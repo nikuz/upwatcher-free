@@ -7,11 +7,16 @@ import {
   View,
   AppRegistry
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { Provider } from 'react-redux';
 import AppStore from './js/store';
 import Main from './js/views/main-controller';
 
 class App extends React.Component {
+  componentDidMount() {
+    SplashScreen.hide();
+    StatusBar.setBackgroundColor('#67be44');
+  }
   render() {
     return (
       <Provider store={AppStore}>
