@@ -6,10 +6,10 @@ const DEFAULT = {
   feeds: ''
 };
 
-var savedFeeds;
+var savedFeedsRequest;
 
 (async function() {
-  savedFeeds = await storage.get('feeds');
+  savedFeedsRequest = await storage.get('feedsRequest');
 })();
 
 export default function searchReducers(state = DEFAULT, action) {
@@ -19,9 +19,9 @@ export default function searchReducers(state = DEFAULT, action) {
         feeds: action.value,
       });
     default:
-      if (savedFeeds) {
-        DEFAULT.feeds = savedFeeds;
-        savedFeeds = null;
+      if (savedFeedsRequest) {
+        DEFAULT.feeds = savedFeedsRequest;
+        savedFeedsRequest = null;
       }
       return state;
   }

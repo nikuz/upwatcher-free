@@ -34,11 +34,11 @@ class Search extends React.Component {
   }
   submitHandler() {
     dismissKeyboard();
-    this.props.addFeeds(this.state.feeds);
+    this.props.addFeedsRequest(this.state.feeds);
   }
   componentDidMount = async () => {
     this.setState({
-      feeds: await this.props.getStoredFeeds()
+      feeds: await this.props.getStoredFeedsRequest()
     });
   };
   render() {
@@ -71,8 +71,8 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  addFeeds: React.PropTypes.func.isRequired,
-  getStoredFeeds: React.PropTypes.func.isRequired
+  addFeedsRequest: React.PropTypes.func.isRequired,
+  getStoredFeedsRequest: React.PropTypes.func.isRequired
 };
 
 export default Search;

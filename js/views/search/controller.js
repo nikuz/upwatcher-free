@@ -15,8 +15,8 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    addFeeds: function(value) {
-      storage.set('feeds', value);
+    addFeedsRequest: function(value) {
+      storage.set('feedsRequest', value);
       dispatch(SearchActions.addFeeds(value));
 
       // var state = this.state,
@@ -34,8 +34,8 @@ const mapDispatchToProps = function(dispatch) {
       //   })
       // }
     },
-    getStoredFeeds: async function() {
-      return await storage.get('feeds');
+    getStoredFeedsRequest: async function() {
+      return await storage.get('feedsRequest');
     }
   };
 };

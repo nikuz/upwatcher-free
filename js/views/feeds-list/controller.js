@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as StateActions from '../../actions/state';
-import FeedsView from './view';
+import * as FeedsActions from '../../actions/feeds';
+import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
   return {
+    feeds: state.feeds
   };
 };
 
@@ -19,4 +20,4 @@ const mapDispatchToProps = function(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FeedsView);
+)(FeedsListView);
