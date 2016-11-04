@@ -51,6 +51,8 @@ function ajax(options) {
     rUrl = opts.url,
     dataString = null;
 
+  console.log(opts.data);
+
   if (opts.cache === false) {
     rUrl += `${addParamsMarker(rUrl)}t=${Date.now()}`;
   }
@@ -106,7 +108,7 @@ function ajax(options) {
     error(response);
   };
 
-  request.send(dataString || null);
+  request.send(dataString);
   return request;
 }
 

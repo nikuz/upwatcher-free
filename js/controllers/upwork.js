@@ -9,19 +9,23 @@ import * as config from '../config';
 import * as storage from '../modules/storage';
 import * as OAuth from '../modules/oauth';
 import constants from '../modules/constants';
+import * as network from '../modules/network';
 import * as ajax from '../modules/ajax';
 
 var oauth;
 
 function init() {
-  if (!oauth) {
-    oauth = OAuth.init({
-      consumer: {
-        public: process.env.UPWORK_KEY,
-        secret: process.env.UPWORK_SECRET
-      }
-    });
-  }
+  return new Promise(function(resolve) {
+    if (!oauth) {
+      oauth = OAuth.init({
+        consumer: {
+          public: process.env.UPWORK_KEY,
+          secret: process.env.UPWORK_SECRET
+        }
+      });
+    }
+    resolve();
+  });
 }
 
 async function request(options = {}, callback = _.noop) {
@@ -55,7 +59,6 @@ async function request(options = {}, callback = _.noop) {
   });
   request_obj.data = request_data;
 
-  console.log(request_obj);
   if (method === 'GET') {
     ajax.get(request_obj);
   } else {
@@ -73,8 +76,8 @@ async function flushAccess() {
   ]);
 }
 
-async function getToken() {
-  return new Promise(async function(resolve) {
+function getToken() {
+  return new Promise(async function(resolve, reject) {
     var {
       token,
       token_secret,
@@ -86,7 +89,7 @@ async function getToken() {
     token_time = Number(token_time);
 
     if (token && token_secret && ((verifier && access) || (Date.now() - token_time) / 1000 / 60 < 4)) { // less than 4 min
-      resolve();
+      resolve(token);
     } else {
       await flushAccess();
       request({
@@ -98,18 +101,18 @@ async function getToken() {
         }
       }, async function(err, response) {
         if (err) {
-          resolve(err);
+          reject(err);
         } else {
           response = oauth.deParam(response);
           if (!response.oauth_token || !response.oauth_token_secret) {
-            resolve(`Can't get Upwork token`);
+            reject(`Can't get Upwork token`);
           } else {
             await storage.set({
               token_time: Date.now(),
               token: response.oauth_token,
               token_secret: response.oauth_token_secret
             });
-            resolve();
+            resolve(response.oauth_token);
           }
         }
       });
@@ -117,41 +120,41 @@ async function getToken() {
   });
 }
 
-async function getVerifier() {
-  return new Promise(async function(resolve) {
+function getVerifier() {
+  return new Promise(async function(resolve, reject) {
     var {verifier, token} = await storage.get(['verifier', 'token']),
       gotVerifier;
 
     if (verifier) {
-      return resolve();
+      return resolve(verifier);
     }
 
     var finish = async function(verifier) {
-      Linking.removeEventListener('url', parseLoadedUrl);
-      // AppState.removeEventListener('change', stateChanged);
+      // Linking.removeEventListener('url', parseLoadedUrl);
+      AppState.removeEventListener('change', stateChanged);
       if (verifier) {
         await storage.set('verifier', verifier);
         resolve();
       } else {
-        resolve(`Can't get Upwork verifier`);
+        reject(`Can't get Upwork verifier`);
       }
     };
 
-    var stateChanged = function(state) {
+    var stateChanged = async function(state) {
       if (state === 'active') {
-        setTimeout(() => !gotVerifier && finish(), 500);
+        let url = await Linking.getInitialURL();
+        parseLoadedUrl({
+          url
+        });
       }
     };
 
     var parseLoadedUrl = function(event) {
-      console.log(event);
       if (gotVerifier) {
         return;
       }
       var url = (event && event.url && event.url.split('&')) || [],
         verifier;
-
-      console.log(url);
 
       _.each(url, function(item) {
         if (item.indexOf('oauth_verifier') !== -1) {
@@ -163,18 +166,18 @@ async function getVerifier() {
       finish(verifier);
     };
 
-    // AppState.addEventListener('change', stateChanged);
     let url = `${config.UPWORK_URL}${config.UPWORK_VERIFIER_URL}?oauth_token=${token}`;
-    Linking.addEventListener('url', parseLoadedUrl);
+    // Linking.addEventListener('url', parseLoadedUrl);
+    AppState.addEventListener('change', stateChanged);
     Linking.openURL(url);
   });
 }
 
-async function getAccess() {
-  return new Promise(async function(resolve) {
+function getAccess() {
+  return new Promise(async function(resolve, reject) {
     var {access, token, verifier} = await storage.get(['access', 'token', 'verifier']);
     if (access) {
-      return resolve();
+      return resolve(access);
     }
 
     request({
@@ -187,62 +190,79 @@ async function getAccess() {
       }
     }, async function(err, response) {
       if (err) {
-        resolve(err);
+        reject(err);
       } else {
         response = oauth.deParam(response);
         if (!response.oauth_token || !response.oauth_token_secret) {
-          resolve(`Can't get Upwork access token`);
+          reject(`Can't get Upwork access token`);
         } else {
           await storage.set({
             access: response.oauth_token,
             token: response.oauth_token,
             token_secret: response.oauth_token_secret
           });
-          resolve();
+          resolve(response.oauth_token);
         }
       }
     });
   });
 }
 
-async function login() {
-  await init();
+function login() {
+  return new Promise(async function(resolve, reject) {
+    await init();
 
-  var token = await getToken(),
-    verifier, access;
+    try {
+      await getToken();
+      await getVerifier();
+      await getAccess();
+    } catch (e) {
+      return reject(e);
+    }
 
-  if (_.isUndefined(token)) {
-    verifier = await getVerifier();
-  } else {
-    return token;
-  }
-  if (_.isUndefined(verifier)) {
-    access = await getAccess();
-  } else {
-    return verifier;
-  }
-  if (_.isUndefined(access)) {
-    return true;
-  } else {
-    return access;
-  }
+    resolve();
+  });
 }
 
 // ----------------
 // public methods
 // ----------------
 
-async function getFeeds(options = {}, callback = _.noop) {
-  var loginAttempt = await login();
-  if (loginAttempt !== true) {
-    return callback(loginAttempt);
-  }
+function getFeeds(value) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      await network.check();
+      await login();
+    } catch (e) {
+      return reject(e);
+    }
 
-  request({
-    url: config.UPWORK_JOBS_URL,
-    method: 'GET',
-    data: options
-  }, callback);
+    request({
+      url: config.UPWORK_JOBS_URL,
+      method: 'GET',
+      data: {
+        q: value,
+        sort: 'create_time desc'
+      }
+    }, function(err, response) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
+
+function getJobInfo(id) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      await network.check();
+      await login();
+    } catch (e) {
+      return reject(e);
+    }
+  });
 }
 
 // ---------
@@ -250,9 +270,11 @@ async function getFeeds(options = {}, callback = _.noop) {
 // ---------
 
 (async function() {
-  await flushAccess();
+  // await flushAccess();
+  // await login();
 })();
 
 export {
-  getFeeds
+  getFeeds,
+  getJobInfo
 };

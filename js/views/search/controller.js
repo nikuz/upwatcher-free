@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as SearchActions from '../../actions/search';
 import * as storage from '../../modules/storage';
-// import * as upworkController from '../../controllers/upwork';
+import * as upworkController from '../../controllers/upwork';
 import SearchView from './view';
 
 const mapStateToProps = function(state) {
@@ -15,10 +15,21 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    addFeedsRequest: function(value) {
-      storage.set('feedsRequest', value);
-      dispatch(SearchActions.addFeeds(value));
+    addFeedsRequest: async function(value) {
+      var feedsName = 'feedsRequest',
+        curFeedsValue = await storage.get(feedsName);
 
+      if (curFeedsValue !== value) {
+        await storage.set(feedsName, value);
+        dispatch(SearchActions.addFeeds(value));
+        try {
+          let response = await upworkController.getFeeds(value);
+          console.log(response);
+          dispatch(SearchActions.feedsUpdateFinished());
+        } catch (e) {
+          console.log(e);
+        }
+      }
       // var state = this.state,
       //   searchValue = this.trim(state.searchValue);
       //

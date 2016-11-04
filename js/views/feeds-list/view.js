@@ -28,7 +28,9 @@ class FeedsListBlank extends React.Component {
       this.state.animShiftTop,
       {toValue}
     ).start(() => {
-      this.startAnimation();
+      if (!this.componentUnmounted) {
+        this.startAnimation();
+      }
     });
 
     this.setState({
@@ -38,6 +40,9 @@ class FeedsListBlank extends React.Component {
   shouldComponentUpdate = () => false;
   componentDidMount() {
     this.startAnimation();
+  }
+  componentWillUnmount() {
+    this.componentUnmounted = true;
   }
   render() {
     return (

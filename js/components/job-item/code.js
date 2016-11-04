@@ -16,7 +16,7 @@ import * as _ from 'underscore';
 import * as Linkify from 'linkifyjs';
 import * as EventManager from '../../modules/events';
 import * as config from '../../config';
-import * as request from '../../modules/request';
+import * as request from '../../controllers/request';
 import Skills from '../skills/code';
 import Errors from '../errors/code';
 import Manager from '../manager/code';

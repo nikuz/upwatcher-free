@@ -33,6 +33,6 @@ export default stylesGenerator({
   submit_loader: {
     position: 'absolute',
     right: 16,
-    top: 9
+    top: 10
   }
 });

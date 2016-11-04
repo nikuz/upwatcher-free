@@ -59,7 +59,7 @@ class Search extends React.Component {
           returnKeyType="search"
         />
         {props.search.loading ?
-          <ActivityIndicator size="small" />
+          <ActivityIndicator size="small" style={styles.submit_loader} />
           :
           <TouchableOpacity style={styles.submit_wrap} onPress={this.submitHandler}>
             <MaterialIcons name="search" style={styles.submit_icon} />

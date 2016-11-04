@@ -7,6 +7,13 @@ function addFeeds(value) {
   };
 }
 
+function feedsUpdateFinished() {
+  return {
+    type: 'SEARCH_FEEDS_UPDATE_FINISHED'
+  };
+}
+
 export {
-  addFeeds
+  addFeeds,
+  feedsUpdateFinished
 };
