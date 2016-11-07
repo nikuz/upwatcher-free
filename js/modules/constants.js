@@ -3,11 +3,11 @@
 import * as _ from 'underscore';
 
 var dictionary = {
-    REQUIRED: '`%s` parameter is required',
-    STORAGE_ERROR: 'Storage error: `%s`',
-    REQUIRED_FUNCTION: 'Function required: `%s`'
-  },
-  dictionaryActions;
+  REQUIRED: '`%s` parameter is required',
+  STORAGE_ERROR: 'Storage error: `%s`',
+  REQUIRED_FUNCTION: 'Function required: `%s`'
+};
+var dictionaryActions;
 
 const Parser = class {
   constructor(name) {

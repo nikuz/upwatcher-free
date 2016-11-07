@@ -1,27 +1,28 @@
 'use strict';
 
-var templates = {
+const templates = {
   prefix: '',
   suffix: ' ago',
   seconds: 'less than a minute',
-  minute: 'about a minute',
+  minute: 'a minute',
   minutes: '%d minutes',
-  hour: 'about an hour',
-  hours: 'about %d hours',
+  hour: 'an hour',
+  hours: '%d hours',
   day: 'a day',
   days: '%d days',
-  month: 'about a month',
+  month: 'a month',
   months: '%d months',
-  year: 'about a year',
+  year: 'a year',
   years: '%d years'
 };
 
-var templateGet = function(t, n) {
+function templateGet(t, n) {
   return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
-};
+}
 
-var timeAgo = function(time) {
+export default function timeAgo(time) {
   if (!time) return;
+
   time = time
     .replace(/\.\d+/, '')
     .replace('-', '/')
@@ -39,7 +40,16 @@ var timeAgo = function(time) {
     days = hours / 24,
     years = days / 365;
 
-  return templates.prefix + (seconds < 45 && templateGet('seconds', seconds) || seconds < 90 && templateGet('minute', 1) || minutes < 45 && templateGet('minutes', minutes) || minutes < 90 && templateGet('hour', 1) || hours < 24 && templateGet('hours', hours) || hours < 42 && templateGet('day', 1) || days < 30 && templateGet('days', days) || days < 45 && templateGet('month', 1) || days < 365 && templateGet('months', days / 30) || years < 1.5 && templateGet('year', 1) || templateGet('years', years)) + templates.suffix;
-};
-
-export default timeAgo;
+  return templates.prefix +
+    (seconds < 45 && templateGet('seconds', seconds)
+    || seconds < 90 && templateGet('minute', 1)
+    || minutes < 45 && templateGet('minutes', minutes)
+    || minutes < 90 && templateGet('hour', 1)
+    || hours < 24 && templateGet('hours', hours)
+    || hours < 42 && templateGet('day', 1)
+    || days < 30 && templateGet('days', days)
+    || days < 45 && templateGet('month', 1)
+    || days < 365 && templateGet('months', days / 30)
+    || years < 1.5 && templateGet('year', 1)
+    || templateGet('years', years)) + templates.suffix;
+}

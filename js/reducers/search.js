@@ -3,7 +3,8 @@
 import * as storage from '../modules/storage';
 
 const DEFAULT = {
-  feeds: ''
+  feeds: '',
+  loading: false
 };
 
 var savedFeedsRequest;

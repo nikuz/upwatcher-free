@@ -10,10 +10,6 @@ import * as _ from 'underscore';
 import styles from './style';
 
 class Skills extends React.Component {
-  static propTypes = {
-    items: React.PropTypes.array.isRequired,
-    short: React.PropTypes.bool
-  };
   render() {
     var props = this.props,
       items = _.clone(props.items),
@@ -49,5 +45,10 @@ class Skills extends React.Component {
     }
   }
 }
+
+Skills.propTypes = {
+  items: React.PropTypes.array.isRequired,
+  short: React.PropTypes.bool
+};
 
 export default Skills;

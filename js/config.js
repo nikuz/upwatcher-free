@@ -18,11 +18,9 @@ export const PROXY_URL = 'http://upwork-proxy.4go.mobi';
 
 // cache
 export const JOBS_PER_PAGE = 15;
-export const CACHE_PER_REQUEST = 45;
-export const CACHE_LIMIT = 180;
-export const FAVORITES_LIMIT = 100;
-export const TRASH_LIMIT = 45;
-export const TRASH_EXTRA_LIMIT = 200;
+export const CACHE_PER_REQUEST = 20;
+export const CACHE_LIMIT = 100;
+export const FAVORITES_LIMIT = 50;
 
 // LOGGLY
 export const LOGGLY_URL = 'https://logs-01.loggly.com';

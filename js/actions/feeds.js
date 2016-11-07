@@ -1,12 +1,20 @@
 'use strict';
 
-function sort(sortType) {
+function update(data) {
   return {
-    type: 'FEEDS_SORT',
-    sortType
+    type: 'FEEDS_UPDATE',
+    data
+  };
+}
+
+function filter(value) {
+  return {
+    type: 'FEEDS_FILTER',
+    value
   };
 }
 
 export {
-  sort
+  update,
+  filter
 };

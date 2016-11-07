@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as SearchActions from '../../actions/search';
+import * as FeedsActions from '../../actions/feeds';
 import * as storage from '../../modules/storage';
 import * as upworkController from '../../controllers/upwork';
 import SearchView from './view';
@@ -22,28 +23,20 @@ const mapDispatchToProps = function(dispatch) {
       if (curFeedsValue !== value) {
         await storage.set(feedsName, value);
         dispatch(SearchActions.addFeeds(value));
+        var response;
         try {
-          let response = await upworkController.getFeeds(value);
-          console.log(response);
-          dispatch(SearchActions.feedsUpdateFinished());
+          response = await upworkController.getFeeds(value);
         } catch (e) {
-          console.log(e);
+          console.log(e); // something wrong, need to handle
+        }
+        dispatch(SearchActions.feedsUpdateFinished());
+        if (response && response.jobs) {
+          await storage.set('feeds', response.jobs);
+          dispatch(FeedsActions.update(response.jobs));
+        } else {
+          console.log(response); // something wrong, need to handle
         }
       }
-      // var state = this.state,
-      //   searchValue = this.trim(state.searchValue);
-      //
-      // if (searchValue !== '') {
-      //   dismissKeyboard();
-      //   await storage.set('search', searchValue);
-      //   upworkController.getFeeds({
-      //     q: searchValue,
-      //     sort: 'create_time desc'
-      //   }, function(err, response) {
-      //     console.log(err);
-      //     console.log(response);
-      //   })
-      // }
     },
     getStoredFeedsRequest: async function() {
       return await storage.get('feedsRequest');

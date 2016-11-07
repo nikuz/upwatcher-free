@@ -2,7 +2,10 @@
 
 import * as storage from '../modules/storage';
 
-const DEFAULT = [];
+const DEFAULT = {
+  data: [],
+  filter: null
+};
 
 var savedFeeds;
 
@@ -12,13 +15,18 @@ var savedFeeds;
 
 export default function feedsReducers(state = DEFAULT, action) {
   switch (action.type) {
-    case 'FEEDS_SORT':
-      return state;
+    case 'FEEDS_UPDATE':
+      return Object.assign({}, state, {
+        data: action.data
+      });
+    case 'FEEDS_FILTER':
+      return Object.assign({}, state, {
+        filter: action.value
+      });
     default:
       if (savedFeeds) {
-        let newState = savedFeeds;
+        DEFAULT.data = savedFeeds;
         savedFeeds = null;
-        return newState;
       }
       return state;
   }

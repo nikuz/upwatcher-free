@@ -48,7 +48,7 @@ class Search extends React.Component {
       <View style={styles.container}>
         <TextInput
           defaultValue={this.state.feeds}
-          placeholder="Find Jobs"
+          placeholder="Find Work"
           placeholderTextColor="#999"
           editable={!props.search.loading}
           style={styles.field}
