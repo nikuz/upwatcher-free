@@ -29,18 +29,18 @@ class Search extends React.Component {
   }
   onChangeText(value) {
     this.setState({
-      feeds: value
+      feeds: this.trim(value)
     });
   }
   submitHandler() {
     dismissKeyboard();
     this.props.addFeedsRequest(this.state.feeds);
   }
-  componentDidMount = async () => {
+  componentWillReceiveProps(newProps) {
     this.setState({
-      feeds: await this.props.getStoredFeedsRequest()
+      feeds: newProps.search.feeds
     });
-  };
+  }
   render() {
     var props = this.props;
 
@@ -48,6 +48,7 @@ class Search extends React.Component {
       <View style={styles.container}>
         <TextInput
           defaultValue={this.state.feeds}
+          value={this.state.feeds}
           placeholder="Find Work"
           placeholderTextColor="#999"
           editable={!props.search.loading}
@@ -71,8 +72,7 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  addFeedsRequest: React.PropTypes.func.isRequired,
-  getStoredFeedsRequest: React.PropTypes.func.isRequired
+  addFeedsRequest: React.PropTypes.func.isRequired
 };
 
 export default Search;

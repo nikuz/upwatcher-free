@@ -3,7 +3,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as storage from '../../modules/storage';
-import * as FeedsActions from '../../actions/feeds';
+import * as feedsActions from '../../actions/feeds';
+import * as feedsModel from '../../models/feeds';
 import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
@@ -16,6 +17,14 @@ const mapDispatchToProps = function(dispatch) {
   return {
     getStoredFeeds: async function() {
       return await storage.get('feeds');
+    },
+    addToFavorites: function(id) {
+      dispatch(feedsActions.addToFavorites(id));
+      feedsModel.addToFavorites(id);
+    },
+    removeFromFavorites: function(id) {
+      dispatch(feedsActions.removeFromFavorites(id));
+      feedsModel.removeFromFavorites(id);
     }
   };
 };

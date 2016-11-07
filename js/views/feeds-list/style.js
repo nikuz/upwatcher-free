@@ -22,19 +22,23 @@ export default stylesGenerator({
     flex: 1
   },
   row: {
-    padding: 10,
+    padding: 13,
     paddingTop: 13,
     paddingBottom: 13,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
   },
   row_title: {
-    marginBottom: 5,
     fontSize: 16,
     color: '#5bbc2e'
   },
+  row_job_header: {
+    flexDirection: 'row',
+  },
   row_job_type_wrap: {
-    flexDirection: 'row'
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 2
   },
   row_job_type: {
     fontWeight: 'bold',
@@ -46,14 +50,23 @@ export default stylesGenerator({
     fontSize: 12
   },
   row_job_budget_wrap: {
-    flexDirection: 'row',
-    marginTop: 8
-  },
-  row_job_budget_title: {
-    color: '#666'
+    flex: 1,
+    alignItems: 'flex-end'
   },
   row_job_budget: {
+    position: 'absolute',
+    right: 0,
+    width: 50,
+    marginTop: 7,
+    alignItems: 'center'
+  },
+  row_job_budget_text: {
     color: '#494949'
+  },
+
+  row_job_skills: {
+    marginTop: 6,
+    marginBottom: 2,
   },
 
   row_footer: {
@@ -113,5 +126,8 @@ export default stylesGenerator({
   row_favorite_icon: {
     fontSize: 20,
     color: '#666'
+  },
+  row_favorite_icon_active: {
+    color: '#f36200'
   }
 });

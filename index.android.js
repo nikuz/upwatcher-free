@@ -10,12 +10,14 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import { Provider } from 'react-redux';
 import AppStore from './js/store';
+import initialModelsSet from './js/models/main';
 import Main from './js/views/main-controller';
 
 class App extends React.Component {
   componentDidMount() {
     SplashScreen.hide();
     StatusBar.setBackgroundColor('#67be44');
+    initialModelsSet();
   }
   render() {
     return (

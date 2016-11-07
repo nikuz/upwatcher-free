@@ -1,5 +1,12 @@
 'use strict';
 
+function defaultSet(value) {
+  return {
+    type: 'SEARCH_DEFAULT_SET',
+    value
+  };
+}
+
 function addFeeds(value) {
   return {
     type: 'SEARCH_ADD_FEEDS',
@@ -14,6 +21,7 @@ function feedsUpdateFinished() {
 }
 
 export {
+  defaultSet,
   addFeeds,
   feedsUpdateFinished
 };

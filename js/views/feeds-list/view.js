@@ -73,12 +73,18 @@ class FeedsItem extends React.Component {
     super(props);
     this.openHandler = this.openHandler.bind(this);
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
+    this.getFavoriteButton = this.getFavoriteButton.bind(this);
   }
   openHandler() {
     console.log(this.props);
   }
   onFavoriteClick() {
-    console.log(this.props);
+    var id = this.props.id;
+    if (this.props.favorite) {
+      this.props.removeFromFavorites(id);
+    } else {
+      this.props.addToFavorites(id);
+    }
   }
   getRating(data) {
     var noRating = true,
@@ -123,9 +129,29 @@ class FeedsItem extends React.Component {
       </View>
     );
   }
+  getFavoriteButton() {
+    var icon = 'favorite-border',
+      inFavorite;
+
+    if (this.props.favorite) {
+      icon = 'favorite';
+      inFavorite = true;
+    }
+    return (
+      <TouchableOpacity
+        style={styles.row_favorite_icon_wrap}
+        onPress={this.onFavoriteClick}
+      >
+        <MaterialIcons
+          name={icon}
+          style={[styles.row_favorite_icon, inFavorite && styles.row_favorite_icon_active]}
+        />
+      </TouchableOpacity>
+    );
+  }
   render() {
     var props = this.props;
-    console.log(props);
+    // console.log(props);
     return (
       <TouchableHighlight
         style={styles.row}
@@ -134,19 +160,24 @@ class FeedsItem extends React.Component {
       >
         <View>
           <Text style={styles.row_title}>{props.title}</Text>
-          <View style={styles.row_job_type_wrap}>
-            <Text style={styles.row_job_type}>{props.job_type}</Text>
-            <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(props.date_created)}</Text>
-          </View>
-          {props.budget ?
-            <View style={styles.row_job_budget_wrap}>
-              <Text style={styles.row_job_budget_title}>Budget: </Text>
-              <Text style={styles.row_job_budget}>${props.budget}</Text>
+          <View style={styles.row_job_header}>
+            <View style={styles.row_job_type_wrap}>
+              <Text style={styles.row_job_type}>{props.job_type}</Text>
+              <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(props.date_created)}</Text>
             </View>
-            : null
-          }
+            <View style={styles.row_job_budget_wrap}>
+              {props.budget ?
+                <View style={styles.row_job_budget}>
+                  <Text style={styles.row_job_budget_text}>${props.budget}</Text>
+                </View>
+                : null
+              }
+            </View>
+          </View>
           {props.skills ?
-            <SkillsView items={props.skills} short={true} />
+            <View style={styles.row_job_skills}>
+              <SkillsView items={props.skills} short={true} />
+            </View>
             : null
           }
           <View style={styles.row_footer}>
@@ -157,15 +188,7 @@ class FeedsItem extends React.Component {
               {this.getPaymentMethod(props.client)}
             </View>
             <View style={styles.row_favorite}>
-              <TouchableOpacity
-                style={styles.row_favorite_icon_wrap}
-                onPress={this.onFavoriteClick}
-              >
-                <MaterialIcons
-                  name="favorite-border"
-                  style={styles.row_favorite_icon}
-                />
-              </TouchableOpacity>
+              {this.getFavoriteButton()}
             </View>
           </View>
         </View>
@@ -180,20 +203,33 @@ FeedsItem.propTypes = {
   date_created: React.PropTypes.string.isRequired,
   budget: React.PropTypes.number.isRequired,
   client: React.PropTypes.object.isRequired,
-  skills: React.PropTypes.array.isRequired
+  skills: React.PropTypes.array.isRequired,
+  addToFavorites: React.PropTypes.func.isRequired,
+  removeFromFavorites: React.PropTypes.func.isRequired
 };
 
 class FeedsList extends React.Component {
   constructor(props) {
     super(props);
-    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
     this.state = {
-      dataSource: this.ds.cloneWithRows(props.data)
+      dataSource: ds.cloneWithRows(props.data)
     };
     this.renderRow = this.renderRow.bind(this);
   }
   renderRow(item) {
-    return <FeedsItem {...item} />;
+    return <FeedsItem
+      {...item}
+      addToFavorites={this.props.addToFavorites}
+      removeFromFavorites={this.props.removeFromFavorites}
+    />
+  }
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(newProps.data)
+    });
   }
   render() {
     return (
@@ -207,7 +243,9 @@ class FeedsList extends React.Component {
 }
 
 FeedsList.propTypes = {
-  data: React.PropTypes.array.isRequired
+  data: React.PropTypes.array.isRequired,
+  addToFavorites: React.PropTypes.func.isRequired,
+  removeFromFavorites: React.PropTypes.func.isRequired
 };
 
 class FeedsListManager extends React.Component {
@@ -222,6 +260,11 @@ class FeedsListManager extends React.Component {
       feeds: await this.props.getStoredFeeds()
     });
   };
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      feeds: newProps.feeds.data
+    });
+  }
   render() {
     var state = this.state;
     return (
@@ -229,7 +272,11 @@ class FeedsListManager extends React.Component {
         {!state.feeds.length ?
           <FeedsListBlank />
           :
-          <FeedsList data={state.feeds} />
+          <FeedsList
+            data={state.feeds}
+            addToFavorites={this.props.addToFavorites}
+            removeFromFavorites={this.props.removeFromFavorites}
+          />
         }
       </View>
     );
@@ -238,7 +285,9 @@ class FeedsListManager extends React.Component {
 
 FeedsListManager.propTypes = {
   feeds: React.PropTypes.object.isRequired,
-  getStoredFeeds: React.PropTypes.func.isRequired
+  getStoredFeeds: React.PropTypes.func.isRequired,
+  addToFavorites: React.PropTypes.func.isRequired,
+  removeFromFavorites: React.PropTypes.func.isRequired
 };
 
 export default FeedsListManager;

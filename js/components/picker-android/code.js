@@ -16,7 +16,7 @@ import styles from './style';
 class PickerAndroid extends Component {
   constructor(props) {
     super(props);
-    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var values = deepClone(props.values);
     _.each(values, function(item) {
       if (_.keys(item)[0] == props.value) {
@@ -26,7 +26,7 @@ class PickerAndroid extends Component {
     this.state = {
       values,
       curValue: props.value,
-      dataSource: this.ds.cloneWithRows(values)
+      dataSource: ds.cloneWithRows(values)
     };
     this.renderRow = this.renderRow.bind(this);
     this.onValueChange = this.onValueChange.bind(this);

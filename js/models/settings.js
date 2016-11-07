@@ -127,4 +127,4 @@ export {
   DEFAULT as DEFAULT_DATA,
   get,
   set
-};
+}

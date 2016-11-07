@@ -9,7 +9,6 @@ import * as config from '../config';
 import * as storage from '../modules/storage';
 import * as OAuth from '../modules/oauth';
 import constants from '../modules/constants';
-import * as settingsModel from '../models/settings';
 import * as network from '../modules/network';
 import * as ajax from '../modules/ajax';
 
@@ -225,16 +224,11 @@ function login() {
   });
 }
 
-function feedsSearchSettingsFieldPrepare(field) {
-  field = field.toLowerCase();
-  return field === 'all' ? '' : field.replace(/\s+/g, '_');
-}
-
 // ----------------
 // public methods
 // ----------------
 
-function getFeeds(value, page) {
+function getFeeds(options) {
   return new Promise(async function(resolve, reject) {
     try {
       await network.check();
@@ -243,31 +237,10 @@ function getFeeds(value, page) {
       return reject(e);
     }
 
-    var sData = await settingsModel.get(),
-      requestData = {
-        q: value,
-        budget: `[${sData.budgetFrom.value} TO ${sData.budgetTo.value}]`,
-        days_posted: config.UPWORK_JOBS_DAYS_POSTED,
-        duration: feedsSearchSettingsFieldPrepare(sData.duration.value),
-        job_type: feedsSearchSettingsFieldPrepare(sData.jobType.value),
-        workload: feedsSearchSettingsFieldPrepare(sData.workload.value),
-        sort: 'create_time desc'
-      },
-      pagerStart = 0;
-
-    if (page) {
-      pagerStart = page * config.CACHE_PER_REQUEST;
-    }
-    requestData.paging = `${pagerStart};${config.CACHE_PER_REQUEST}`; // API pager format is `$offset;$count`
-
-    if (sData.category2.value !== 'All') {
-      requestData.category2 = sData.category2.value;
-    }
-
     request({
       url: config.UPWORK_JOBS_URL,
       method: 'GET',
-      data: requestData
+      data: options
     }, function(err, response) {
       if (err) {
         reject(err);
