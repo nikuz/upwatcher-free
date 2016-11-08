@@ -2,12 +2,13 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as StateActions from '../../actions/state';
-import FeedsView from './view';
+import * as favoritesActions from '../../actions/favorites';
+import * as favoritesModel from '../../models/favorites';
+import FavoritesView from './view';
 
 const mapStateToProps = function(state) {
   return {
-    tabs: state.tabs
+    favorites: state.favorites
   };
 };
 
@@ -20,4 +21,4 @@ const mapDispatchToProps = function(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FeedsView);
+)(FavoritesView);

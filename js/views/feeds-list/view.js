@@ -7,14 +7,11 @@ import {
   Text,
   ListView,
   RefreshControl,
-  TouchableHighlight,
-  TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
 import {deepClone} from '../../modules/object';
-import SkillsView from '../../components/skills/code';
-import timeAgo from '../../modules/timeAgo';
+import FeedsItem from '../../components/feeds-list-item/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
@@ -72,142 +69,6 @@ class FeedsListBlank extends React.Component {
   }
 }
 
-class FeedsItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.openHandler = this.openHandler.bind(this);
-    this.onFavoriteClick = this.onFavoriteClick.bind(this);
-    this.getFavoriteButton = this.getFavoriteButton.bind(this);
-  }
-  openHandler() {
-    console.log(this.props.item);
-  }
-  onFavoriteClick() {
-    var id = this.props.item.id;
-    if (this.props.item.favorite) {
-      this.props.removeFromFavorites(id);
-    } else {
-      this.props.addToFavorites(this.props.item);
-    }
-  }
-  getRating(data) {
-    var noRating = true,
-      text;
-
-    if (data.feedback) {
-      noRating = false;
-      text = `${data.feedback.toFixed(1)} (${data.reviews_count})`;
-    } else {
-      text = 'No Ratings Yet';
-    }
-
-    return (
-      <View style={styles.row_rating_cont}>
-        <MaterialIcons
-          name="star"
-          style={[styles.row_rating_icon, noRating && styles.row_rating_icon_gray]}
-        />
-        <Text style={styles.row_rating_text}>{text}</Text>
-      </View>
-    );
-  }
-  getPaymentMethod(data) {
-    var text = 'Unverified',
-      unverified = true;
-
-    if (data.payment_verification_status === 'VERIFIED') {
-      text = 'Verified';
-      unverified = false;
-    }
-    return (
-      <View style={styles.row_payment_cont}>
-        <MaterialIcons
-          name="verified-user"
-          style={[styles.row_payment_icon, unverified && styles.row_payment_unverified]}
-        />
-        <Text
-          style={[styles.row_payment_text, unverified && styles.row_payment_unverified]}
-        >
-          Payment {text}
-        </Text>
-      </View>
-    );
-  }
-  getFavoriteButton(data) {
-    var icon = 'favorite-border',
-      inFavorite;
-
-    if (data.favorite) {
-      icon = 'favorite';
-      inFavorite = true;
-    }
-    return (
-      <TouchableOpacity
-        style={styles.row_favorite_icon_wrap}
-        onPress={this.onFavoriteClick}
-      >
-        <MaterialIcons
-          name={icon}
-          style={[styles.row_favorite_icon, inFavorite && styles.row_favorite_icon_active]}
-        />
-      </TouchableOpacity>
-    );
-  }
-  render() {
-    var item = this.props.item;
-    return (
-      <TouchableHighlight
-        style={styles.row}
-        onPress={this.openHandler}
-        underlayColor="#f9f9f9"
-      >
-        <View>
-          <View style={styles.row_body}>
-            <Text style={styles.row_title}>{item.title}</Text>
-            <View style={styles.row_job_header}>
-              <View style={styles.row_job_type_wrap}>
-                <Text style={styles.row_job_type}>{item.job_type}</Text>
-                <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(item.date_created)}</Text>
-              </View>
-              <View style={styles.row_job_budget_wrap}>
-                {item.budget ?
-                  <View style={styles.row_job_budget}>
-                    <Text style={styles.row_job_budget_text}>${item.budget}</Text>
-                  </View>
-                  : null
-                }
-              </View>
-            </View>
-            {item.skills ?
-              <View style={styles.row_job_skills}>
-                <SkillsView items={item.skills} short={true} />
-              </View>
-              : null
-            }
-          </View>
-          <View style={styles.row_footer}>
-            <View style={styles.row_rating}>
-              {this.getRating(item.client)}
-            </View>
-            <View style={styles.row_payment}>
-              {this.getPaymentMethod(item.client)}
-            </View>
-            <View style={styles.row_favorite}>
-              {this.getFavoriteButton(item)}
-            </View>
-          </View>
-        </View>
-      </TouchableHighlight>
-    );
-  }
-}
-
-FeedsItem.propTypes = {
-  item: React.PropTypes.object.isRequired,
-  addToFavorites: React.PropTypes.func.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
-};
-
 class FeedsList extends React.Component {
   constructor(props) {
     super(props);
@@ -221,6 +82,8 @@ class FeedsList extends React.Component {
       refreshing: props.feeds.refreshing,
       page: 0
     };
+    this.openHandler = this.openHandler.bind(this);
+    this.onFavoriteClick = this.onFavoriteClick.bind(this);
     this.refresh = this.refresh.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
@@ -232,6 +95,16 @@ class FeedsList extends React.Component {
       item.favorite = !!_.findWhere(favorites, {id: item.id});
     });
     return feeds;
+  }
+  openHandler(item) {
+    console.log(item);
+  }
+  onFavoriteClick(item) {
+    if (item.favorite) {
+      this.props.removeFromFavorites(item.id);
+    } else {
+      this.props.addToFavorites(item);
+    }
   }
   refresh() {
     if (!this.state.refreshing) {
@@ -258,9 +131,9 @@ class FeedsList extends React.Component {
   renderRow(item) {
     return (
       <FeedsItem
-        item={item}
-        addToFavorites={this.props.addToFavorites}
-        removeFromFavorites={this.props.removeFromFavorites}
+        data={item}
+        openHandler={this.openHandler}
+        onFavoriteClick={this.onFavoriteClick}
       />
     );
   }
