@@ -15,14 +15,17 @@ export default stylesGenerator({
   tab_item: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 7
+    paddingTop: 7,
+    // borderWidth: 1
   },
   tab_cont: {
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 10
   },
   icon: {
-    fontSize: 22,
-    marginBottom: 2,
+    fontSize: 24,
+    marginBottom: -3,
     color: '#585759'
   },
   name: {
@@ -34,16 +37,21 @@ export default stylesGenerator({
   },
   counter: {
     position: 'absolute',
-    top: -5,
-    left: 19,
+    top: 3,
+    right: 10,
     padding: 2,
-    opacity: .5
+    paddingLeft: 6,
+    paddingRight: 6,
+    backgroundColor: '#f36200',
+    borderRadius: 10,
   },
-  tab_active_counter: {
-    opacity: .9
+  counter_long: {
+    paddingLeft: 4,
+    paddingRight: 4
   },
   counter_text: {
     fontSize: 10,
+    color: '#FFF',
     backgroundColor: 'transparent'
   }
 });

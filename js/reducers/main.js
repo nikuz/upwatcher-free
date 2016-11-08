@@ -7,6 +7,7 @@ import overlay from './overlay';
 import search from './search';
 import feeds from './feeds';
 import favorites from './favorites';
+import tabs from './tabs';
 
 const todoApp = combineReducers({
   state: appState,
@@ -14,7 +15,8 @@ const todoApp = combineReducers({
   overlay,
   search,
   feeds,
-  favorites
+  favorites,
+  tabs
 });
 
 export default todoApp;
