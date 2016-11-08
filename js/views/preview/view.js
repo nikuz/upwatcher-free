@@ -151,27 +151,27 @@ class JobView extends React.Component {
       loading: true
     });
     this.request = true;
-    request.get({
-      url: config.UPWORK_JOB_URL.replace('{id}', this.props.id)
-    }, (err, response) => {
-      if (err) {
-        EventManager.trigger('inboxError');
-        if (this.request) {
-          this.setState({
-            loading: false
-          });
-        }
-      } else if(response && this.request) {
-        this.request = null;
-        this.parseJobData(response.profile);
-      } else {
-        if (this.request) {
-          this.setState({
-            loading: false
-          });
-        }
-      }
-    });
+    // request.get({
+    //   url: config.UPWORK_JOB_URL.replace('{id}', this.props.id)
+    // }, (err, response) => {
+    //   if (err) {
+    //     EventManager.trigger('inboxError');
+    //     if (this.request) {
+    //       this.setState({
+    //         loading: false
+    //       });
+    //     }
+    //   } else if(response && this.request) {
+    //     this.request = null;
+    //     this.parseJobData(response.profile);
+    //   } else {
+    //     if (this.request) {
+    //       this.setState({
+    //         loading: false
+    //       });
+    //     }
+    //   }
+    // });
   };
   managerEventsHandler = (e) => {
     var targetFolder = 'trash';

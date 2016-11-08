@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import * as config from '../config';
 import Feeds from './feeds/controller';
-import JobView from './settings/controller';
+import Preview from './preview/controller';
 import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/controller';
 import NavigatorBar from './../components/navigator-bar/code';
@@ -51,19 +51,14 @@ class Main extends React.Component {
   }
   shouldComponentUpdate = () => false;
   renderScene(route, navigator) {
-    var component;
     switch (route.id) {
       case 'inbox':
-        component = <Feeds navigator={navigator} />;
-        break;
-      case 'job_view':
-        component = <JobView {...route.job_data} navigator={navigator} />;
-        break;
+        return <Feeds navigator={navigator} />;
+      case 'preview':
+        return <Preview />;
       case 'settings':
-        component = <Settings />;
-        break;
+        return <Settings />;
     }
-    return component;
   }
   render() {
     var initialRoute = {

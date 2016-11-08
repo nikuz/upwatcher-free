@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import * as _ from 'underscore';
 import * as EventManager from '../../modules/events';
-import * as navigatorHelpers from '../../modules/navigator';
 import styles from './style';
 
 const positionOnScreen = 39,

@@ -6,7 +6,6 @@ import {
   Text,
   TouchableHighlight
 } from 'react-native';
-import * as _ from 'underscore';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
@@ -16,13 +15,7 @@ class Tabs extends React.Component {
     this.handlerClick = this.handlerClick.bind(this);
   }
   handlerClick(tabId) {
-    var clickOnActiveTab;
-    _.each(this.props.tabs.items, function(item) {
-      if (item.active && item.id === tabId) {
-        clickOnActiveTab = true;
-      }
-    });
-    if (!clickOnActiveTab) {
+    if (tabId !== this.props.tabs.activeTab) {
       this.props.change(tabId);
     }
   }
@@ -32,7 +25,7 @@ class Tabs extends React.Component {
       return (
         <View style={styles.tabs}>
           {tabs.items.map(tab => {
-            let activeStyle = tab.active && styles.tab_active_color,
+            let activeStyle = tab.id === tabs.activeTab && styles.tab_active_color,
               jobsCount;
 
             if (tab.id === 'favorites') {

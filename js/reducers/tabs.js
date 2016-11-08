@@ -1,15 +1,12 @@
 'use strict';
 
-import * as _ from 'underscore';
-import {deepClone} from '../modules/object';
-
 const DEFAULT = {
   visible: true,
+  activeTab: 'search',
   items: [{
     id: 'search',
     name: 'Search',
-    icon: 'search',
-    active: true
+    icon: 'search'
   }, {
     id: 'favorites',
     name: 'Favorites',
@@ -19,13 +16,10 @@ const DEFAULT = {
 
 export default function tabsReducers(state = DEFAULT, action) {
   switch (action.type) {
-    case 'TABS_CHANGE': {
-      let newState = deepClone(state);
-      _.each(newState.items, function(item) {
-        item.active = item.id === action.id;
+    case 'TABS_CHANGE':
+      return Object.assign({}, state, {
+        activeTab: action.id
       });
-      return newState;
-    }
     default:
       return state;
   }
