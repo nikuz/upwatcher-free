@@ -16,14 +16,36 @@ import * as _ from 'underscore';
 import * as Linkify from 'linkifyjs';
 import * as EventManager from '../../modules/events';
 import * as config from '../../config';
-import * as request from '../../controllers/request';
-import Skills from '../skills/code';
-import Errors from '../errors/code';
-import Manager from '../manager/code';
+import Skills from '../../components/skills/code';
+import Errors from '../../components/errors/code';
 import timeAgo from '../../modules/timeAgo';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import FeedbacksList from './feedbacks';
 import styles from './style';
+
+class FeedbacksList extends React.Component {
+  render() {
+    var feedbacks = this.props.feedbacks || [];
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.feedback_wrap}
+      >
+        {feedbacks.map((item, key) => {
+          return (
+            <View key={key} style={styles.feedback_item}>
+              <View style={styles.fi_cont}>
+                <Text style={styles.big}>{item.as_engagement_title}</Text>
+                <Text style={[styles.small, styles.margin]}>{item.as_from} - {item.as_to}</Text>
+                {item.feedback.comment ? <Text>{item.feedback.comment}</Text> : null}
+              </View>
+              <Text style={styles.big}>{item.feedback.score}</Text>
+            </View>
+          );
+        })}
+      </ScrollView>
+    );
+  }
+}
 
 class JobView extends React.Component {
   static propTypes = {
