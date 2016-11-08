@@ -22,11 +22,14 @@ export default stylesGenerator({
     flex: 1
   },
   row: {
-    padding: 13,
     paddingTop: 13,
     paddingBottom: 13,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0'
+  },
+  row_body: {
+    paddingLeft: 13,
+    paddingRight: 13,
   },
   row_title: {
     fontSize: 16,
@@ -75,7 +78,8 @@ export default stylesGenerator({
   },
 
   row_rating: {
-    flex: 3
+    flex: 3,
+    paddingLeft: 13
   },
   row_rating_cont: {
     flexDirection: 'row'
@@ -129,5 +133,9 @@ export default stylesGenerator({
   },
   row_favorite_icon_active: {
     color: '#f36200'
+  },
+  footer: {
+    paddingTop: 5,
+    paddingBottom: 5
   }
 });

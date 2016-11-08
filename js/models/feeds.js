@@ -4,9 +4,10 @@ import * as _ from 'underscore';
 import * as storage from '../modules/storage';
 import * as config from '../config';
 import * as settingsModel from './settings';
+import * as searchModel from './search';
 import * as upworkController from '../controllers/upwork';
 
-const name = 'feeds';
+const storageCollectionName = 'feeds';
 
 function settingsFieldPrepare(field) {
   field = field.toLowerCase();
@@ -18,10 +19,14 @@ function settingsFieldPrepare(field) {
 // ----------------
 
 async function get() {
-  return await storage.get(name);
+  return await storage.get(storageCollectionName);
 }
 
 async function request(value, page) {
+  if (!value) {
+    value = await searchModel.get();
+  }
+
   var sData = await settingsModel.get(),
     requestData = {
       q: value,
@@ -49,12 +54,11 @@ async function request(value, page) {
   } catch (e) {
     console.log(e);
   }
-  await storage.set('feeds', response.jobs);
   return response;
 }
 
 async function set(value) {
-  return await storage.set(name, value);
+  return await storage.set(storageCollectionName, value);
 }
 
 async function addToFavorites(id) {

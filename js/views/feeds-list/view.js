@@ -6,8 +6,10 @@ import {
   Animated,
   Text,
   ListView,
+  RefreshControl,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import SkillsView from '../../components/skills/code';
 import timeAgo from '../../modules/timeAgo';
@@ -159,27 +161,29 @@ class FeedsItem extends React.Component {
         underlayColor="#f9f9f9"
       >
         <View>
-          <Text style={styles.row_title}>{props.title}</Text>
-          <View style={styles.row_job_header}>
-            <View style={styles.row_job_type_wrap}>
-              <Text style={styles.row_job_type}>{props.job_type}</Text>
-              <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(props.date_created)}</Text>
+          <View style={styles.row_body}>
+            <Text style={styles.row_title}>{props.title}</Text>
+            <View style={styles.row_job_header}>
+              <View style={styles.row_job_type_wrap}>
+                <Text style={styles.row_job_type}>{props.job_type}</Text>
+                <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(props.date_created)}</Text>
+              </View>
+              <View style={styles.row_job_budget_wrap}>
+                {props.budget ?
+                  <View style={styles.row_job_budget}>
+                    <Text style={styles.row_job_budget_text}>${props.budget}</Text>
+                  </View>
+                  : null
+                }
+              </View>
             </View>
-            <View style={styles.row_job_budget_wrap}>
-              {props.budget ?
-                <View style={styles.row_job_budget}>
-                  <Text style={styles.row_job_budget_text}>${props.budget}</Text>
-                </View>
-                : null
-              }
-            </View>
+            {props.skills ?
+              <View style={styles.row_job_skills}>
+                <SkillsView items={props.skills} short={true} />
+              </View>
+              : null
+            }
           </View>
-          {props.skills ?
-            <View style={styles.row_job_skills}>
-              <SkillsView items={props.skills} short={true} />
-            </View>
-            : null
-          }
           <View style={styles.row_footer}>
             <View style={styles.row_rating}>
               {this.getRating(props.client)}
@@ -201,7 +205,7 @@ FeedsItem.propTypes = {
   title: React.PropTypes.string.isRequired,
   job_type: React.PropTypes.string.isRequired,
   date_created: React.PropTypes.string.isRequired,
-  budget: React.PropTypes.number.isRequired,
+  budget: React.PropTypes.number,
   client: React.PropTypes.object.isRequired,
   skills: React.PropTypes.array.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
@@ -215,27 +219,82 @@ class FeedsList extends React.Component {
       rowHasChanged: (r1, r2) => r1 !== r2
     });
     this.state = {
-      dataSource: ds.cloneWithRows(props.data)
+      dataSource: ds.cloneWithRows(props.feeds.data),
+      loading_more: props.feeds.loading_more,
+      refreshing: props.feeds.refreshing,
+      page: 0
     };
+    this.refresh = this.refresh.bind(this);
     this.renderRow = this.renderRow.bind(this);
+    this.renderFooter = this.renderFooter.bind(this);
+    this.onEndReached = this.onEndReached.bind(this);
   }
-  renderRow(item) {
-    return <FeedsItem
-      {...item}
-      addToFavorites={this.props.addToFavorites}
-      removeFromFavorites={this.props.removeFromFavorites}
-    />
+  refresh() {
+    if (!this.state.refreshing) {
+      this.props.refresh();
+    }
+  }
+  onEndReached() {
+    if (!this.state.loading_more) {
+      let page = this.state.page + 1;
+      this.setState({
+        page
+      });
+      this.props.loadMoreJobs(page);
+    }
   }
   componentWillReceiveProps(newProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(newProps.data)
+      dataSource: this.state.dataSource.cloneWithRows(newProps.feeds.data),
+      loading_more: newProps.feeds.loading_more,
+      refreshing: newProps.feeds.refreshing
     });
   }
+  shouldComponentUpdate(nextProps) {
+    var props = this.props;
+
+    return nextProps.feeds.data !== props.feeds.data
+      || nextProps.feeds.refreshing !== props.feeds.refreshing
+      || nextProps.feeds.loading_more !== props.feeds.loading_more;
+  }
+  renderRow(item) {
+    return (
+      <FeedsItem
+        {...item}
+        addToFavorites={this.props.addToFavorites}
+        removeFromFavorites={this.props.removeFromFavorites}
+      />
+    );
+  }
+  renderFooter() {
+    var content = null;
+    if (this.state.loading_more) {
+      content = (
+        <View style={styles.footer}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    }
+    return content;
+  }
   render() {
+    var state = this.state;
     return (
       <ListView
-        dataSource={this.state.dataSource}
+        dataSource={state.dataSource}
         renderRow={this.renderRow}
+        renderFooter={this.renderFooter}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={20}
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor="#6FDA44"
+            colors={['#FFF']}
+            tintColor="#6FDA44" // iOS
+            refreshing={state.refreshing}
+            onRefresh={this.refresh}
+          />
+        }
         style={styles.list_container}
       />
     );
@@ -243,40 +302,22 @@ class FeedsList extends React.Component {
 }
 
 FeedsList.propTypes = {
-  data: React.PropTypes.array.isRequired,
+  feeds: React.PropTypes.object.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
+  removeFromFavorites: React.PropTypes.func.isRequired,
+  refresh: React.PropTypes.func.isRequired,
+  loadMoreJobs: React.PropTypes.func.isRequired
 };
 
 class FeedsListManager extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      feeds: props.feeds.data
-    };
-  }
-  componentDidMount = async () => {
-    this.setState({
-      feeds: await this.props.getStoredFeeds()
-    });
-  };
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      feeds: newProps.feeds.data
-    });
-  }
   render() {
-    var state = this.state;
+    var props = this.props;
     return (
       <View style={styles.container}>
-        {!state.feeds.length ?
+        {!props.feeds.data.length ?
           <FeedsListBlank />
           :
-          <FeedsList
-            data={state.feeds}
-            addToFavorites={this.props.addToFavorites}
-            removeFromFavorites={this.props.removeFromFavorites}
-          />
+          <FeedsList {...props} />
         }
       </View>
     );
@@ -285,9 +326,10 @@ class FeedsListManager extends React.Component {
 
 FeedsListManager.propTypes = {
   feeds: React.PropTypes.object.isRequired,
-  getStoredFeeds: React.PropTypes.func.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
+  removeFromFavorites: React.PropTypes.func.isRequired,
+  refresh: React.PropTypes.func.isRequired,
+  loadMoreJobs: React.PropTypes.func.isRequired
 };
 
 export default FeedsListManager;

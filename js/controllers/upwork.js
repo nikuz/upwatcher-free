@@ -15,17 +15,14 @@ import * as ajax from '../modules/ajax';
 var oauth;
 
 function init() {
-  return new Promise(function(resolve) {
-    if (!oauth) {
-      oauth = OAuth.init({
-        consumer: {
-          public: process.env.UPWORK_KEY,
-          secret: process.env.UPWORK_SECRET
-        }
-      });
-    }
-    resolve();
-  });
+  if (!oauth) {
+    oauth = OAuth.init({
+      consumer: {
+        public: process.env.UPWORK_KEY,
+        secret: process.env.UPWORK_SECRET
+      }
+    });
+  }
 }
 
 async function request(options = {}, callback = _.noop) {
@@ -210,7 +207,7 @@ function getAccess() {
 
 function login() {
   return new Promise(async function(resolve, reject) {
-    await init();
+    init();
 
     try {
       await getToken();

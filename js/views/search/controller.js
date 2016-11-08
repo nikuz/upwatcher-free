@@ -31,6 +31,7 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(searchActions.feedsUpdateFinished());
         if (response && response.jobs) {
           dispatch(feedsActions.update(response.jobs));
+          feedsModel.set(response.jobs);
         } else {
           console.log(response); // something wrong, need to handle
         }
