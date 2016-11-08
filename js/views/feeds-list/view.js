@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
+import * as _ from 'underscore';
+import {deepClone} from '../../modules/object';
 import SkillsView from '../../components/skills/code';
 import timeAgo from '../../modules/timeAgo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -78,14 +80,14 @@ class FeedsItem extends React.Component {
     this.getFavoriteButton = this.getFavoriteButton.bind(this);
   }
   openHandler() {
-    console.log(this.props);
+    console.log(this.props.item);
   }
   onFavoriteClick() {
-    var id = this.props.id;
-    if (this.props.favorite) {
+    var id = this.props.item.id;
+    if (this.props.item.favorite) {
       this.props.removeFromFavorites(id);
     } else {
-      this.props.addToFavorites(id);
+      this.props.addToFavorites(this.props.item);
     }
   }
   getRating(data) {
@@ -131,11 +133,11 @@ class FeedsItem extends React.Component {
       </View>
     );
   }
-  getFavoriteButton() {
+  getFavoriteButton(data) {
     var icon = 'favorite-border',
       inFavorite;
 
-    if (this.props.favorite) {
+    if (data.favorite) {
       icon = 'favorite';
       inFavorite = true;
     }
@@ -152,8 +154,7 @@ class FeedsItem extends React.Component {
     );
   }
   render() {
-    var props = this.props;
-    // console.log(props);
+    var item = this.props.item;
     return (
       <TouchableHighlight
         style={styles.row}
@@ -162,37 +163,37 @@ class FeedsItem extends React.Component {
       >
         <View>
           <View style={styles.row_body}>
-            <Text style={styles.row_title}>{props.title}</Text>
+            <Text style={styles.row_title}>{item.title}</Text>
             <View style={styles.row_job_header}>
               <View style={styles.row_job_type_wrap}>
-                <Text style={styles.row_job_type}>{props.job_type}</Text>
-                <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(props.date_created)}</Text>
+                <Text style={styles.row_job_type}>{item.job_type}</Text>
+                <Text style={styles.row_job_posted} ref="date_created"> - {timeAgo(item.date_created)}</Text>
               </View>
               <View style={styles.row_job_budget_wrap}>
-                {props.budget ?
+                {item.budget ?
                   <View style={styles.row_job_budget}>
-                    <Text style={styles.row_job_budget_text}>${props.budget}</Text>
+                    <Text style={styles.row_job_budget_text}>${item.budget}</Text>
                   </View>
                   : null
                 }
               </View>
             </View>
-            {props.skills ?
+            {item.skills ?
               <View style={styles.row_job_skills}>
-                <SkillsView items={props.skills} short={true} />
+                <SkillsView items={item.skills} short={true} />
               </View>
               : null
             }
           </View>
           <View style={styles.row_footer}>
             <View style={styles.row_rating}>
-              {this.getRating(props.client)}
+              {this.getRating(item.client)}
             </View>
             <View style={styles.row_payment}>
-              {this.getPaymentMethod(props.client)}
+              {this.getPaymentMethod(item.client)}
             </View>
             <View style={styles.row_favorite}>
-              {this.getFavoriteButton()}
+              {this.getFavoriteButton(item)}
             </View>
           </View>
         </View>
@@ -202,12 +203,7 @@ class FeedsItem extends React.Component {
 }
 
 FeedsItem.propTypes = {
-  title: React.PropTypes.string.isRequired,
-  job_type: React.PropTypes.string.isRequired,
-  date_created: React.PropTypes.string.isRequired,
-  budget: React.PropTypes.number,
-  client: React.PropTypes.object.isRequired,
-  skills: React.PropTypes.array.isRequired,
+  item: React.PropTypes.object.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
   removeFromFavorites: React.PropTypes.func.isRequired
 };
@@ -218,8 +214,9 @@ class FeedsList extends React.Component {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
+    var feeds = this.checkFavorites(props.feeds.data, props.favorites);
     this.state = {
-      dataSource: ds.cloneWithRows(props.feeds.data),
+      dataSource: ds.cloneWithRows(feeds),
       loading_more: props.feeds.loading_more,
       refreshing: props.feeds.refreshing,
       page: 0
@@ -228,6 +225,13 @@ class FeedsList extends React.Component {
     this.renderRow = this.renderRow.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onEndReached = this.onEndReached.bind(this);
+  }
+  checkFavorites(feeds, favorites) {
+    feeds = deepClone(feeds);
+    _.each(feeds, function(item) {
+      item.favorite = !!_.findWhere(favorites, {id: item.id});
+    });
+    return feeds;
   }
   refresh() {
     if (!this.state.refreshing) {
@@ -244,23 +248,17 @@ class FeedsList extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
+    var feeds = this.checkFavorites(newProps.feeds.data, newProps.favorites);
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(newProps.feeds.data),
+      dataSource: this.state.dataSource.cloneWithRows(feeds),
       loading_more: newProps.feeds.loading_more,
       refreshing: newProps.feeds.refreshing
     });
   }
-  shouldComponentUpdate(nextProps) {
-    var props = this.props;
-
-    return nextProps.feeds.data !== props.feeds.data
-      || nextProps.feeds.refreshing !== props.feeds.refreshing
-      || nextProps.feeds.loading_more !== props.feeds.loading_more;
-  }
   renderRow(item) {
     return (
       <FeedsItem
-        {...item}
+        item={item}
         addToFavorites={this.props.addToFavorites}
         removeFromFavorites={this.props.removeFromFavorites}
       />
@@ -285,7 +283,6 @@ class FeedsList extends React.Component {
         renderRow={this.renderRow}
         renderFooter={this.renderFooter}
         onEndReached={this.onEndReached}
-        onEndReachedThreshold={20}
         refreshControl={
           <RefreshControl
             progressBackgroundColor="#6FDA44"
@@ -303,6 +300,7 @@ class FeedsList extends React.Component {
 
 FeedsList.propTypes = {
   feeds: React.PropTypes.object.isRequired,
+  favorites: React.PropTypes.array.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
   removeFromFavorites: React.PropTypes.func.isRequired,
   refresh: React.PropTypes.func.isRequired,
@@ -326,6 +324,7 @@ class FeedsListManager extends React.Component {
 
 FeedsListManager.propTypes = {
   feeds: React.PropTypes.object.isRequired,
+  favorites: React.PropTypes.array.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
   removeFromFavorites: React.PropTypes.func.isRequired,
   refresh: React.PropTypes.func.isRequired,

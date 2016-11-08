@@ -4,11 +4,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as feedsActions from '../../actions/feeds';
 import * as feedsModel from '../../models/feeds';
+import * as favoritesActions from '../../actions/favorites';
+import * as favoritesModel from '../../models/favorites';
 import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
   return {
-    feeds: state.feeds
+    feeds: state.feeds,
+    favorites: state.favorites
   };
 };
 
@@ -45,13 +48,13 @@ const mapDispatchToProps = function(dispatch) {
         console.log(response); // something wrong, need to handle
       }
     },
-    addToFavorites: function(id) {
-      dispatch(feedsActions.addToFavorites(id));
-      feedsModel.addToFavorites(id);
+    addToFavorites: function(item) {
+      dispatch(favoritesActions.add(item));
+      favoritesModel.add(item);
     },
     removeFromFavorites: function(id) {
-      dispatch(feedsActions.removeFromFavorites(id));
-      feedsModel.removeFromFavorites(id);
+      dispatch(favoritesActions.remove(id));
+      favoritesModel.remove(id);
     }
   };
 };

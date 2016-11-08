@@ -238,7 +238,7 @@ function update(id, data, callback) {
     if (err) {
       return cb(err);
     }
-    var item = _.findWhere(curCache, {id: id});
+    var item = _.findWhere(curCache, {id});
     if (item) {
       _.extend(item, data);
     }

@@ -28,20 +28,6 @@ function filter(value) {
   };
 }
 
-function addToFavorites(id) {
-  return {
-    type: 'FEEDS_ADD_TO_FAVORITES',
-    id
-  };
-}
-
-function removeFromFavorites(id) {
-  return {
-    type: 'FEEDS_REMOVE_FROM_FAVORITES',
-    id
-  };
-}
-
 function refreshStart() {
   return {
     type: 'FEEDS_REFRESH_START'
@@ -71,8 +57,6 @@ export {
   update,
   addMore,
   filter,
-  addToFavorites,
-  removeFromFavorites,
   refreshStart,
   refreshStop,
   loadMoreJobsStart,

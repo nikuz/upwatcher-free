@@ -2,18 +2,18 @@
 
 import * as storage from '../modules/storage';
 
-const name = 'feedsRequest';
+const storageCollectionName = 'feedsRequest';
 
 // ----------------
 // public methods
 // ----------------
 
 async function get() {
-  return await storage.get(name);
+  return await storage.get(storageCollectionName);
 }
 
 async function set(value) {
-  return await storage.set(name, value);
+  return await storage.set(storageCollectionName, value);
 }
 
 // ---------

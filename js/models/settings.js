@@ -5,7 +5,7 @@ import constants from '../modules/constants';
 import * as storage from '../modules/storage';
 import {deepClone} from '../modules/object';
 
-const settingsName = 'settings';
+const storageCollectionName = 'settings';
 
 const DEFAULT = {
   category2: {
@@ -78,9 +78,9 @@ const DEFAULT = {
 };
 
 (async function() {
-  var settingsData = await storage.get(settingsName);
+  var settingsData = await storage.get(storageCollectionName);
   if (settingsData && !_.isEqual(_.keys(settingsData), _.keys(DEFAULT))) {
-    storage.remove(settingsName);
+    storage.remove(storageCollectionName);
   }
 })();
 
@@ -90,7 +90,7 @@ const DEFAULT = {
 
 async function get(field) {
   field = _.isString(field) ? field : null;
-  var settings = await storage.get(settingsName);
+  var settings = await storage.get(storageCollectionName);
   if (!settings) {
     settings = deepClone(DEFAULT);
   }
@@ -113,9 +113,9 @@ async function set(field, data) {
         settings[key] = data;
       }
     });
-    return await storage.set(settingsName, settings);
+    return await storage.set(storageCollectionName, settings);
   } else {
-    return await storage.set(settingsName, data);
+    return await storage.set(storageCollectionName, data);
   }
 }
 

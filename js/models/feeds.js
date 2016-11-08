@@ -22,6 +22,10 @@ async function get() {
   return await storage.get(storageCollectionName);
 }
 
+async function set(data) {
+  return await storage.set(storageCollectionName, data);
+}
+
 async function request(value, page) {
   if (!value) {
     value = await searchModel.get();
@@ -57,38 +61,12 @@ async function request(value, page) {
   return response;
 }
 
-async function set(value) {
-  return await storage.set(storageCollectionName, value);
-}
-
-async function addToFavorites(id) {
-  var feeds = await get();
-  _.each(feeds, function(item) {
-    if (item.id === id) {
-      item.favorite = true;
-    }
-  });
-  await set(feeds);
-}
-
-async function removeFromFavorites(id) {
-  var feeds = await get();
-  _.each(feeds, function(item) {
-    if (item.id === id) {
-      item.favorite = false;
-    }
-  });
-  await set(feeds);
-}
-
 // ---------
 // interface
 // ---------
 
 export {
   get,
-  request,
   set,
-  addToFavorites,
-  removeFromFavorites
+  request
 }
