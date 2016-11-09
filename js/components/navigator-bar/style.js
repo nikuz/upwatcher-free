@@ -24,7 +24,7 @@ export default stylesGenerator({
   },
   button: {
     padding: 10,
-    paddingTop: 7
+    paddingTop: 5
   },
   button_icon: {
     fontSize: 32,

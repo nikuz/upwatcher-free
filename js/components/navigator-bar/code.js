@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import * as _ from 'underscore';
 import * as device from '../../modules/device';
-import * as InteractionManager from '../../modules/interactions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
@@ -38,6 +37,7 @@ class NavigatorBar extends Component {
     this.back = this.back.bind(this);
     this.leftButtonRender = this.leftButtonRender.bind(this);
     this.titleRender = this.titleRender.bind(this);
+    this.update = this.update.bind(this);
   }
   back() {
     if (this.state.leftButton) {
@@ -57,6 +57,14 @@ class NavigatorBar extends Component {
       return null;
     }
   }
+  titlePrepare(title, length) {
+    length = length || [40, 20];
+    var maxLength = device.isTablet() ? length[0] : length[1];
+    if (title.length > maxLength) {
+      title = title.substring(0, maxLength) + '...';
+    }
+    return title;
+  }
   titleRender(route) {
     if (route.id === 'inbox') {
       return (
@@ -68,23 +76,27 @@ class NavigatorBar extends Component {
         </View>
       );
     } else {
+      let titleText = this.titlePrepare(route.title);
       return (
         <View style={styles.title}>
-          <Text style={styles.title_text}>{route.title}</Text>
+          <Text style={styles.title_text}>{titleText}</Text>
         </View>
       );
     }
   }
   rightButtonRender(route) {
-    if (route.id !== 'settings') {
-      return (
-        <TouchableOpacity style={styles.button} onPress={route.onRightButtonClick}>
-          <MaterialIcons name="menu" style={styles.button_icon} />
-        </TouchableOpacity>
-      );
+    if (route.rightButton) {
+      return route.rightButton;
     } else {
       return null;
     }
+  }
+  update(opts = {}) {
+    var newState = {};
+    if (opts.rightButton) {
+      newState.rightButton = this.rightButtonRender(opts);
+    }
+    this.setState(newState);
   }
   handleWillFocus(route) {
     var state = this.state,
@@ -138,7 +150,6 @@ class NavigatorBar extends Component {
     }
   }
   onAnimationEnd() {
-    InteractionManager.clearInteractionHandle();
     this.setState({
       transitionDirection: null,
       prevTitle: null,

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as AppStateActions from '../../actions/state';
 import * as feedsActions from '../../actions/feeds';
 import * as feedsModel from '../../models/feeds';
 import * as favoritesActions from '../../actions/favorites';
@@ -55,6 +56,13 @@ const mapDispatchToProps = function(dispatch) {
     removeFromFavorites: function(id) {
       dispatch(favoritesActions.remove(id));
       favoritesModel.remove(id);
+    },
+    pushState: function(id, data) {
+      dispatch(AppStateActions.push({
+        id,
+        name: data.title,
+        data
+      }));
     }
   };
 };

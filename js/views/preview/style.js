@@ -3,28 +3,16 @@
 import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
-  wrap: {
+  container: {
     flex: 1,
-    marginTop: 65,
     backgroundColor: '#FFF'
   },
-  menu: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0
-  },
   cont: {
-    marginTop: 39,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 13,
     paddingRight: 13,
     flex: 1
-  },
-  title: {
-    fontSize: 18,
-    color: '#494949'
   },
   column: {
     flexDirection: 'row',
@@ -143,5 +131,16 @@ export default stylesGenerator({
   fi_cont: {
     flex: 1,
     paddingRight: 20
+  },
+  nav_bar_button: {
+    padding: 10,
+    paddingTop: 5
+  },
+  nav_bar_button_icon: {
+    fontSize: 32,
+    color: '#FFF'
+  },
+  nav_bar_button_icon_active: {
+    color: '#f36200'
   }
 });

@@ -97,7 +97,7 @@ class FeedsList extends React.Component {
     return feeds;
   }
   openHandler(item) {
-    console.log(item);
+    this.props.pushState('preview', item);
   }
   onFavoriteClick(item) {
     if (item.favorite) {
@@ -177,7 +177,8 @@ FeedsList.propTypes = {
   addToFavorites: React.PropTypes.func.isRequired,
   removeFromFavorites: React.PropTypes.func.isRequired,
   refresh: React.PropTypes.func.isRequired,
-  loadMoreJobs: React.PropTypes.func.isRequired
+  loadMoreJobs: React.PropTypes.func.isRequired,
+  pushState: React.PropTypes.func.isRequired
 };
 
 class FeedsListManager extends React.Component {
@@ -201,7 +202,8 @@ FeedsListManager.propTypes = {
   addToFavorites: React.PropTypes.func.isRequired,
   removeFromFavorites: React.PropTypes.func.isRequired,
   refresh: React.PropTypes.func.isRequired,
-  loadMoreJobs: React.PropTypes.func.isRequired
+  loadMoreJobs: React.PropTypes.func.isRequired,
+  pushState: React.PropTypes.func.isRequired
 };
 
 export default FeedsListManager;

@@ -11,6 +11,7 @@ export default stylesGenerator({
     flexWrap: 'wrap'
   },
   skill: {
+    height: 23,
     paddingTop: 3,
     paddingRight: 7,
     paddingBottom: 5,

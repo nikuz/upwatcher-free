@@ -13,11 +13,14 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    pushState: function(state) {
-      dispatch(AppStateActions.push(state));
+    pushState: function(id) {
+      dispatch(AppStateActions.push({
+        id,
+        name: id
+      }));
     },
-    popState: function(state) {
-      dispatch(AppStateActions.pop(state));
+    popState: function(id) {
+      dispatch(AppStateActions.pop(id));
     }
   };
 };

@@ -3,7 +3,8 @@
 import React from 'react';
 import {
   View,
-  Navigator
+  Navigator,
+  TouchableOpacity
 } from 'react-native';
 import * as config from '../config';
 import Feeds from './feeds/controller';
@@ -11,14 +12,15 @@ import Preview from './preview/controller';
 import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/controller';
 import NavigatorBar from './../components/navigator-bar/code';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'inbox',
-      prevName: ''
+      id: 'inbox',
+      prevId: ''
     };
     this.onSettingsClick = this.onSettingsClick.bind(this);
     this.back = this.back.bind(this);
@@ -27,24 +29,28 @@ class Main extends React.Component {
     this.props.pushState('settings');
   }
   back() {
-    this.props.popState(this.state.prevName);
+    this.props.popState(this.state.prevId);
   }
   componentWillReceiveProps(nextProps) {
-    var stateName = nextProps.state.name;
+    var stateId = nextProps.state.id,
+      stateName = nextProps.state.name,
+      stateData = nextProps.state.data;
+
     if (nextProps.state.type === 'push') {
       this.setState({
-        name: stateName,
-        prevName: this.state.name
+        id: stateId,
+        prevId: this.state.id
       });
       this.refs.navigator.push({
         title: stateName.substring(0, 1).toUpperCase() + stateName.substring(1, stateName.length),
-        id: stateName,
-        backButton: true
+        id: stateId,
+        backButton: true,
+        data: stateData
       });
     } else if (nextProps.state.type === 'pop') {
       this.setState({
-        name: stateName,
-        prevName: null
+        id: stateId,
+        prevId: null
       });
       this.refs.navigator.pop();
     }
@@ -53,9 +59,12 @@ class Main extends React.Component {
   renderScene(route, navigator) {
     switch (route.id) {
       case 'inbox':
-        return <Feeds navigator={navigator} />;
+        return <Feeds />;
       case 'preview':
-        return <Preview />;
+        return <Preview
+          navigator={navigator}
+          data={route.data}
+        />;
       case 'settings':
         return <Settings />;
     }
@@ -66,7 +75,11 @@ class Main extends React.Component {
       initial: true,
       type: 'tab',
       id: 'inbox',
-      onRightButtonClick: this.onSettingsClick
+      rightButton: (
+        <TouchableOpacity style={styles.nav_bar_button} onPress={this.onSettingsClick}>
+          <MaterialIcons name="menu" style={styles.nav_bar_button_icon} />
+        </TouchableOpacity>
+      )
     };
     return (
       <View style={styles.container}>

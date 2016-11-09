@@ -91,12 +91,9 @@ class FeedsItem extends React.Component {
     );
   }
   getFavoriteButton(data) {
-    var icon = 'favorite-border',
-      inFavorite;
-
+    var icon = 'favorite-border';
     if (data.favorite) {
       icon = 'favorite';
-      inFavorite = true;
     }
     return (
       <TouchableOpacity
@@ -105,7 +102,7 @@ class FeedsItem extends React.Component {
       >
         <MaterialIcons
           name={icon}
-          style={[styles.favorite_icon, inFavorite && styles.favorite_icon_active]}
+          style={[styles.favorite_icon, data.favorite && styles.favorite_icon_active]}
         />
       </TouchableOpacity>
     );
