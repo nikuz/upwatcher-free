@@ -13,7 +13,7 @@ import {
   ActionSheetIOS
 } from 'react-native';
 import * as _ from 'underscore';
-import * as Linkify from 'linkifyjs';
+// import * as Linkify from 'linkifyjs';
 import * as EventManager from '../../modules/events';
 import * as config from '../../config';
 import Skills from '../../components/skills/code';

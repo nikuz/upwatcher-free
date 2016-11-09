@@ -16,7 +16,36 @@ import styles from './style';
 class FeedsItem extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      animHeight: null
+    };
+    this.componentUnmounted = false;
+    this.onLayout = this.onLayout.bind(this);
     this.getFavoriteButton = this.getFavoriteButton.bind(this);
+    this.onFavoriteClick = this.onFavoriteClick.bind(this);
+  }
+  onLayout(e) {
+    if (this.props.animatedAnnihilation && this.state.animHeight === null) {
+      var layout = e.nativeEvent.layout;
+      this.setState({
+        animHeight: new Animated.Value(layout.height)
+      });
+    }
+  }
+  onFavoriteClick() {
+    var props = this.props;
+    if (props.animatedAnnihilation) {
+      Animated.timing(
+        this.state.animHeight,
+        {toValue: 0}
+      ).start(() => {
+        if (!this.componentUnmounted) {
+          props.onFavoriteClick(props.data);
+        }
+      });
+    } else {
+      props.onFavoriteClick(props.data);
+    }
   }
   getRating(data) {
     var noRating = true,
@@ -72,7 +101,7 @@ class FeedsItem extends React.Component {
     return (
       <TouchableOpacity
         style={styles.favorite_icon_wrap}
-        onPress={this.props.onFavoriteClick.bind(null, data)}
+        onPress={this.onFavoriteClick}
       >
         <MaterialIcons
           name={icon}
@@ -81,13 +110,20 @@ class FeedsItem extends React.Component {
       </TouchableOpacity>
     );
   }
+  componentWillUnmount() {
+    this.componentUnmounted = true;
+  }
   render() {
-    var data = this.props.data;
-    return (
+    var props = this.props,
+      data = this.props.data,
+      cont;
+
+    cont = (
       <TouchableHighlight
         style={styles.container}
         onPress={this.props.openHandler.bind(null, data)}
         underlayColor="#f9f9f9"
+        onLayout={this.onLayout}
       >
         <View>
           <View style={styles.body}>
@@ -127,13 +163,27 @@ class FeedsItem extends React.Component {
         </View>
       </TouchableHighlight>
     );
+    if (props.animatedAnnihilation) {
+      cont = (
+        <Animated.View
+          style={{
+            height: this.state.animHeight
+          }}
+          renderToHardwareTextureAndroid={true}
+        >
+          {cont}
+        </Animated.View>
+      )
+    }
+    return cont;
   }
 }
 
 FeedsItem.propTypes = {
   data: React.PropTypes.object.isRequired,
   onFavoriteClick: React.PropTypes.func.isRequired,
-  openHandler: React.PropTypes.func.isRequired
+  openHandler: React.PropTypes.func.isRequired,
+  animatedAnnihilation: React.PropTypes.bool
 };
 
 export default FeedsItem;

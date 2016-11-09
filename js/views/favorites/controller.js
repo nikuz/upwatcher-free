@@ -14,7 +14,10 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-
+    removeFromFavorites: function(id) {
+      dispatch(favoritesActions.remove(id));
+      favoritesModel.remove(id);
+    }
   };
 };
 
