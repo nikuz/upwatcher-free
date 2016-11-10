@@ -6,30 +6,35 @@ import {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  ActivityIndicatorIOS,
+  ActivityIndicator,
   ScrollView,
-  LinkingIOS,
+  Linking,
   RefreshControl,
   ActionSheetIOS,
   InteractionManager
 } from 'react-native';
 import * as _ from 'underscore';
-// import * as Linkify from 'linkifyjs';
-import * as EventManager from '../../modules/events';
 import * as config from '../../config';
-import Skills from '../../components/skills/code';
-import Errors from '../../components/errors/code';
+import * as numberModule from '../../modules/number';
 import timeAgo from '../../modules/timeAgo';
+import Skills from '../../components/skills/code';
+import Linkify from 'linkify-it';
+import RatingComponent from '../../components/rating/code';
+import PaymentComponent from '../../components/payment/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import styles from './style';
+
+const linkify = Linkify();
 
 class FeedbacksList extends React.Component {
   render() {
     var feedbacks = this.props.feedbacks || [];
     return (
-      <ScrollView showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-                  style={styles.feedback_wrap}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={styles.feedback_wrap}
       >
         {feedbacks.map((item, key) => {
           return (
@@ -52,14 +57,18 @@ class Preview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      itemData: null,
-      created_time: null,
+      data: props.data,
+      created_time: timeAgo(props.data.date_created),
       favorite: props.data.favorite
     };
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
     this.getNavigatorRightButton = this.getNavigatorRightButton.bind(this);
     this.updateNavBarRightButton = this.updateNavBarRightButton.bind(this);
+    this.parseJobInfo = this.parseJobInfo.bind(this);
+    this.handlerApplyClick = this.handlerApplyClick.bind(this);
+    this.handlerOpenAttachment = this.handlerOpenAttachment.bind(this);
+    this.handlerOpenJobLink = this.handlerOpenJobLink.bind(this);
+    this.handlerFeedbackClick = this.handlerFeedbackClick.bind(this);
   }
   onFavoriteClick() {
     var props = this.props,
@@ -109,124 +118,131 @@ class Preview extends React.Component {
   //   }
   //   this.updateTimer = setTimeout(this.updateTimeAgo, 6e4 - new Date().getSeconds() * 1000);
   // };
-  // handlerFeedbackClick = () => {
-  //   EventManager.trigger('overlayOpen', {
-  //     title: 'Feedback',
-  //     component: <FeedbacksList feedbacks={this.state.itemData.assignments} />
-  //   });
-  // };
-  // handlerApplyClick = () => {
-  //   LinkingIOS.openURL(config.UPWORK_URL + '/job/' + this.props.id + '/apply');
-  // };
-  // handlerOpenJobLink = () => {
-  //   LinkingIOS.openURL(config.UPWORK_URL + '/job/' + this.props.id);
-  // };
-  // handlerOpenAttachment = () => {
-  //   LinkingIOS.openURL(this.state.itemData.attachment);
-  // };
-  // handlerOpenLink = (url) => {
-  //   LinkingIOS.openURL(url);
-  // };
-  // linkify(text) {
-  //   // text = text || '';
-  //   // var result = [],
-  //   //   linksInText = Linkify.find(text);
-  //   //
-  //   // if (linksInText.length) {
-  //   //   _.each(linksInText, (item, key) => {
-  //   //     text = text.split(item.value);
-  //   //     result.push(
-  //   //       <Text key={key + '_'}>{text.shift()}</Text>,
-  //   //       <Text key={key} style={styles.text_link} onPress={this.handlerOpenLink.bind(null, item.href)}>{item.value}</Text>
-  //   //     );
-  //   //     text = text.join('');
-  //   //   });
-  //   // } else {
-  //   //   result.push(text);
-  //   // }
-  //   // return result;
-  //   return text;
-  // }
-  // parseJobData = (data) => {
-  //   var assignments = [],
-  //     feedback,
-  //     timezone,
-  //     result;
-  //
-  //   if (data.assignments && data.assignments.assignment) {
-  //     _.each(data.assignments.assignment, item => {
-  //       if (item.feedback && item.feedback.score) {
-  //         item.feedback.score = Number(item.feedback.score).toFixed(1);
-  //         assignments.push(item);
-  //       }
-  //     });
-  //   }
-  //   feedback = Number(data.buyer.op_adjusted_score).toFixed(1);
-  //   if (data.buyer.op_timezone) {
-  //     timezone = data.buyer.op_timezone.replace(/^(UTC(?:.\d+\:\d+)?).*$/, '$1');
-  //   }
-  //
-  //   result = _.extend({}, this.props, {
-  //     extended: true,
-  //     description: this.linkify(data.op_description),
-  //     applicants: data.op_tot_cand,
-  //     interviewing: data.interviewees_total_active,
-  //     feedback: feedback > 0,
-  //     adjusted_score: feedback,
-  //     feedback_ppl: assignments.length || null,
-  //     payment_verified: Number(data.op_cny_upm_verified) > 0,
-  //     engagement_weeks: data.engagement_weeks,
-  //     op_engagement: data.op_engagement,
-  //     buyer: data.buyer,
-  //     buyer_timezone: timezone,
-  //     assignments: assignments,
-  //     total_charge: parseInt(data.buyer.op_tot_charge, 10),
-  //     total_hours: parseInt(data.buyer.op_tot_hours, 10),
-  //     attachment: data.op_attached_doc
-  //   });
-  //   this.setState({
-  //     itemData: result,
-  //     loading: false
-  //   });
-  // };
-  // requestJobData = () => {
-  //   this.setState({
-  //     loading: true
-  //   });
-  //   this.request = true;
-  //   // request.get({
-  //   //   url: config.UPWORK_JOB_URL.replace('{id}', this.props.id)
-  //   // }, (err, response) => {
-  //   //   if (err) {
-  //   //     EventManager.trigger('inboxError');
-  //   //     if (this.request) {
-  //   //       this.setState({
-  //   //         loading: false
-  //   //       });
-  //   //     }
-  //   //   } else if(response && this.request) {
-  //   //     this.request = null;
-  //   //     this.parseJobData(response.profile);
-  //   //   } else {
-  //   //     if (this.request) {
-  //   //       this.setState({
-  //   //         loading: false
-  //   //       });
-  //   //     }
-  //   //   }
-  //   // });
-  // };
-  // managerEventsHandler = (e) => {
-  //   var targetFolder = 'trash';
-  //   if (e.name === 'btnFavoritesClicked') {
-  //     targetFolder = 'favorites';
-  //   }
-  //   EventManager.trigger('jobHasFolderChanged', {
-  //     id: this.props.id,
-  //     folder: targetFolder
-  //   });
-  //   this.props.navigator.pop();
-  // };
+  handlerFeedbackClick() {
+    this.props.openFeedbackOverlay(
+      'Feedback',
+      <FeedbacksList feedbacks={this.state.data.assignments} />
+    );
+  };
+  handlerApplyClick() {
+    Linking.openURL(config.UPWORK_URL + '/job/' + this.props.data.id + '/apply');
+  }
+  handlerOpenJobLink() {
+    Linking.openURL(config.UPWORK_URL + '/job/' + this.props.data.id);
+  }
+  getAttachment(url) {
+    if (linkify.test(url)) {
+      return url;
+    } else if (url) {
+      return config.UPWORK_URL + url;
+    } else {
+      return null;
+    }
+  }
+  handlerOpenAttachment() {
+    console.log(this.state.data.attachment);
+    Linking.openURL(this.state.data.attachment);
+  }
+  handlerOpenLink(url) {
+    Linking.openURL(url);
+  }
+  linkify(text) {
+    text = text || '';
+    var result = [],
+      linksInText = linkify.match(text);
+
+    if (linksInText && linksInText.length) {
+      _.each(linksInText, (item, key) => {
+        text = text.split(item.raw);
+        result.push(
+          <Text key={key + '_'}>{text.shift()}</Text>,
+          <Text key={key} style={styles.text_link} onPress={this.handlerOpenLink.bind(null, item.url)}>{item.url}</Text>
+        );
+        text = text.join('');
+      });
+    } else {
+      result.push(text);
+    }
+    return result;
+  }
+  getSkillLevel(level) {
+    level = Number(level);
+    switch (level) {
+      case 2:
+        return 'Intermediate';
+      case 3:
+        return 'Expert';
+      default:
+        return 'Entry';
+    }
+  }
+  getEnglishLevel(level) {
+    level = Number(level);
+    switch (level) {
+      case 1:
+        return 'Elementary';
+      case 2:
+        return 'Conversational';
+      case 3:
+        return 'Fluent';
+      default:
+        return null;
+    }
+  }
+  parseJobInfo(data) {
+    console.log(data);
+    var assignments = [],
+      feedback,
+      timezone,
+      questions;
+
+    if (data.assignments && data.assignments.assignment) {
+      _.each(data.assignments.assignment, item => {
+        if (item.feedback && item.feedback.score) {
+          item.feedback.score = Number(item.feedback.score).toFixed(1);
+          assignments.push(item);
+        }
+      });
+    }
+    feedback = Number(data.buyer.op_adjusted_score).toFixed(1);
+    if (data.buyer.op_timezone) {
+      timezone = data.buyer.op_timezone.replace(/^(UTC(?:.\d+\:\d+)?).*$/, '$1');
+    }
+
+    if (data.op_additional_questions && data.op_additional_questions.op_additional_question) {
+      questions = data.op_additional_questions.op_additional_question;
+      if (questions instanceof Object) {
+        questions = [questions];
+      }
+    }
+
+    return _.extend({}, this.state.data, {
+      extended: true,
+      description: this.linkify(data.op_description),
+      applicants: data.op_tot_cand,
+      interviewing: data.interviewees_total_active,
+      feedback: feedback > 0,
+      adjusted_score: feedback,
+      feedback_ppl: assignments.length || null,
+      payment_verified: Number(data.op_cny_upm_verified) > 0,
+      engagement_weeks: data.engagement_weeks,
+      op_engagement: data.op_engagement,
+      buyer: data.buyer,
+      buyer_country: data.buyer && data.buyer.op_country,
+      buyer_contract_date: data.buyer && data.buyer.op_contract_date,
+      buyer_timezone: timezone,
+      assignments: assignments,
+      total_charge: parseInt(data.buyer.op_tot_charge, 10),
+      total_hours: parseInt(data.buyer.op_tot_hours, 10),
+      attachment: this.getAttachment(data.op_attached_doc),
+      skill_level: this.getSkillLevel(data.op_contractor_tier),
+      additional_questions: questions,
+      upwork_hours: Number(data.op_pref_odesk_hours),
+      pref_loccation: data.op_pref_location,
+      english_level: this.getEnglishLevel(data.op_pref_english_skill),
+      candidates: (data.candidates && data.candidates.candidate.length) || 0
+    });
+  }
   // shareEventsHandler = () => {
   //   var props = this.props;
   //   ActionSheetIOS.showShareActionSheetWithOptions({
@@ -238,153 +254,218 @@ class Preview extends React.Component {
   // handlerBackBtn = () => {
   //   this.props.navigator.pop();
   // };
-  // settingsChangedHandler = (options) => {
-  //   var opts = options || {};
-  //   if (opts.needToUpdateCache) {
-  //     this.props.navigator.pop();
-  //   }
-  // };
   // componentWillMount() {
   //   // this.curTimeAgo = timeAgo(this.props.date_created);
   // }
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      data: this.parseJobInfo(newProps.preview.data)
+    });
+  }
   componentDidUpdate() {
     this.updateNavBarRightButton();
   }
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.updateNavBarRightButton();
+      this.props.getJobInfo(this.props.data.id);
     });
-    // this.requestJobData();
-    // this.updateTimeAgo();
-    // EventManager.on('btnFavoritesClicked btnTrashClicked', this.managerEventsHandler);
-    // EventManager.on('btnShareClicked', this.shareEventsHandler);
-    // EventManager.on('btnBackClicked', this.handlerBackBtn);
-    // EventManager.on('settingsSaved', this.settingsChangedHandler);
-  }
-  componentWillUnmount() {
-    // this.request = null;
-    // clearTimeout(this.updateTimer);
-    // EventManager.off('btnFavoritesClicked btnTrashClicked', this.managerEventsHandler);
-    // EventManager.off('btnShareClicked', this.shareEventsHandler);
-    // EventManager.off('btnBackClicked', this.handlerBackBtn);
-    // EventManager.off('settingsSaved', this.settingsChangedHandler);
   }
   render() {
-    var data = this.props.data;
+    var props = this.props,
+      data = this.state.data;
+
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.cont}>
-          <Text style={[styles.small, styles.margin]}>
-            <Text style={styles.bold}>{data.job_type} - </Text>
-            <Text style={styles.gray}>Posted <Text>{this.state.created_time || this.curTimeAgo}</Text></Text>
-          </Text>
-          <TouchableHighlight style={styles.apply} onPress={this.handlerApplyClick} underlayColor="#69cb3c">
-            <Text style={styles.apply_text}>Apply to this job</Text>
-          </TouchableHighlight>
-          <View style={styles.column}>
-            <View style={styles.column_item}>
-              <Text style={styles.column_title}>Budget</Text>
-              <Text style={styles.big}>${data.budget || ' - '}</Text>
-            </View>
-            <View style={styles.column_item}>
-              <Text style={styles.column_title}>Client Feedback</Text>
-              {data.extended ?
-                <Text style={styles.big}>
-                  {data.feedback_ppl ?
-                    <Text>{data.adjusted_score} &nbsp; ({data.feedback_ppl} reviews)</Text> :
-                    <Text>No Feedback</Text>
-                  }
-                </Text>
-                : null
+        <ScrollView>
+          <View style={styles.cont}>
+            <TouchableOpacity onPress={this.handlerOpenJobLink}>
+              <Text style={styles.title}>{data.title}&nbsp;<MaterialIcons name="open-in-new" /></Text>
+            </TouchableOpacity>
+            <Text style={[styles.small, styles.margin]}>
+              <Text style={styles.gray}>Posted <Text>{this.state.created_time}</Text></Text>
+            </Text>
+            <TouchableHighlight style={styles.apply} onPress={this.handlerApplyClick} underlayColor="#69cb3c">
+              <Text style={styles.apply_text}>SUBMIT PROPOSAL</Text>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.attention}>
+            <View style={styles.at_item}>
+              {data.job_type === 'Fixed' ?
+                <FontAwesomeIcons name="money" style={styles.at_item_icon} />
+                :
+                <MaterialIcons name="access-time" style={styles.at_item_icon} />
               }
+              <Text style={styles.at_text}>{data.job_type} Price</Text>
+            </View>
+            {data.budget ?
+              <View style={styles.at_item}>
+                <MaterialIcons name="attach-money" style={styles.at_item_icon} />
+                <Text style={styles.at_text}>{numberModule.parseBigNumber(data.budget)}</Text>
+                <Text style={styles.at_label}>Budget</Text>
+              </View>
+              : null
+            }
+            <View style={styles.at_item}>
+              <MaterialIcons name="equalizer" style={styles.at_item_icon} />
+              <Text style={styles.at_text}>{data.skill_level || ' '}</Text>
+              <Text style={styles.at_label}>Skill Level</Text>
             </View>
           </View>
-          <View style={styles.column}>
-            <View style={styles.column_item}>
-              <Text style={styles.column_title}>Applicants:</Text>
-              <Text style={styles.big}>{data.applicants}</Text>
-            </View>
-            <View style={styles.column_item}>
-              <Text style={styles.column_title}>Interviewing</Text>
-              <Text style={styles.big}>{data.interviewing}</Text>
-            </View>
-          </View>
+
           <View style={styles.description}>
             {data.description ?
               <Text style={styles.description_text}>{data.description}</Text>
               : null
             }
-            {!data.description && this.state.loading ?
-              <ActivityIndicatorIOS animating={true} size="large" color="#43AC12" />
+            {!data.description && props.preview.loading ?
+              <ActivityIndicator size="large" color="#43AC12" />
               : null
             }
           </View>
           {data.attachment ?
-            <TouchableOpacity style={styles.attachment} onPress={this.handlerOpenAttachment}>
-              <Text>
-                <MaterialIcons name="attach-file" style={styles.attachment_icon} />&nbsp;&nbsp;
+            <View style={styles.cont}>
+              <TouchableOpacity style={styles.attachment} onPress={this.handlerOpenAttachment}>
+                <MaterialIcons name="attach-file" style={styles.attachment_icon} />
                 <Text style={styles.text_link}>Attachment</Text>
-              </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
             : null
           }
-          {data.skills ? <Skills items={data.skills} wrapped={true} /> : null}
+          {data.skills ?
+            <View style={styles.cont}>
+              <Skills items={data.skills} wrapped={true} />
+            </View>
+            : null
+          }
           {data.engagement_weeks ?
-            <View style={styles.edur}>
-              <Text style={styles.edur_title}>Estimated Duration</Text>
-              <Text style={styles.big}>{data.engagement_weeks}</Text>
-              <Text style={[styles.small, styles.margin]}>{data.op_engagement}</Text>
+            <View style={styles.cont}>
+              <View style={styles.edur}>
+                <Text style={styles.edur_title}>Estimated Duration</Text>
+                <Text style={styles.big}>{data.engagement_weeks}</Text>
+                <Text style={[styles.small, styles.margin]}>{data.op_engagement}</Text>
+              </View>
             </View>
             : null
           }
-          <View style={styles.separator_wrap}>
-            <Text style={styles.separator}>Client</Text>
-          </View>
-          <Text style={styles.big}>
-            {data.buyer && data.buyer.op_country} {data.buyer_timezone ? <Text>({data.buyer_timezone})</Text> : null}
-          </Text>
-          <Text style={[styles.small, styles.gray, styles.margin]}>
-            Member since {data.buyer && data.buyer.op_contract_date}
-          </Text>
-          <View style={styles.column}>
-            <View style={styles.column_item}>
-              <Text style={[styles.column_title, styles.gray, styles.small]}>Total Spent</Text>
-              <Text style={styles.big}>${data.total_charge}</Text>
-            </View>
-            <View style={styles.column_item}>
-              <Text style={[styles.column_title, styles.gray, styles.small]}>Hours Billed</Text>
-              <Text style={styles.big}>{data.total_hours}</Text>
-            </View>
-            <View style={styles.column_item}>
-              <Text style={[styles.column_title, styles.gray, styles.small]}>Paid Contracts</Text>
-              <Text style={styles.big}>{data.buyer && data.buyer.op_tot_asgs}</Text>
-            </View>
-          </View>
-          <View style={styles.column}>
-            <View style={styles.column_item}>
-              <Text>Payment method</Text>
-            </View>
-            {data.extended ?
-              <Text style={styles.big}>
-                {data.payment_verified ? <Text>Verified</Text> : <Text>Unverified</Text>}
+          {data.additional_questions ?
+            <View style={[styles.cont, styles.cont_sep]}>
+              <Text style={[styles.normal, styles.gray, styles.margin]}>
+                You will be asked to answer the following questions when applying:
               </Text>
+              {data.additional_questions.map((item, key) => {
+                var style = [styles.normal, styles.black];
+                if (key !== data.additional_questions.length - 1) {
+                  style.push(styles.margin_bottom);
+                }
+                return (
+                  <Text key={key} style={style}>
+                    {item.position}. {item.question}
+                  </Text>
+                );
+              })}
+            </View>
+            : null
+          }
+          {data.upwork_hours || data.pref_loccation || data.english_level ?
+            <View style={[styles.cont, styles.cont_sep]}>
+              <Text style={[styles.normal, styles.gray, styles.margin]}>
+                Preferred qualifications:
+              </Text>
+              {data.upwork_hours ?
+                <Text style={(data.pref_loccation || data.english_level) && styles.margin_bottom}>
+                  <Text style={[styles.normal, styles.gray]}>Upwork Hours: </Text>
+                  <Text style={[styles.normal, styles.black]}>At least {data.upwork_hours} hour(s)</Text>
+                </Text>
+                : null
+              }
+              {data.pref_loccation ?
+                <Text style={data.english_level && styles.margin_bottom}>
+                  <Text style={[styles.normal, styles.gray]}>Preferred Location: </Text>
+                  <Text style={[styles.normal, styles.black]}>{data.pref_loccation}</Text>
+                </Text>
+                : null
+              }
+              {data.english_level ?
+                <Text>
+                  <Text style={[styles.normal, styles.gray]}>English Level: </Text>
+                  <Text style={[styles.normal, styles.black]}>{data.english_level}</Text>
+                </Text>
+                : null
+              }
+            </View>
+            : null
+          }
+
+          <View style={[styles.cont, styles.cont_sep]}>
+            <Text style={[styles.normal, styles.gray, styles.margin]}>
+              Freelancers Activity on this Job
+            </Text>
+            <View style={styles.column}>
+              <View style={styles.column_item}>
+                <Text style={[styles.small, styles.gray]}>Proposals</Text>
+                <Text style={[styles.normal, styles.black]}>
+                  {data.candidates}
+                </Text>
+              </View>
+              <View style={styles.column_item}>
+                <Text style={[styles.small, styles.gray]}>Interviewing</Text>
+                <Text style={[styles.normal, styles.black]}>
+                  {data.interviewing}
+                </Text>
+              </View>
+              <View style={styles.column_item}>
+                <Text style={[styles.small, styles.gray]}>Hired</Text>
+                <Text style={[styles.normal, styles.black]}>
+                  {data.applicants}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.client}>
+            <View style={styles.client_head}>
+              <RatingComponent
+                feedback={data.client.feedback}
+                reviews_count={data.client.reviews_count}
+                style={styles.client_rating}
+              />
+              <PaymentComponent
+                status={data.client.payment_verification_status}
+              />
+            </View>
+            <Text style={[styles.big, styles.black]}>
+              {data.buyer_country} {data.buyer_timezone ? <Text>({data.buyer_timezone})</Text> : null}
+            </Text>
+            <Text style={[styles.small, styles.gray, styles.margin_bottom]}>
+              Member since {data.buyer_contract_date}
+            </Text>
+            <View style={styles.column}>
+              <View style={styles.column_item}>
+                <Text style={[styles.gray, styles.small]}>Total Spent</Text>
+                <Text style={[styles.big, styles.black]}>${numberModule.parseBigNumber(data.total_charge)}</Text>
+              </View>
+              <View style={styles.column_item}>
+                <Text style={[styles.gray, styles.small]}>Hours Billed</Text>
+                <Text style={[styles.big, styles.black]}>{numberModule.parseBigNumber(data.total_hours)}</Text>
+              </View>
+              <View style={styles.column_item}>
+                <Text style={[styles.gray, styles.small]}>Paid Contracts</Text>
+                <Text style={[styles.big, styles.black]}>{data.buyer && data.buyer.op_tot_asgs}</Text>
+              </View>
+            </View>
+            {data.feedback_ppl ?
+              <TouchableHighlight
+                style={[styles.apply, styles.feedback]}
+                onPress={this.handlerFeedbackClick}
+                underlayColor="#dedddd"
+              >
+                <Text style={[styles.apply_text, styles.feedback_text]}>View all feedback</Text>
+              </TouchableHighlight>
               : null
             }
           </View>
-          {data.feedback_ppl ?
-            <TouchableHighlight
-              style={[styles.apply, styles.feedback]}
-              onPress={this.handlerFeedbackClick}
-              underlayColor="#dedddd"
-            >
-              <Text style={[styles.apply_text, styles.feedback_text]}>View all feedback</Text>
-            </TouchableHighlight>
-            : null
-          }
         </ScrollView>
-        <View style={styles.menu}>
-          <Errors parent="job_view" navigator={this.props.navigator} />
-        </View>
       </View>
     );
   }
@@ -393,8 +474,10 @@ class Preview extends React.Component {
 Preview.propTypes = {
   data: React.PropTypes.object.isRequired,
   navigator: React.PropTypes.object.isRequired,
+  getJobInfo: React.PropTypes.func.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
+  removeFromFavorites: React.PropTypes.func.isRequired,
+  openFeedbackOverlay: React.PropTypes.func.isRequired
 };
 
 export default Preview;

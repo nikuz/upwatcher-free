@@ -11,45 +11,57 @@ export default stylesGenerator({
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 13,
-    paddingRight: 13,
-    flex: 1
+    paddingRight: 13
+  },
+  cont_sep: {
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#EDEDED',
+  },
+  title: {
+    fontSize: 18,
+    color: '#494949'
+  },
+  attention: {
+    flexDirection: 'row'
+  },
+  at_item: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  at_item_icon: {
+    fontSize: 34,
+    color: '#848484'
+  },
+  at_text: {
+    fontSize: 15,
+    color: '#383838'
+  },
+  at_label: {
+    fontSize: 11,
+    lineHeight: 12,
+    color: '#666'
   },
   column: {
     flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 20
+    paddingTop: 10
   },
   column_item: {
     flex: 1
-  },
-  column_title: {
-    marginBottom: 3
-  },
-  separator_wrap: {
-    marginTop: 15,
-    marginBottom: 15,
-    marginLeft: -13,
-    marginRight: -13,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 13,
-    paddingRight: 13,
-    borderTopWidth: 1,
-    borderTopColor: '#EDEDED',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EDEDED',
-    backgroundColor: '#f9f9f9'
-  },
-  separator: {
-    fontSize: 15
   },
   margin: {
     marginTop: 5,
     marginBottom: 5
   },
+  margin_bottom: {
+    marginBottom: 5
+  },
   big: {
-    fontSize: 17,
+    fontSize: 15,
     lineHeight: 20
+  },
+  normal: {
+    fontSize: 13
   },
   small: {
     fontSize: 11
@@ -60,19 +72,21 @@ export default stylesGenerator({
   gray: {
     color: '#999'
   },
+  black: {
+    color: '#383838'
+  },
   text_link: {
     color: '#6FDA44',
     textDecorationLine: 'underline'
   },
   description: {
+    marginTop: 20,
     borderTopWidth: 1,
     borderTopColor: '#EDEDED',
-    marginLeft: -13,
-    marginRight: -13,
     paddingTop: 15,
+    paddingBottom: 10,
     paddingLeft: 13,
-    paddingRight: 13,
-    paddingBottom: 10
+    paddingRight: 13
   },
   description_text: {
     fontSize: 14,
@@ -81,33 +95,30 @@ export default stylesGenerator({
   apply: {
     marginTop: 10,
     marginBottom: 10,
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
     borderRadius: 3,
     backgroundColor: '#5bbc2e',
     alignItems: 'center'
   },
   apply_text: {
     color: '#FFF',
-    fontWeight: '500',
-    fontSize: 18
+    fontSize: 16
   },
   attachment: {
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    marginBottom: 10
+    flexDirection: 'row'
   },
   attachment_icon: {
-    fontSize: 15
+    marginRight: 4,
+    fontSize: 15,
+    textAlignVertical: 'center'
   },
   feedback: {
+    marginBottom: 3,
     backgroundColor: '#e9e9e9'
   },
   feedback_text: {
     color: '#222'
-  },
-  edur: {
-    paddingTop: 10
   },
   edur_title: {
     color: '#919191',
@@ -142,5 +153,22 @@ export default stylesGenerator({
   },
   nav_bar_button_icon_active: {
     color: '#f36200'
+  },
+  client: {
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 13,
+    paddingRight: 13,
+    borderTopWidth: 1,
+    borderTopColor: '#EDEDED',
+    backgroundColor: '#f9f9f9'
+  },
+  client_head: {
+    flexDirection: 'row',
+    marginBottom: 5
+  },
+  client_rating: {
+    marginRight: 20
   }
 });

@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import SkillsView from '../../components/skills/code';
 import timeAgo from '../../modules/timeAgo';
+import RatingComponent from '../rating/code';
+import PaymentComponent from '../payment/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
@@ -46,49 +48,6 @@ class FeedsItem extends React.Component {
     } else {
       props.onFavoriteClick(props.data);
     }
-  }
-  getRating(data) {
-    var noRating = true,
-      text;
-
-    if (data.feedback) {
-      noRating = false;
-      text = `${data.feedback.toFixed(1)} (${data.reviews_count})`;
-    } else {
-      text = 'No Ratings Yet';
-    }
-
-    return (
-      <View style={styles.rating_cont}>
-        <MaterialIcons
-          name="star"
-          style={[styles.rating_icon, noRating && styles.rating_icon_gray]}
-        />
-        <Text style={styles.rating_text}>{text}</Text>
-      </View>
-    );
-  }
-  getPaymentMethod(data) {
-    var text = 'Unverified',
-      unverified = true;
-
-    if (data.payment_verification_status === 'VERIFIED') {
-      text = 'Verified';
-      unverified = false;
-    }
-    return (
-      <View style={styles.payment_cont}>
-        <MaterialIcons
-          name="verified-user"
-          style={[styles.payment_icon, unverified && styles.payment_unverified]}
-        />
-        <Text
-          style={[styles.payment_text, unverified && styles.payment_unverified]}
-        >
-          Payment {text}
-        </Text>
-      </View>
-    );
   }
   getFavoriteButton(data) {
     var icon = 'favorite-border';
@@ -148,10 +107,15 @@ class FeedsItem extends React.Component {
           </View>
           <View style={styles.footer}>
             <View style={styles.rating}>
-              {this.getRating(data.client)}
+              <RatingComponent
+                feedback={data.client.feedback}
+                reviews_count={data.client.reviews_count}
+              />
             </View>
             <View style={styles.payment}>
-              {this.getPaymentMethod(data.client)}
+              <PaymentComponent
+                status={data.client.payment_verification_status}
+              />
             </View>
             <View style={styles.favorite}>
               {this.getFavoriteButton(data)}

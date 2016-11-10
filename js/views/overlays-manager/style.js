@@ -7,8 +7,8 @@ export default stylesGenerator({
     flex: 1
   },
   navigator: {
-    paddingTop: 30,
-    paddingBottom: 10,
+    paddingTop: 7,
+    paddingBottom: 5,
     flexDirection: 'row',
     backgroundColor: '#6FDA44'
   },
@@ -18,7 +18,7 @@ export default stylesGenerator({
     paddingLeft: 10
   },
   navigator_icon: {
-    fontSize: 26,
+    fontSize: 32,
     color: '#FFF'
   },
   navigator_icon_close: {

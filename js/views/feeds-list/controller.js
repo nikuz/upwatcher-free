@@ -7,6 +7,7 @@ import * as feedsActions from '../../actions/feeds';
 import * as feedsModel from '../../models/feeds';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
+import * as upworkController from '../../controllers/upwork';
 import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
@@ -22,7 +23,7 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(feedsActions.refreshStart());
       var response;
       try {
-        response = await feedsModel.request();
+        response = await upworkController.getFeeds();
       } catch (e) {
         console.log(e); // something wrong, need to handle
       }
@@ -38,7 +39,7 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(feedsActions.loadMoreJobsStart());
       var response;
       try {
-        response = await feedsModel.request(null, page);
+        response = await upworkController.getFeeds(null, page);
       } catch (e) {
         console.log(e); // something wrong, need to handle
       }
@@ -60,7 +61,7 @@ const mapDispatchToProps = function(dispatch) {
     pushState: function(id, data) {
       dispatch(AppStateActions.push({
         id,
-        name: data.title,
+        name: id,
         data
       }));
     }

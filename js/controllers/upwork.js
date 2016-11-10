@@ -9,6 +9,8 @@ import * as config from '../config';
 import * as storage from '../modules/storage';
 import * as OAuth from '../modules/oauth';
 import constants from '../modules/constants';
+import * as settingsModel from '../models/settings';
+import * as searchModel from '../models/search';
 import * as network from '../modules/network';
 import * as ajax from '../modules/ajax';
 
@@ -221,11 +223,16 @@ function login() {
   });
 }
 
+function settingsFieldPrepare(field) {
+  field = field.toLowerCase();
+  return field === 'all' ? '' : field.replace(/\s+/g, '_');
+}
+
 // ----------------
 // public methods
 // ----------------
 
-function getFeeds(options) {
+function getFeeds(value, page) {
   return new Promise(async function(resolve, reject) {
     try {
       await network.check();
@@ -234,10 +241,35 @@ function getFeeds(options) {
       return reject(e);
     }
 
+    if (!value) {
+      value = await searchModel.get();
+    }
+
+    var sData = await settingsModel.get(),
+      requestData = {
+        q: value,
+        budget: `[${sData.budgetFrom.value} TO ${sData.budgetTo.value}]`,
+        days_posted: config.UPWORK_JOBS_DAYS_POSTED,
+        duration: settingsFieldPrepare(sData.duration.value),
+        job_type: settingsFieldPrepare(sData.jobType.value),
+        workload: settingsFieldPrepare(sData.workload.value),
+        sort: 'create_time desc'
+      },
+      pagerStart = 0;
+
+    if (page) {
+      pagerStart = page * config.CACHE_PER_REQUEST;
+    }
+    requestData.paging = `${pagerStart};${config.CACHE_PER_REQUEST}`; // API pager format is `$offset;$count`
+
+    if (sData.category2.value !== 'All') {
+      requestData.category2 = sData.category2.value;
+    }
+
     request({
       url: config.UPWORK_JOBS_URL,
       method: 'GET',
-      data: options
+      data: requestData
     }, function(err, response) {
       if (err) {
         reject(err);
@@ -256,6 +288,17 @@ function getJobInfo(id) {
     } catch (e) {
       return reject(e);
     }
+
+    request({
+      url: config.UPWORK_JOB_URL.replace('{id}', id),
+      method: 'GET'
+    }, function(err, response) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
   });
 }
 

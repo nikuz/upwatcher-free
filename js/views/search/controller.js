@@ -6,6 +6,7 @@ import * as searchActions from '../../actions/search';
 import * as feedsActions from '../../actions/feeds';
 import * as searchModel from '../../models/search';
 import * as feedsModel from '../../models/feeds';
+import * as upworkController from '../../controllers/upwork';
 import SearchView from './view';
 
 const mapStateToProps = function(state) {
@@ -24,7 +25,7 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(searchActions.addFeeds(value));
         var response;
         try {
-          response = await feedsModel.request(value);
+          response = await upworkController.getFeeds(value);
         } catch (e) {
           console.log(e); // something wrong, need to handle
         }

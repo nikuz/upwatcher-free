@@ -63,41 +63,8 @@ export default stylesGenerator({
     flex: 3,
     paddingLeft: 13
   },
-  rating_cont: {
-    flexDirection: 'row'
-  },
-  rating_icon: {
-    marginRight: 4,
-    fontSize: 18,
-    color: '#ffb000'
-  },
-  rating_icon_gray: {
-    color: '#e0e0e0'
-  },
-  rating_text: {
-    color: '#666',
-    textAlignVertical: 'center',
-    fontSize: 12
-  },
-
   payment: {
     flex: 4
-  },
-  payment_cont: {
-    flexDirection: 'row'
-  },
-  payment_icon: {
-    marginRight: 4,
-    fontSize: 18,
-    color: '#14bff4'
-  },
-  payment_text: {
-    color: '#666',
-    textAlignVertical: 'center',
-    fontSize: 12
-  },
-  payment_unverified: {
-    color: '#CCC'
   },
 
   favorite: {

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as _ from 'underscore';
 import Orientation from 'react-native-orientation';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 class Overlay extends React.Component {
@@ -78,13 +78,13 @@ class Overlay extends React.Component {
         {state.navigator ?
           <View style={styles.navigator}>
             <TouchableOpacity style={styles.navigator_icon_wrap} onPress={this.close}>
-              <Icon name="arrow-left" style={styles.navigator_icon}/>
+              <MaterialIcons name="arrow-back" style={styles.navigator_icon}/>
             </TouchableOpacity>
             <View style={styles.navigator_title}>
               <Text style={styles.navigator_title_text}>{this.state.title}</Text>
             </View>
             <TouchableOpacity style={styles.navigator_icon_wrap} onPress={this.close}>
-              <Icon name="times" style={[styles.navigator_icon, styles.navigator_icon_close]} />
+              <MaterialIcons name="menu" style={[styles.navigator_icon, styles.navigator_icon_close]} />
             </TouchableOpacity>
           </View>
           : null
