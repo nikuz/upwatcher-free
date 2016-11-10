@@ -250,7 +250,8 @@ class NavigatorBar extends Component {
 
 NavigatorBar.propTypes = {
   navigator: React.PropTypes.object,
-  route: React.PropTypes.object.isRequired
+  route: React.PropTypes.object.isRequired,
+  backHandler: React.PropTypes.func.isRequired
 };
 
 export default NavigatorBar;

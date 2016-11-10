@@ -9,8 +9,6 @@ import {
   ActivityIndicator,
   ScrollView,
   Linking,
-  RefreshControl,
-  ActionSheetIOS,
   InteractionManager
 } from 'react-native';
 import * as _ from 'underscore';
@@ -23,6 +21,7 @@ import RatingComponent from '../../components/rating/code';
 import PaymentComponent from '../../components/payment/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
+import Share from 'react-native-share';
 import styles from './style';
 
 const linkify = Linkify();
@@ -56,15 +55,23 @@ class FeedbacksList extends React.Component {
 class Preview extends React.Component {
   constructor(props) {
     super(props);
+    this.parseJobInfo = this.parseJobInfo.bind(this);
+
+    var data = props.data;
+    if (props.preview && props.preview.ciphertext === props.data.id) {
+      data = this.parseJobInfo(props.preview, props.data);
+    }
     this.state = {
-      data: props.data,
+      data: data,
+      shortData: props.data,
       created_time: timeAgo(props.data.date_created),
       favorite: props.data.favorite
     };
+
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
+    this.onShareClick = this.onShareClick.bind(this);
     this.getNavigatorRightButton = this.getNavigatorRightButton.bind(this);
     this.updateNavBarRightButton = this.updateNavBarRightButton.bind(this);
-    this.parseJobInfo = this.parseJobInfo.bind(this);
     this.handlerApplyClick = this.handlerApplyClick.bind(this);
     this.handlerOpenAttachment = this.handlerOpenAttachment.bind(this);
     this.handlerOpenJobLink = this.handlerOpenJobLink.bind(this);
@@ -76,14 +83,25 @@ class Preview extends React.Component {
       favorite = state.favorite;
 
     if (favorite) {
-      props.removeFromFavorites(props.data.id);
+      props.removeFromFavorites(state.shortData.id);
       favorite = false;
     } else {
-      props.addToFavorites(props.data);
+      props.addToFavorites(state.shortData);
       favorite = true;
     }
     this.setState({
       favorite
+    });
+  }
+  onShareClick() {
+    var data = this.state.data,
+      url = config.UPWORK_URL + '/job/' + data.id;
+
+    Share.open({
+      title: data.title,
+      message: data.title + '\n\n' + url,
+      url: url,
+      subject: data.title
     });
   }
   getNavigatorRightButton() {
@@ -95,12 +113,20 @@ class Preview extends React.Component {
     }
 
     return (
-      <TouchableOpacity style={styles.nav_bar_button} onPress={this.onFavoriteClick}>
-        <MaterialIcons
-          name={icon}
-          style={[styles.nav_bar_button_icon, favorite && styles.nav_bar_button_icon_active]}
-        />
-      </TouchableOpacity>
+      <View style={styles.nav_bar_buttons}>
+        <TouchableOpacity style={[styles.nav_bar_button, styles.nav_bar_button_share]} onPress={this.onShareClick}>
+          <MaterialIcons
+            name="share"
+            style={styles.nav_bar_button_icon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.nav_bar_button} onPress={this.onFavoriteClick}>
+          <MaterialIcons
+            name={icon}
+            style={[styles.nav_bar_button_icon, favorite && styles.nav_bar_button_icon_active]}
+          />
+        </TouchableOpacity>
+      </View>
     );
   }
   updateNavBarRightButton() {
@@ -189,8 +215,7 @@ class Preview extends React.Component {
         return null;
     }
   }
-  parseJobInfo(data) {
-    console.log(data);
+  parseJobInfo(data, shortData) {
     var assignments = [],
       feedback,
       timezone,
@@ -216,7 +241,7 @@ class Preview extends React.Component {
       }
     }
 
-    return _.extend({}, this.state.data, {
+    return _.extend({}, shortData || this.state.data, {
       extended: true,
       description: this.linkify(data.op_description),
       applicants: data.op_tot_cand,
@@ -227,7 +252,7 @@ class Preview extends React.Component {
       payment_verified: Number(data.op_cny_upm_verified) > 0,
       engagement_weeks: data.engagement_weeks,
       op_engagement: data.op_engagement,
-      buyer: data.buyer,
+      buyer_paid_contracts: data.buyer && data.buyer.op_tot_asgs,
       buyer_country: data.buyer && data.buyer.op_country,
       buyer_contract_date: data.buyer && data.buyer.op_contract_date,
       buyer_timezone: timezone,
@@ -243,24 +268,15 @@ class Preview extends React.Component {
       candidates: (data.candidates && data.candidates.candidate.length) || 0
     });
   }
-  // shareEventsHandler = () => {
-  //   var props = this.props;
-  //   ActionSheetIOS.showShareActionSheetWithOptions({
-  //     url: props.url,
-  //     message: props.title + '\n\n' + props.url,
-  //     subject: props.title
-  //   }, (err) => {}, (success) => {});
-  // };
-  // handlerBackBtn = () => {
-  //   this.props.navigator.pop();
-  // };
   // componentWillMount() {
   //   // this.curTimeAgo = timeAgo(this.props.date_created);
   // }
   componentWillReceiveProps(newProps) {
-    this.setState({
-      data: this.parseJobInfo(newProps.preview.data)
-    });
+    if (newProps.preview) {
+      this.setState({
+        data: this.parseJobInfo(newProps.preview)
+      });
+    }
   }
   componentDidUpdate() {
     this.updateNavBarRightButton();
@@ -268,19 +284,22 @@ class Preview extends React.Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.updateNavBarRightButton();
-      this.props.getJobInfo(this.props.data.id);
+      if (!this.state.data.op_description) {
+        this.props.getJobInfo(this.props.data.id);
+      }
     });
   }
   render() {
-    var props = this.props,
-      data = this.state.data;
-
+    var data = this.state.data;
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.cont}>
             <TouchableOpacity onPress={this.handlerOpenJobLink}>
-              <Text style={styles.title}>{data.title}&nbsp;<MaterialIcons name="open-in-new" /></Text>
+              <Text style={styles.title}>
+                {data.title}&nbsp;
+                <MaterialIcons name="open-in-new" style={styles.title_icon} />
+              </Text>
             </TouchableOpacity>
             <Text style={[styles.small, styles.margin]}>
               <Text style={styles.gray}>Posted <Text>{this.state.created_time}</Text></Text>
@@ -316,11 +335,8 @@ class Preview extends React.Component {
           <View style={styles.description}>
             {data.description ?
               <Text style={styles.description_text}>{data.description}</Text>
-              : null
-            }
-            {!data.description && props.preview.loading ?
+              :
               <ActivityIndicator size="large" color="#43AC12" />
-              : null
             }
           </View>
           {data.attachment ?
@@ -451,7 +467,7 @@ class Preview extends React.Component {
               </View>
               <View style={styles.column_item}>
                 <Text style={[styles.gray, styles.small]}>Paid Contracts</Text>
-                <Text style={[styles.big, styles.black]}>{data.buyer && data.buyer.op_tot_asgs}</Text>
+                <Text style={[styles.big, styles.black]}>{data.buyer_paid_contracts}</Text>
               </View>
             </View>
             {data.feedback_ppl ?
@@ -473,6 +489,7 @@ class Preview extends React.Component {
 
 Preview.propTypes = {
   data: React.PropTypes.object.isRequired,
+  preview: React.PropTypes.object.isRequired,
   navigator: React.PropTypes.object.isRequired,
   getJobInfo: React.PropTypes.func.isRequired,
   addToFavorites: React.PropTypes.func.isRequired,

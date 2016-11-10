@@ -22,6 +22,9 @@ export default stylesGenerator({
     fontSize: 18,
     color: '#494949'
   },
+  title_icon: {
+    fontSize: 16
+  },
   attention: {
     flexDirection: 'row'
   },
@@ -114,7 +117,8 @@ export default stylesGenerator({
     textAlignVertical: 'center'
   },
   feedback: {
-    marginBottom: 3,
+    marginTop: 15,
+    marginBottom: 5,
     backgroundColor: '#e9e9e9'
   },
   feedback_text: {
@@ -143,6 +147,9 @@ export default stylesGenerator({
     flex: 1,
     paddingRight: 20
   },
+  nav_bar_buttons: {
+    flexDirection: 'row'
+  },
   nav_bar_button: {
     padding: 10,
     paddingTop: 5
@@ -153,6 +160,9 @@ export default stylesGenerator({
   },
   nav_bar_button_icon_active: {
     color: '#f36200'
+  },
+  nav_bar_button_share: {
+    paddingRight: 5
   },
   client: {
     marginTop: 10,
