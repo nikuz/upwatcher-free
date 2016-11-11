@@ -5,8 +5,10 @@ import { connect } from 'react-redux';
 import * as previewActions from '../../actions/preview';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
-import * as upworkController from '../../controllers/upwork';
 import * as overlayActions from '../../actions/overlay';
+import * as errorActions from '../../actions/error';
+import * as upworkController from '../../controllers/upwork';
+import * as logsController from '../../controllers/logs';
 import PreviewView from './view';
 
 const mapStateToProps = function(state) {
@@ -21,14 +23,15 @@ const mapDispatchToProps = function(dispatch) {
       var response;
       try {
         response = await upworkController.getJobInfo(id);
-      } catch (e) {
-        console.log(e); // something wrong, need to handle
+      } catch (err) {
+        dispatch(errorActions.show(this.getJobInfo));
+        logsController.captureError(err);
       }
-      console.log(response);
       if (response && response.profile) {
         dispatch(previewActions.update(response.profile));
       } else {
-        console.log(response); // something wrong, need to handle
+        dispatch(errorActions.show(this.getJobInfo));
+        logsController.captureMessage('Preview Controller `getJobInfo` empty response');
       }
     },
     addToFavorites: function(item) {

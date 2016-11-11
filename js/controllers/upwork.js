@@ -8,7 +8,6 @@ import * as _ from 'underscore';
 import * as config from '../config';
 import * as storage from '../modules/storage';
 import * as OAuth from '../modules/oauth';
-import constants from '../modules/constants';
 import * as settingsModel from '../models/settings';
 import * as searchModel from '../models/search';
 import * as network from '../modules/network';
@@ -31,10 +30,6 @@ async function request(options = {}, callback = _.noop) {
   var url = options.url,
     method = options.method || 'GET',
     format = options.format || 'json';
-
-  if (!url) {
-    return callback(constants.REQUIRED('url'));
-  }
 
   var {token, token_secret} = await storage.get(['token', 'token_secret']),
     request_data = {

@@ -1,7 +1,7 @@
 'use strict';
 
 import * as CryptoJS from 'crypto-js';
-import * as logs from './logs';
+import * as logs from '../controllers/logs';
 
 /**
  * Constructor

@@ -8,12 +8,13 @@ export default stylesGenerator({
     left: 0,
     right: 0,
     top: 0,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 8,
+    paddingBottom: 8,
     paddingLeft: 7,
     paddingRight: 7,
-    backgroundColor: '#fde3e3',
+    backgroundColor: '#f36200',
     alignItems: 'center',
+    elevation: 3,
     shadowColor: '#666',
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -23,6 +24,8 @@ export default stylesGenerator({
     }
   },
   text: {
-    color: '#333'
+    marginBottom: 5,
+    fontSize: 15,
+    color: '#FFF'
   }
 });

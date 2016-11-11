@@ -6,7 +6,9 @@ import * as searchActions from '../../actions/search';
 import * as feedsActions from '../../actions/feeds';
 import * as searchModel from '../../models/search';
 import * as feedsModel from '../../models/feeds';
+import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
+import * as logsController from '../../controllers/logs';
 import SearchView from './view';
 
 const mapStateToProps = function(state) {
@@ -26,15 +28,17 @@ const mapDispatchToProps = function(dispatch) {
         var response;
         try {
           response = await upworkController.getFeeds(value);
-        } catch (e) {
-          console.log(e); // something wrong, need to handle
+        } catch (err) {
+          dispatch(errorActions.show(this.addFeedsRequest));
+          logsController.captureError(err);
         }
         dispatch(searchActions.feedsUpdateFinished());
         if (response && response.jobs) {
           dispatch(feedsActions.update(response.jobs));
           feedsModel.set(response.jobs);
         } else {
-          console.log(response); // something wrong, need to handle
+          dispatch(errorActions.show(this.addFeedsRequest));
+          logsController.captureMessage('Search controller `addFeedsRequest` empty response');
         }
       }
     }

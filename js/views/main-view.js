@@ -11,6 +11,7 @@ import Feeds from './feeds/controller';
 import Preview from './preview/controller';
 import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/controller';
+import ErrorManager from './../views/errors/controller';
 import NavigatorBar from './../components/navigator-bar/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
@@ -96,6 +97,7 @@ class Main extends React.Component {
           style={styles.navigator}
         />
         <OverlaysManager />
+        <ErrorManager />
       </View>
     );
   }

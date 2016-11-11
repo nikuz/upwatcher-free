@@ -9,6 +9,7 @@ import feeds from './feeds';
 import favorites from './favorites';
 import tabs from './tabs';
 import preview from './preview';
+import error from './error';
 
 const todoApp = combineReducers({
   state: appState,
@@ -18,7 +19,8 @@ const todoApp = combineReducers({
   feeds,
   favorites,
   tabs,
-  preview
+  preview,
+  error
 });
 
 export default todoApp;

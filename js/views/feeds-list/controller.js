@@ -7,7 +7,9 @@ import * as feedsActions from '../../actions/feeds';
 import * as feedsModel from '../../models/feeds';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
+import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
+import * as logsController from '../../controllers/logs';
 import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
@@ -24,15 +26,17 @@ const mapDispatchToProps = function(dispatch) {
       var response;
       try {
         response = await upworkController.getFeeds();
-      } catch (e) {
-        console.log(e); // something wrong, need to handle
+      } catch (err) {
+        dispatch(errorActions.show(this.refresh));
+        logsController.captureError(err);
       }
       dispatch(feedsActions.refreshStop());
       if (response && response.jobs) {
         dispatch(feedsActions.update(response.jobs));
         feedsModel.set(response.jobs);
       } else {
-        console.log(response); // something wrong, need to handle
+        dispatch(errorActions.show(this.refresh));
+        logsController.captureMessage('Feeds list `refresh` empty response');
       }
     },
     loadMoreJobs: async function(page) {
@@ -40,14 +44,16 @@ const mapDispatchToProps = function(dispatch) {
       var response;
       try {
         response = await upworkController.getFeeds(null, page);
-      } catch (e) {
-        console.log(e); // something wrong, need to handle
+      } catch (err) {
+        dispatch(errorActions.show(this.loadMoreJobs));
+        logsController.captureError(err);
       }
       dispatch(feedsActions.loadMoreJobsStop());
       if (response && response.jobs) {
         dispatch(feedsActions.addMore(response.jobs));
       } else {
-        console.log(response); // something wrong, need to handle
+        dispatch(errorActions.show(this.loadMoreJobs));
+        logsController.captureMessage('Feeds list `loadMoreJobs` empty response');
       }
     },
     addToFavorites: function(item) {

@@ -3,9 +3,7 @@
 import * as _ from 'underscore';
 
 var dictionary = {
-  REQUIRED: '`%s` parameter is required',
-  STORAGE_ERROR: 'Storage error: `%s`',
-  REQUIRED_FUNCTION: 'Function required: `%s`'
+  REQUIRED: '`%s` parameter is required'
 };
 var dictionaryActions;
 

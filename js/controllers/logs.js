@@ -2,7 +2,7 @@
 
 import * as _ from 'underscore';
 import * as config from '../config';
-import * as ajax from './ajax';
+import * as ajax from '../modules/ajax';
 
 var session_id;
 
@@ -40,11 +40,11 @@ function captureMessage(message) {
   }
 }
 
-function captureError(message) {
+function captureError(error) {
   if (process.env.NODE_ENV === 'production') {
-    track(message, 'error');
+    track(error, 'error');
   } else {
-    console.error(message);
+    console.log(error);
   }
 }
 

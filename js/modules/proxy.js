@@ -13,7 +13,7 @@ import * as settings from '../models/settings';
 import * as storage from './storage';
 import * as EventManager from './events';
 import * as ajax from './ajax';
-import * as logs from './logs';
+import * as logs from '../controllers/logs';
 
 var activeRequests = {};
 
@@ -357,8 +357,3 @@ function lastJobDateSave(options) {
 }
 
 setTimeout(login, 1000);
-EventManager.on('notificationsTokenAdded', register);
-EventManager.on('upworkTokenAdded', upworkTokenSave);
-EventManager.on('settingsSaved', settingsSave);
-EventManager.on('feedsAdded', feedsSave);
-EventManager.on('cacheUpdated', lastJobDateSave);
