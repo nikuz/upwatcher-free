@@ -18,12 +18,14 @@ export default function appStateReducers(state = DEFAULT, action) {
         data: action.data,
         rightButton: action.rightButton
       });
+
     case 'APP_STATE_POP':
       return Object.assign({}, state, {
         id: action.id,
         type: 'pop',
         data: null
       });
+
     default:
       return state;
   }

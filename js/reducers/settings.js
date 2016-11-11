@@ -9,10 +9,19 @@ export default function settingsReducers(state = DEFAULT, action) {
   switch (action.type) {
     case 'SETTINGS_DEFAULT_SET':
       return action.data;
-    case 'SETTINGS_CHANGE':
+
+    case 'SETTINGS_CHANGE': {
       let newState = deepClone(state);
       newState[action.name].value = action.value;
       return newState;
+    }
+
+    case 'SETTINGS_UPDATE_CATEGORIES': {
+      let newState = deepClone(state);
+      newState.category2.values = action.data;
+      return newState;
+    }
+
     default:
       return state;
   }

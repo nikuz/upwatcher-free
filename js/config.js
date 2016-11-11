@@ -17,9 +17,7 @@ export const PROXY_URL = 'http://upwork-proxy.4go.mobi';
 //export const PROXY_URL = 'http://192.168.2.4:8020';
 
 // cache
-export const JOBS_PER_PAGE = 15;
-export const CACHE_PER_REQUEST = 20;
-export const CACHE_LIMIT = 100;
+export const JOBS_PER_PAGE = 20;
 export const FAVORITES_LIMIT = 50;
 
 // LOGGLY

@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import * as logs from '../../modules/logs';
 import * as settingsModel from '../../models/settings';
 import * as settingsActions from '../../actions/settings';
+import * as feedsActions from '../../actions/feeds';
+import * as overlayActions from '../../actions/overlay';
+import * as upworkController from '../../controllers/upwork';
 import SettingsView from './view';
 
 const mapStateToProps = function(state) {
@@ -16,16 +19,13 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    changeHandler: function(name, value) {
+    change: function(name, value) {
       dispatch(settingsActions.change(name, value));
     },
-    saveHandler: async function(sData) {
+    save: async function(sData) {
       var curSavedSettings = await settingsModel.get(),
         needToUpdateCache = false,
         changed = false;
-
-      console.log(sData);
-      console.log(curSavedSettings);
 
       _.each(curSavedSettings, (item, key) => {
         if (item.value !== sData[key].value) {
@@ -35,16 +35,33 @@ const mapDispatchToProps = function(dispatch) {
           changed = true;
         }
       });
-      console.log(changed);
       if (changed) {
         settingsModel.set(sData);
       }
-      if (changed || needToUpdateCache) {
-        // EventManager.trigger('settingsSaved', {
-        //   changed,
-        //   needToUpdateCache
-        // });
+      if (needToUpdateCache) {
+        dispatch(feedsActions.refresh());
       }
+    },
+    getCategories: async function() {
+      var response,
+        categories = [{
+          'All': 'All',
+        }];
+
+      try {
+        response = await upworkController.getCategories();
+      } catch (e) {
+        console.log(e); // something wrong, need to handle
+        appStore.dispatch(overlayActions.close());
+      }
+
+      _.each(response.categories, item => {
+        categories.push({
+          [item.title]: item.title
+        });
+      });
+
+      dispatch(settingsActions.updateCategories(categories));
     }
   };
 };

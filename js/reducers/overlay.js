@@ -10,10 +10,12 @@ export default function overlayReducers(state = DEFAULT, action) {
       let newState = Object.assign({}, state, action.props);
       newState.status = 'open';
       return newState;
+
     case 'OVERLAY_CLOSE':
       return {
         status: 'close'
       };
+
     default:
       return state;
   }

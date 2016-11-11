@@ -20,6 +20,7 @@ export default function tabsReducers(state = DEFAULT, action) {
       return Object.assign({}, state, {
         activeTab: action.id
       });
+
     default:
       return state;
   }

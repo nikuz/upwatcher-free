@@ -258,9 +258,9 @@ function getFeeds(value, page) {
       pagerStart = 0;
 
     if (page) {
-      pagerStart = page * config.CACHE_PER_REQUEST;
+      pagerStart = page * config.JOBS_PER_PAGE;
     }
-    requestData.paging = `${pagerStart};${config.CACHE_PER_REQUEST}`; // API pager format is `$offset;$count`
+    requestData.paging = `${pagerStart};${config.JOBS_PER_PAGE}`; // API pager format is `$offset;$count`
 
     if (sData.category2.value !== 'All') {
       requestData.category2 = sData.category2.value;
@@ -302,11 +302,34 @@ function getJobInfo(id) {
   });
 }
 
+function getCategories() {
+  return new Promise(async function(resolve, reject) {
+    try {
+      await network.check();
+      await login();
+    } catch (e) {
+      return reject(e);
+    }
+
+    request({
+      url: config.UPWORK_JOBS_CATEGORIES,
+      method: 'GET'
+    }, function(err, response) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
+
 // ---------
 // interface
 // ---------
 
 export {
   getFeeds,
-  getJobInfo
+  getJobInfo,
+  getCategories
 };

@@ -40,6 +40,12 @@ function refreshStop() {
   };
 }
 
+function refresh() {
+  return {
+    type: 'FEEDS_REFRESH'
+  };
+}
+
 function loadMoreJobsStart() {
   return {
     type: 'FEEDS_LOAD_MORE_JOBS_START'
@@ -59,6 +65,7 @@ export {
   filter,
   refreshStart,
   refreshStop,
+  refresh,
   loadMoreJobsStart,
   loadMoreJobsStop
 };

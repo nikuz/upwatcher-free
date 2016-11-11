@@ -15,7 +15,15 @@ function change(name, value) {
   };
 }
 
+function updateCategories(data) {
+  return {
+    type: 'SETTINGS_UPDATE_CATEGORIES',
+    data
+  };
+}
+
 export {
   defaultSet,
-  change
+  change,
+  updateCategories
 };

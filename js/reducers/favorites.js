@@ -10,6 +10,7 @@ export default function favoritesReducers(state = DEFAULT, action) {
   switch (action.type) {
     case 'FAVORITES_DEFAULT_SET':
       return action.data || [];
+
     case 'FAVORITES_ADD': {
       let newState = deepClone(state);
       newState.unshift(action.item);
@@ -18,6 +19,7 @@ export default function favoritesReducers(state = DEFAULT, action) {
       }
       return newState;
     }
+
     case 'FAVORITES_REMOVE': {
       let newState = deepClone(state);
       newState = _.filter(newState, function(item) {
@@ -25,6 +27,7 @@ export default function favoritesReducers(state = DEFAULT, action) {
       });
       return newState;
     }
+
     default:
       return state;
   }

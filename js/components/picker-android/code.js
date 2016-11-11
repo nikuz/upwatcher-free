@@ -30,32 +30,43 @@ class PickerAndroid extends Component {
     };
     this.renderRow = this.renderRow.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+    this.scrollTo = this.scrollTo.bind(this);
   }
   onValueChange(value) {
     this.props.onValueChange(value);
+  }
+  scrollTo() {
+    var selectedItemIndex = _.findIndex(this.state.values, {
+      current: true
+    });
+    var itemHeight = 50;
+
+    this.refs.container.scrollTo({
+      x: 0,
+      y: selectedItemIndex * itemHeight - 9 * itemHeight,
+      animated: false
+    });
   }
   renderRow(item) {
     var key = _.keys(item)[0],
       value = _.values(item)[0];
 
     return (
-      <View>
-        <TouchableHighlight
-          style={styles.item}
-          onPress={this.onValueChange.bind(null, key)}
-          underlayColor="#ddf3d3"
-        >
-          <View style={styles.item_cont}>
-            <View style={styles.item_cont_text_wrap}>
-              <Text style={styles.item_text}>{value}</Text>
-            </View>
-            {item.current ?
-              <MaterialIcons name="check" style={styles.item_icon} />
-              : null
-            }
+      <TouchableHighlight
+        style={styles.item}
+        onPress={this.onValueChange.bind(null, key)}
+        underlayColor="#ddf3d3"
+      >
+        <View style={styles.item_cont}>
+          <View style={styles.item_cont_text_wrap}>
+            <Text style={styles.item_text}>{value}</Text>
           </View>
-        </TouchableHighlight>
-      </View>
+          {item.current ?
+            <MaterialIcons name="check" style={styles.item_icon} />
+            : null
+          }
+        </View>
+      </TouchableHighlight>
     );
   }
   render() {
@@ -65,6 +76,8 @@ class PickerAndroid extends Component {
 
     return (
       <ListView
+        onLayout={this.scrollTo}
+        ref="container"
         dataSource={this.state.dataSource}
         renderRow={this.renderRow}
         style={[styles.wrap, style]}

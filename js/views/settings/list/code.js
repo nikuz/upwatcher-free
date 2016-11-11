@@ -23,10 +23,10 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      err: null
+      opened: false,
+      shouldBeOpened: false
     };
     this.openHandler = this.openHandler.bind(this);
-    this.downloadAgainHandler = this.downloadAgainHandler.bind(this);
     this.pickerGenerator = this.pickerGenerator.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
     this.saveHandler = this.saveHandler.bind(this);
@@ -64,25 +64,10 @@ class List extends React.Component {
     }
   }
   openHandler() {
-    // if (this.state.opened) {
-    //
-    // } else {
-    //   appStore.dispatch(overlayActions.close());
-    // }
     let props = this.props,
       values = props.values,
       selectorContent;
 
-    // if (this.state.err) {
-    //   selectorContent = (
-    //     <View style={styles.error}>
-    //       <Text style={styles.error_text}>Something went wrong, please try again</Text>
-    //       <TouchableHighlight style={styles.retry_btn} onPress={this.downloadAgainHandler} underlayColor="#69cb3c">
-    //         <Text style={styles.retry_btn_text}>Try again</Text>
-    //       </TouchableHighlight>
-    //     </View>
-    //   );
-    // } else if (!values.length) {
     if (!values.length) {
       selectorContent = (
         <View style={styles.waiting}>
@@ -104,31 +89,13 @@ class List extends React.Component {
       />
     }));
 
-    // var openHandler = this.props.openHandler;
-    // if (openHandler && !this.props.values.length) {
-    //   openHandler((err, response) => {
-    //     var state = {
-    //       err: null
-    //     };
-    //     if (err) {
-    //       state.err = err;
-    //     } else {
-    //       response = response || [];
-    //       _.extend(state, {
-    //         values: response,
-    //         selectedValue: _.keys(response[0])[0]
-    //       });
-    //     }
-    //     this.setState(state);
-    //   });
-    // }
-  }
-  downloadAgainHandler() {
-    // this.setState({
-    //   err: null,
-    //   values: []
-    // });
-    // this.openHandler();
+    if (props.openHandler && !props.values.length) {
+      props.openHandler();
+    }
+
+    this.setState({
+      opened: true
+    });
   }
   changeHandler(value) {
     if (device.isAndroid()) {
@@ -149,6 +116,22 @@ class List extends React.Component {
   }
   cancelHandler() {
     appStore.dispatch(overlayActions.close());
+  }
+  componentWillReceiveProps(nextProps) {
+    var valuesIsNotEqual = !_.isEqual(nextProps.values, this.props.values);
+    if (valuesIsNotEqual && this.state.opened) {
+      this.setState({
+        shouldBeOpened: true
+      });
+    }
+  }
+  componentDidUpdate() {
+    if (this.state.shouldBeOpened) {
+      this.openHandler();
+      this.setState({
+        shouldBeOpened: false
+      });
+    }
   }
   render() {
     var props = this.props,

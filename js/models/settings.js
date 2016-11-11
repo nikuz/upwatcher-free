@@ -11,7 +11,7 @@ const DEFAULT = {
   category2: {
     values: [],
     value: 'All',
-    search: true
+    search: true // it is mean, that change this field will refresh search results
   },
   budgetFrom: {
     value: 0,
@@ -19,7 +19,7 @@ const DEFAULT = {
   },
   budgetTo: {
     value: 1000000,
-    search: true // it is mean, that change this field will refresh search results
+    search: true
   },
   notifyInterval: {
     values: [

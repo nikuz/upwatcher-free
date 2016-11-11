@@ -7,7 +7,8 @@ import {
   Text,
   ListView,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  InteractionManager
 } from 'react-native';
 import * as _ from 'underscore';
 import {deepClone} from '../../modules/object';
@@ -182,6 +183,16 @@ FeedsList.propTypes = {
 };
 
 class FeedsListManager extends React.Component {
+  componentWillReceiveProps(newProps) {
+    if (newProps.feeds.shouldBeRefresh) {
+      InteractionManager.runAfterInteractions(() => {
+        this.props.refresh();
+      });
+    }
+  }
+  shouldComponentUpdate(nextProps) {
+    return !nextProps.feeds.shouldBeRefresh;
+  }
   render() {
     var props = this.props;
     return (

@@ -4,8 +4,7 @@ import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
   wrap: {
-    marginTop: 10,
-    marginBottom: 10
+
   },
   item: {
     padding: 15,

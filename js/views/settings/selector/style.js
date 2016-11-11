@@ -21,7 +21,7 @@ export default stylesGenerator({
   },
   select: {
     backgroundColor: '#FFF',
-    borderRadius: 6
+    // borderRadius: 6
   },
   buttons: {
     flexDirection: 'row'
