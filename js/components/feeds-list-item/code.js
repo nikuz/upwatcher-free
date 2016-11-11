@@ -19,12 +19,17 @@ class FeedsItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      animHeight: null
+      animHeight: null,
+      created_time: timeAgo(props.data.date_created),
     };
+
     this.componentUnmounted = false;
+    this.updateTimer = null;
+
     this.onLayout = this.onLayout.bind(this);
     this.getFavoriteButton = this.getFavoriteButton.bind(this);
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
+    this.updateCreatedTime = this.updateCreatedTime.bind(this);
   }
   onLayout(e) {
     if (this.props.animatedAnnihilation && this.state.animHeight === null) {
@@ -66,7 +71,24 @@ class FeedsItem extends React.Component {
       </TouchableOpacity>
     );
   }
+  updateCreatedTime() {
+    if (this.componentUnmounted) {
+      return;
+    }
+
+    var newCreatedTime = timeAgo(this.props.data.date_created);
+    if (newCreatedTime !== this.state.created_time) {
+      this.setState({
+        created_time: newCreatedTime
+      });
+    }
+    this.updateTimer = setTimeout(this.updateCreatedTime, 6e4 - new Date().getSeconds() * 1000);
+  }
+  componentDidMount() {
+    this.updateCreatedTime();
+  }
   componentWillUnmount() {
+    clearTimeout(this.updateTimer);
     this.componentUnmounted = true;
   }
   render() {
@@ -87,7 +109,7 @@ class FeedsItem extends React.Component {
             <View style={styles.job_header}>
               <View style={styles.job_type_wrap}>
                 <Text style={styles.job_type}>{data.job_type}</Text>
-                <Text style={styles.job_posted} ref="date_created"> - {timeAgo(data.date_created)}</Text>
+                <Text style={styles.job_posted} ref="date_created"> - {this.state.created_time}</Text>
               </View>
               <View style={styles.job_budget_wrap}>
                 {data.budget ?

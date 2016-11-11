@@ -68,6 +68,9 @@ class Preview extends React.Component {
       favorite: props.data.favorite
     };
 
+    this.componentUnmounted = false;
+    this.updateTimer = null;
+
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
     this.onShareClick = this.onShareClick.bind(this);
     this.getNavigatorRightButton = this.getNavigatorRightButton.bind(this);
@@ -76,6 +79,7 @@ class Preview extends React.Component {
     this.handlerOpenAttachment = this.handlerOpenAttachment.bind(this);
     this.handlerOpenJobLink = this.handlerOpenJobLink.bind(this);
     this.handlerFeedbackClick = this.handlerFeedbackClick.bind(this);
+    this.updateCreatedTime = this.updateCreatedTime.bind(this);
   }
   onFavoriteClick() {
     var props = this.props,
@@ -99,7 +103,7 @@ class Preview extends React.Component {
 
     Share.open({
       title: data.title,
-      message: data.title + '\n\n' + url,
+      message: data.title,
       url: url,
       subject: data.title
     });
@@ -131,19 +135,23 @@ class Preview extends React.Component {
   }
   updateNavBarRightButton() {
     this.props.navigator._navBar.update({
+      id: 'preview',
       rightButton: this.getNavigatorRightButton()
     });
   }
-  // updateTimeAgo = () => {
-  //   var newTimeAgo = timeAgo(this.props.date_created);
-  //   if (newTimeAgo !== this.curTimeAgo) {
-  //     this.curTimeAgo = newTimeAgo;
-  //     this.setState({
-  //       created_time: newTimeAgo
-  //     });
-  //   }
-  //   this.updateTimer = setTimeout(this.updateTimeAgo, 6e4 - new Date().getSeconds() * 1000);
-  // };
+  updateCreatedTime() {
+    if (this.componentUnmounted) {
+      return;
+    }
+
+    var newCreatedTime = timeAgo(this.props.data.date_created);
+    if (newCreatedTime !== this.state.created_time) {
+      this.setState({
+        created_time: newCreatedTime
+      });
+    }
+    this.updateTimer = setTimeout(this.updateCreatedTime, 6e4 - new Date().getSeconds() * 1000);
+  }
   handlerFeedbackClick() {
     this.props.openFeedbackOverlay(
       'Feedback',
@@ -166,7 +174,6 @@ class Preview extends React.Component {
     }
   }
   handlerOpenAttachment() {
-    console.log(this.state.data.attachment);
     Linking.openURL(this.state.data.attachment);
   }
   handlerOpenLink(url) {
@@ -268,9 +275,6 @@ class Preview extends React.Component {
       candidates: (data.candidates && data.candidates.candidate.length) || 0
     });
   }
-  // componentWillMount() {
-  //   // this.curTimeAgo = timeAgo(this.props.date_created);
-  // }
   componentWillReceiveProps(newProps) {
     if (newProps.preview) {
       this.setState({
@@ -279,15 +283,24 @@ class Preview extends React.Component {
     }
   }
   componentDidUpdate() {
-    this.updateNavBarRightButton();
+    if (!this.componentUnmounted) {
+      this.updateNavBarRightButton();
+    }
   }
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.updateNavBarRightButton();
-      if (!this.state.data.op_description) {
-        this.props.getJobInfo(this.props.data.id);
+      if (!this.componentUnmounted) {
+        this.updateNavBarRightButton();
+        if (!this.state.data.op_description) {
+          this.props.getJobInfo(this.props.data.id);
+        }
       }
     });
+    this.updateCreatedTime();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.updateTimer);
+    this.componentUnmounted = true;
   }
   render() {
     var data = this.state.data;

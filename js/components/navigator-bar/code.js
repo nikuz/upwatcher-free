@@ -20,6 +20,7 @@ class NavigatorBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: null,
       leftButton: null,
       prevLeftButton: null,
       title: null,
@@ -92,6 +93,10 @@ class NavigatorBar extends Component {
     }
   }
   update(opts = {}) {
+    if (opts.id !== this.state.id) {
+      return;
+    }
+
     var newState = {};
     if (opts.rightButton) {
       newState.rightButton = this.rightButtonRender(opts);
@@ -101,6 +106,7 @@ class NavigatorBar extends Component {
   handleWillFocus(route) {
     var state = this.state,
       newState = {
+        id: route.id,
         leftButton: this.leftButtonRender(route),
         prevLeftButton: state.leftButton,
         title: this.titleRender(route),
