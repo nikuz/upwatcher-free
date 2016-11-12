@@ -7,24 +7,25 @@ import {
   Animated,
   TouchableOpacity
 } from 'react-native';
-import {ButtonBlue} from '../../components/buttons/code';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 const positionOnScreen = 43,
   hiddenPosition = -100,
   animationDuration = 300;
 
-class Error extends React.Component {
+class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: props.error.visible,
+      visible: props.notifications.visible,
       animTop: new Animated.Value(hiddenPosition),
       animOpacity: new Animated.Value(0)
     };
-    this.onPressRetry = this.onPressRetry.bind(this);
+
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this.onPress = this.onPress.bind(this);
   }
   show() {
     Animated.parallel([
@@ -47,16 +48,13 @@ class Error extends React.Component {
         toValue: 0
       })
     ]).start();
-  };
-  onPressRetry() {
+  }
+  onPress() {
     this.hide();
-    if (this.props.error.retryHandler) {
-      this.props.error.retryHandler();
-    }
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
-      visible: nextProps.error.visible
+      visible: nextProps.notifications.visible
     });
   }
   componentDidUpdate() {
@@ -66,32 +64,33 @@ class Error extends React.Component {
       this.hide();
     }
   }
+  componentDidMount() {
+    this.props.registration();
+  }
   render() {
-    var state = this.state;
     return (
       <Animated.View
         style={[
           styles.wrap,
           {
-            top: state.animTop,
-            //opacity: state.animOpacity
+            top: this.state.animTop,
+            opacity: this.state.animOpacity
           }
         ]}
       >
-        <Text style={styles.text}>
-          Something went wrong, please try again.
-        </Text>
-        <ButtonBlue
-          text="Try again"
-          onPress={this.onPressRetry}
-        />
+        <TouchableOpacity style={styles.button} onPress={this.onPress}>
+          <Text style={styles.text}>
+            <MaterialIcons name="arrow-upward" style={styles.icon} /> Show new jobs
+          </Text>
+        </TouchableOpacity>
       </Animated.View>
     );
   }
 }
 
-Error.propTypes = {
-  error: React.PropTypes.object.isRequired
+Notifications.propTypes = {
+  notifications: React.PropTypes.object.isRequired,
+  registration: React.PropTypes.func.isRequired,
 };
 
-export default Error;
+export default Notifications;
