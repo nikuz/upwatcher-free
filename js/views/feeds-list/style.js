@@ -24,5 +24,13 @@ export default stylesGenerator({
   footer: {
     paddingTop: 5,
     paddingBottom: 5
+  },
+  footer_full: {
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  footer_full_text: {
+    fontSize: 15,
+    textAlign: 'center'
   }
 });

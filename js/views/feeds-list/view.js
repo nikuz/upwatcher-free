@@ -11,6 +11,7 @@ import {
   InteractionManager
 } from 'react-native';
 import * as _ from 'underscore';
+import * as config from '../../config';
 import {deepClone} from '../../modules/object';
 import FeedsItem from '../../components/feeds-list-item/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -78,10 +79,12 @@ class FeedsList extends React.Component {
     });
     var feeds = this.checkFavorites(props.feeds.data, props.favorites);
     this.state = {
+      feeds_count: feeds.length,
       dataSource: ds.cloneWithRows(feeds),
       loading_more: props.feeds.loading_more,
       refreshing: props.feeds.refreshing,
-      page: 0
+      page: 0,
+      full: props.feeds.full
     };
     this.openHandler = this.openHandler.bind(this);
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
@@ -113,7 +116,8 @@ class FeedsList extends React.Component {
     }
   }
   onEndReached() {
-    if (!this.state.loading_more) {
+    var state = this.state;
+    if (state.feeds_count >= config.JOBS_PER_PAGE && !state.full && !state.loading_more) {
       let page = this.state.page + 1;
       this.setState({
         page
@@ -124,9 +128,11 @@ class FeedsList extends React.Component {
   componentWillReceiveProps(newProps) {
     var feeds = this.checkFavorites(newProps.feeds.data, newProps.favorites);
     this.setState({
+      feeds_count: feeds.length,
       dataSource: this.state.dataSource.cloneWithRows(feeds),
       loading_more: newProps.feeds.loading_more,
-      refreshing: newProps.feeds.refreshing
+      refreshing: newProps.feeds.refreshing,
+      full: newProps.feeds.full
     });
   }
   renderRow(item) {
@@ -139,14 +145,26 @@ class FeedsList extends React.Component {
     );
   }
   renderFooter() {
-    var content = null;
-    if (this.state.loading_more) {
+    var content = null,
+      state = this.state;
+
+    if (state.loading_more) {
       content = (
         <View style={styles.footer}>
           <ActivityIndicator size="large" />
         </View>
       );
     }
+    if (state.full) {
+      content = (
+        <View style={styles.footer_full}>
+          <Text style={styles.footer_full_text}>
+            No more jobs that match your search
+          </Text>
+        </View>
+      );
+    }
+
     return content;
   }
   render() {

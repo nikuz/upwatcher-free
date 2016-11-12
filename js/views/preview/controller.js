@@ -20,18 +20,24 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     getJobInfo: async function(id) {
-      var response;
+      var response,
+        responseErr;
+
       try {
         response = await upworkController.getJobInfo(id);
       } catch (err) {
-        dispatch(errorActions.show(this.getJobInfo));
-        logsController.captureError(err);
+        responseErr = err;
       }
+
       if (response && response.profile) {
         dispatch(previewActions.update(response.profile));
       } else {
-        dispatch(errorActions.show(this.getJobInfo));
-        logsController.captureMessage('Preview Controller `getJobInfo` empty response');
+        dispatch(errorActions.show(this.getJobInfo.bind(this)));
+        if (responseErr) {
+          logsController.captureError(responseErr);
+        } else {
+          logsController.captureMessage('Preview Controller `getJobInfo` empty response');
+        }
       }
     },
     addToFavorites: function(item) {

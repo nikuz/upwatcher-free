@@ -25,20 +25,28 @@ const mapDispatchToProps = function(dispatch) {
       if (curFeedsValue !== value) {
         await searchModel.set(value);
         dispatch(searchActions.addFeeds(value));
-        var response;
+
+        let response,
+          responseErr;
+
         try {
           response = await upworkController.getFeeds(value);
         } catch (err) {
-          dispatch(errorActions.show(this.addFeedsRequest));
-          logsController.captureError(err);
+          responseErr= err;
         }
+
         dispatch(searchActions.feedsUpdateFinished());
+
         if (response && response.jobs) {
           dispatch(feedsActions.update(response.jobs));
           feedsModel.set(response.jobs);
         } else {
-          dispatch(errorActions.show(this.addFeedsRequest));
-          logsController.captureMessage('Search controller `addFeedsRequest` empty response');
+          dispatch(errorActions.show(this.addFeedsRequest.bind(this)));
+          if (responseErr) {
+            logsController.captureError(responseErr);
+          } else {
+            logsController.captureMessage('Search controller `addFeedsRequest` empty response');
+          }
         }
       }
     }

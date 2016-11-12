@@ -45,25 +45,37 @@ const mapDispatchToProps = function(dispatch) {
     },
     getCategories: async function() {
       var response,
-        categories = [{
-          'All': 'All',
-        }];
+        responseErr,
+        categories = [];
 
       try {
         response = await upworkController.getCategories();
       } catch (err) {
-        appStore.dispatch(overlayActions.close());
-        dispatch(errorActions.show(this.getCategories));
-        logsController.captureError(err);
+        responseErr = err;
       }
 
-      _.each(response.categories, item => {
-        categories.push({
-          [item.title]: item.title
+      if (response && response.categories) {
+        _.each(response.categories, item => {
+          categories.push({
+            [item.title]: item.title
+          });
         });
-      });
+      }
 
-      dispatch(settingsActions.updateCategories(categories));
+      if (categories.length) {
+        categories.unshift({
+          'All': 'All',
+        });
+        dispatch(settingsActions.updateCategories(categories));
+      } else {
+        dispatch(overlayActions.close());
+        dispatch(errorActions.show(this.getCategories.bind(this)));
+        if (responseErr) {
+          logsController.captureError(responseErr);
+        } else {
+          logsController.captureMessage('Settings `getCategories` empty response');
+        }
+      }
     }
   };
 };

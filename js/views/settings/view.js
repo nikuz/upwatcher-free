@@ -26,7 +26,7 @@ class Settings extends React.Component {
           name="category2"
           value={sData.category2.value}
           values={sData.category2.values}
-          openHandler={props.getCategories}
+          getCategories={props.getCategories}
         />
         <Slider
           changeHandler={props.change}

@@ -58,6 +58,12 @@ function loadMoreJobsStop() {
   };
 }
 
+function markAsFull() {
+  return {
+    type: 'FEEDS_MARK_AS_FULL'
+  };
+}
+
 export {
   defaultSet,
   update,
@@ -67,5 +73,6 @@ export {
   refreshStop,
   refresh,
   loadMoreJobsStart,
-  loadMoreJobsStop
+  loadMoreJobsStop,
+  markAsFull
 };

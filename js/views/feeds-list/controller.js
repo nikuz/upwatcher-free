@@ -23,37 +23,55 @@ const mapDispatchToProps = function(dispatch) {
   return {
     refresh: async function() {
       dispatch(feedsActions.refreshStart());
-      var response;
+      var response,
+        responseErr;
+
       try {
         response = await upworkController.getFeeds();
       } catch (err) {
-        dispatch(errorActions.show(this.refresh));
-        logsController.captureError(err);
+        responseErr = err;
       }
+
       dispatch(feedsActions.refreshStop());
+
       if (response && response.jobs) {
         dispatch(feedsActions.update(response.jobs));
         feedsModel.set(response.jobs);
       } else {
-        dispatch(errorActions.show(this.refresh));
-        logsController.captureMessage('Feeds list `refresh` empty response');
+        dispatch(errorActions.show(this.refresh.bind(this)));
+        if (responseErr) {
+          logsController.captureError(responseErr);
+        } else {
+          logsController.captureMessage('Feeds list `refresh` empty response');
+        }
       }
     },
     loadMoreJobs: async function(page) {
       dispatch(feedsActions.loadMoreJobsStart());
-      var response;
+      var response,
+        responseErr;
+
       try {
         response = await upworkController.getFeeds(null, page);
       } catch (err) {
-        dispatch(errorActions.show(this.loadMoreJobs));
-        logsController.captureError(err);
+        responseErr = err;
       }
+
       dispatch(feedsActions.loadMoreJobsStop());
+
       if (response && response.jobs) {
-        dispatch(feedsActions.addMore(response.jobs));
+        if (response.jobs.length) {
+          dispatch(feedsActions.addMore(response.jobs));
+        } else {
+          dispatch(feedsActions.markAsFull());
+        }
       } else {
-        dispatch(errorActions.show(this.loadMoreJobs));
-        logsController.captureMessage('Feeds list `loadMoreJobs` empty response');
+        dispatch(errorActions.show(this.loadMoreJobs.bind(this)));
+        if (responseErr) {
+          logsController.captureError(responseErr);
+        } else {
+          logsController.captureMessage('Feeds list `loadMoreJobs` empty response');
+        }
       }
     },
     addToFavorites: function(item) {

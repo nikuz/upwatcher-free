@@ -89,8 +89,8 @@ class List extends React.Component {
       />
     }));
 
-    if (props.openHandler && !props.values.length) {
-      props.openHandler();
+    if (props.getCategories && !props.values.length) {
+      props.getCategories();
     }
 
     this.setState({
@@ -168,7 +168,7 @@ List.propTypes = {
   ]),
   values: React.PropTypes.array.isRequired,
   changeHandler: React.PropTypes.func.isRequired,
-  openHandler: React.PropTypes.func
+  getCategories: React.PropTypes.func
 };
 
 export default List;
