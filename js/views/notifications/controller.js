@@ -1,12 +1,11 @@
 'use strict';
 
 import * as React from 'react';
-import {
-  PushNotificationIOS,
-  Platform
-} from 'react-native';
 import { connect } from 'react-redux';
-import PushNotifications from 'react-native-push-notification';
+import AppStore from '../../store';
+import FCM from 'react-native-fcm';
+import * as notificationsActions from '../../actions/notifications';
+import * as feedsActions from '../../actions/feeds';
 import NotificationsView from './view';
 
 const mapStateToProps = function(state) {
@@ -17,22 +16,37 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    registration: function() {
-      // if (Platform.OS === 'ios') {
-      //   PushNotificationIOS.requestPermissions();
-      //   PushNotificationIOS.addEventListener('register', this.registerHandler);
-      //   PushNotificationIOS.addEventListener('notification', this.onNotificationHandler);
-      // } else {
-      //   PushNotifications.configure({
-      //     requestPermissions: false, // disable iOS processing for third party plugin
-      //     onRegister: token => {
-      //       this.registerHandler(token);
-      //     },
-      //     onNotification: () => {
-      //       this.onNotificationHandler();
-      //     }
-      //   });
+    registration: async function() {
+      // PushNotifications.configure({
+      //   onRegister: function(token) {
+      //     console.log(token);
+      //     // this.registerHandler(token);
+      //   },
+      //   onNotification: function(notification) {
+      //     console.log(notification);
+      //     dispatch(feedsActions.refresh());
+      //     // dispatch(notificationsActions.show());
+      //   },
+      //   senderID: process.env.GCM_SENDER_ID
+      // });
+      var token = await FCM.getFCMToken();
+
+      // console.log(initialNotification);
+      // if (await FCM.getInitialNotification()) {
+      //   console.log('adasdasd');
+      //   // dispatch(feedsActions.refresh());
       // }
+      FCM.on('notification', function() {
+        var appState = AppStore.getState();
+        if (appState.state.id === 'inbox') {
+          dispatch(notificationsActions.show());
+        } else {
+          dispatch(feedsActions.refresh());
+        }
+      });
+    },
+    onPress: function() {
+      dispatch(feedsActions.refresh());
     }
   };
 };

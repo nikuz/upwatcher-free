@@ -134,6 +134,13 @@ class FeedsList extends React.Component {
       refreshing: newProps.feeds.refreshing,
       full: newProps.feeds.full
     });
+    if (newProps.feeds.shouldBeRefresh) {
+      this.refs.contList.scrollTo({
+        x: 0,
+        y: 0,
+        animated: true
+      });
+    }
   }
   renderRow(item) {
     return (
@@ -171,6 +178,7 @@ class FeedsList extends React.Component {
     var state = this.state;
     return (
       <ListView
+        ref="contList"
         dataSource={state.dataSource}
         renderRow={this.renderRow}
         renderFooter={this.renderFooter}
@@ -207,9 +215,6 @@ class FeedsListManager extends React.Component {
         this.props.refresh();
       });
     }
-  }
-  shouldComponentUpdate(nextProps) {
-    return !nextProps.feeds.shouldBeRefresh;
   }
   render() {
     var props = this.props;

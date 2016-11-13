@@ -14,13 +14,15 @@ export default stylesGenerator({
     alignItems: 'center'
   },
   button: {
+    flexDirection: 'row',
     alignSelf: 'center',
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 7,
     paddingRight: 7,
     borderRadius: 4,
-    backgroundColor: '#b1fb94',
+    backgroundColor: '#0eb8f7',
+    elevation: 3,
     shadowColor: '#333',
     shadowOpacity: 0.8,
     shadowRadius: 2,
@@ -30,10 +32,14 @@ export default stylesGenerator({
     }
   },
   text: {
-    color: '#30621b'
+    color: '#FFF',
+    textAlignVertical: 'center'
   },
   icon: {
-    position: 'relative'
+    marginRight: 5,
+    textAlignVertical: 'center',
+    fontSize: 16,
+    color: '#FFF'
   }
 });
 

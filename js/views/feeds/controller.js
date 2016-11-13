@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as StateActions from '../../actions/state';
 import FeedsView from './view';
 
 const mapStateToProps = function(state) {

@@ -14,10 +14,14 @@ export default function errorReducers(state = DEFAULT, action) {
       });
 
     case 'ERROR_HIDE':
-      return Object.assign({}, state, {
-        visible: false,
-        retryHandler: null
-      });
+      if (state.visible === false) {
+        return state;
+      } else {
+        return Object.assign({}, state, {
+          visible: false,
+          retryHandler: null
+        });
+      }
 
     default:
       return state;

@@ -10,7 +10,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
-const positionOnScreen = 43,
+const positionOnScreen = 85,
   hiddenPosition = -100,
   animationDuration = 300;
 
@@ -51,6 +51,7 @@ class Notifications extends React.Component {
   }
   onPress() {
     this.hide();
+    this.props.onPress();
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -79,9 +80,8 @@ class Notifications extends React.Component {
         ]}
       >
         <TouchableOpacity style={styles.button} onPress={this.onPress}>
-          <Text style={styles.text}>
-            <MaterialIcons name="arrow-upward" style={styles.icon} /> Show new jobs
-          </Text>
+          <MaterialIcons name="arrow-upward" style={styles.icon} />
+          <Text style={styles.text}>Show new jobs</Text>
         </TouchableOpacity>
       </Animated.View>
     );
@@ -91,6 +91,7 @@ class Notifications extends React.Component {
 Notifications.propTypes = {
   notifications: React.PropTypes.object.isRequired,
   registration: React.PropTypes.func.isRequired,
+  onPress: React.PropTypes.func.isRequired
 };
 
 export default Notifications;

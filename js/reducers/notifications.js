@@ -12,9 +12,13 @@ export default function notificationsReducers(state = DEFAULT, action) {
       });
 
     case 'NOTIFICATIONS_HIDE':
-      return Object.assign({}, state, {
-        visible: false
-      });
+      if (state.visible === false) {
+        return state;
+      } else {
+        return Object.assign({}, state, {
+          visible: false
+        });
+      }
 
     default:
       return state;
