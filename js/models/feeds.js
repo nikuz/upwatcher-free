@@ -1,5 +1,6 @@
 'use strict';
 
+import * as _ from 'underscore';
 import * as storage from '../modules/storage';
 
 const storageCollectionName = 'feeds';
@@ -13,7 +14,24 @@ async function get() {
 }
 
 async function set(data) {
-  // TODO: add trimmer for each job fields
+  var allowedFields = [
+    'id',
+    'cut_id',
+    'category2',
+    'budget',
+    'date_created',
+    'date',
+    'duration',
+    'job_type',
+    'skills',
+    'title',
+    'url',
+    'workload',
+    'client'
+  ];
+  _.each(data, (item, key) => {
+    data[key] = _.pick(item, allowedFields);
+  });
   return await storage.set(storageCollectionName, data);
 }
 
