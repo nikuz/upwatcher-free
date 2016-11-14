@@ -7,7 +7,7 @@ export default stylesGenerator({
     borderBottomWidth: 1,
     borderBottomColor: '#d4d4d4',
     paddingTop: 10,
-    paddingBottom: 5
+    paddingBottom: 10
   },
   cont: {
     paddingLeft: 13,

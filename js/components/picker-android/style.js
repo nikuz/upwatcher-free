@@ -3,26 +3,20 @@
 import stylesGenerator from '../../../styles/generator';
 
 export default stylesGenerator({
-  wrap: {
-
+  cont: {
+    paddingTop: 9,
+    paddingBottom: 9,
+    marginLeft: 10,
+    marginRight: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DFDFDF'
   },
-  item: {
-    padding: 15,
-    paddingTop: 7,
-    paddingBottom: 7
+  text: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'rgba(0,118,255,0.9)'
   },
-  item_cont: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  item_cont_text_wrap: {
-    flex: 1
-  },
-  item_text: {
-    fontSize: 20
-  },
-  item_icon: {
-    fontSize: 26,
-    color: '#009385'
+  text_current: {
+    color: '#383838'
   }
 });

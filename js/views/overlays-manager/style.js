@@ -38,5 +38,13 @@ export default stylesGenerator({
   cont: {
     flex: 1,
     backgroundColor: '#FFF'
+  },
+  loading_cont: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  loading: {
+    flex: 1
   }
 });

@@ -83,6 +83,7 @@ class List extends React.Component {
     appStore.dispatch(overlayActions.open({
       navigator: false,
       transparent: true,
+      animationType: 'fade',
       component: (
         <Selector
           title={props.title}

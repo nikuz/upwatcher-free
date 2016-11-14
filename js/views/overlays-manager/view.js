@@ -5,75 +5,73 @@ import {
   Modal,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
-import Orientation from 'react-native-orientation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 class Overlay extends React.Component {
   constructor(props) {
     super(props);
+    var options = props.overlay;
     this.state = {
-      navigator: true,
-      visible: false,
-      transparent: false,
-      title: '',
-      component: null,
-      orientation: null
+      animationType: options.animationType,
+      navigator: options.navigator,
+      visible: options.visible,
+      transparent: options.transparent,
+      title: options.title,
+      component: null
     };
+    this.onShow = this.onShow.bind(this);
     this.close = this.close.bind(this);
     this.openHandler = this.openHandler.bind(this);
-    this.orientationChangedHandler = this.orientationChangedHandler.bind(this);
   }
-  close(orientation) {
+  onShow() {
+    this.setState({
+      component: this.props.overlay.component
+    });
+  }
+  close() {
     this.setState({
       visible: false,
-      title: '',
-      component: null,
-      navigator: true,
-      transparent: false,
-      orientation
+      component: null
     });
   }
   openHandler(options) {
     var opts = options || {};
     this.setState(_.extend(this.state, opts, {visible: true}));
   }
-  orientationChangedHandler(orientation) {
-    if (orientation !== 'UNKNOWN' && this.state.transparent && orientation !== this.state.orientation) {
-      this.close(orientation);
-    }
-  }
   componentWillReceiveProps(nextProps) {
     var props = nextProps.overlay;
     this.setState({
-      visible: props.status === 'open',
-      component: props.component,
+      visible: props.visible,
       navigator: props.navigator,
       transparent: props.transparent,
-      title: props.title
+      title: props.title,
+      animationType: props.animationType,
+      component: null
     });
-  }
-  componentDidMount() {
-    Orientation.getOrientation((err, orientation) => {
-      this.setState({orientation});
-    });
-    Orientation.addOrientationListener(this.orientationChangedHandler);
-  }
-  componentWillUnmount() {
-    Orientation.removeOrientationListener(this.orientationChangedHandler);
   }
   render() {
-    var state = this.state;
+    var state = this.state,
+      loadingCont;
+
+    loadingCont = (
+      <View style={styles.loading_cont}>
+        <ActivityIndicator size="large" style={styles.loading} />
+      </View>
+    );
+
     return (
       <Modal
-        animationType="slide"
+        animationType={state.animationType}
         transparent={state.transparent}
         visible={state.visible}
         style={styles.wrap}
         onRequestClose={this.close}
+        onShow={this.onShow}
       >
         {state.navigator ?
           <View style={styles.navigator}>
@@ -89,7 +87,7 @@ class Overlay extends React.Component {
           </View>
           : null
         }
-        {this.state.component}
+        {this.state.component || loadingCont}
       </Modal>
     );
   }

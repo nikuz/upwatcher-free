@@ -30,6 +30,7 @@ const mapDispatchToProps = function(dispatch) {
       //   senderID: process.env.GCM_SENDER_ID
       // });
       var token = await FCM.getFCMToken();
+      console.log(token);
 
       // console.log(initialNotification);
       // if (await FCM.getInitialNotification()) {

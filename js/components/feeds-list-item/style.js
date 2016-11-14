@@ -15,7 +15,8 @@ export default stylesGenerator({
   },
   title: {
     fontSize: 16,
-    color: '#5bbc2e'
+    fontWeight: '400',
+    color: '#408c1d'
   },
   job_header: {
     flexDirection: 'row',

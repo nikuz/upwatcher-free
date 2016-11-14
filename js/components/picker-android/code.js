@@ -10,7 +10,6 @@ import {
 import * as _ from 'underscore';
 import {deepClone} from '../../modules/object';
 import * as device from '../../modules/device';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
 class PickerAndroid extends Component {
@@ -39,7 +38,7 @@ class PickerAndroid extends Component {
     var selectedItemIndex = _.findIndex(this.state.values, {
       current: true
     });
-    var itemHeight = 50;
+    var itemHeight = 45;
 
     this.refs.container.scrollTo({
       x: 0,
@@ -55,16 +54,12 @@ class PickerAndroid extends Component {
       <TouchableHighlight
         style={styles.item}
         onPress={this.onValueChange.bind(null, key)}
-        underlayColor="#ddf3d3"
+        underlayColor="#f9f9f9"
       >
-        <View style={styles.item_cont}>
-          <View style={styles.item_cont_text_wrap}>
-            <Text style={styles.item_text}>{value}</Text>
-          </View>
-          {item.current ?
-            <MaterialIcons name="check" style={styles.item_icon} />
-            : null
-          }
+        <View style={styles.cont}>
+          <Text style={[styles.text, item.current && styles.text_current]}>
+            {value}
+          </Text>
         </View>
       </TouchableHighlight>
     );

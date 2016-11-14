@@ -53,6 +53,7 @@ const mapDispatchToProps = function(dispatch) {
         title: title,
         navigator: true,
         transparent: false,
+        animationType: 'slide',
         component: cont
       }));
     }
