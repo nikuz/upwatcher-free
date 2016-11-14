@@ -46,8 +46,8 @@ class Favorites extends React.Component {
     });
     return favorites;
   }
-  openHandler() {
-
+  openHandler(item) {
+    this.props.pushState('preview', item);
   }
   onFavoriteClick(item) {
     this.props.removeFromFavorites(item.id);
@@ -96,7 +96,8 @@ class FavoritesManager extends React.Component {
 
 FavoritesManager.propTypes = {
   favorites: React.PropTypes.array.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
+  removeFromFavorites: React.PropTypes.func.isRequired,
+  pushState: React.PropTypes.func.isRequired
 };
 
 export default FavoritesManager;

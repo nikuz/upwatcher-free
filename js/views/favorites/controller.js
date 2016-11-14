@@ -2,8 +2,11 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as AppStateActions from '../../actions/state';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
+import * as errorActions from '../../actions/error';
+import * as notificationsActions from '../../actions/notifications';
 import FavoritesView from './view';
 
 const mapStateToProps = function(state) {
@@ -17,6 +20,15 @@ const mapDispatchToProps = function(dispatch) {
     removeFromFavorites: function(id) {
       dispatch(favoritesActions.remove(id));
       favoritesModel.remove(id);
+    },
+    pushState: function(id, data) {
+      dispatch(AppStateActions.push({
+        id,
+        name: id,
+        data
+      }));
+      dispatch(notificationsActions.hide());
+      dispatch(errorActions.hide());
     }
   };
 };
