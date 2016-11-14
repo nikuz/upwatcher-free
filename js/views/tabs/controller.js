@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as feedsActions from '../../actions/feeds';
 import * as tabsActions from '../../actions/tabs';
 import TabsListView from './view';
 
@@ -17,7 +16,6 @@ const mapDispatchToProps = function(dispatch) {
   return {
     change: function(tabId) {
       dispatch(tabsActions.change(tabId));
-      // dispatch(feedsActions.filter(tabId));
     }
   };
 };
