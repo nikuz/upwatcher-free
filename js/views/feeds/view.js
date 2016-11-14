@@ -4,9 +4,9 @@ import React from 'react';
 import {
   View,
   ViewPagerAndroid,
-  InteractionManager,
   ActivityIndicator
 } from 'react-native';
+import * as InteractionManager from '../../modules/interactions';
 import Search from '../search/controller';
 import FeedsList from '../feeds-list/controller';
 import Favorites from '../favorites/controller';
@@ -17,6 +17,7 @@ class Feeds extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      interactionName: 'viewPager',
       contentSearch: <FeedsList />,
       contentFavorites: null
     };
@@ -34,7 +35,6 @@ class Feeds extends React.Component {
       page = 1;
     }
 
-    this.pagerChangeHandler = InteractionManager.createInteractionHandle();
     this.refs.viewPager.setPage(page);
   }
   updateContent() {
@@ -48,10 +48,9 @@ class Feeds extends React.Component {
     var curTab = event.nativeEvent.position;
     this.props.changeTab(curTab === 0 ? 'search' : 'favorites');
   }
-  onPageScrollStateChanged() {
-    if (this.pagerChangeHandler) {
-      InteractionManager.clearInteractionHandle(this.pagerChangeHandler);
-      this.pagerChangeHandler = null;
+  onPageScrollStateChanged(state) {
+    if (state === 'idle') {
+      InteractionManager.clearInteractionHandle(this.state.interactionName);
     }
   }
   componentDidUpdate() {
@@ -63,7 +62,7 @@ class Feeds extends React.Component {
     }
 
     this.changePage();
-    InteractionManager.runAfterInteractions(() => {
+    InteractionManager.runAfterInteraction(state.interactionName, () => {
       this.updateContent();
     });
   }
