@@ -76,7 +76,8 @@ class Favorites extends React.Component {
 
 Favorites.propTypes = {
   favorites: React.PropTypes.array.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired
+  removeFromFavorites: React.PropTypes.func.isRequired,
+  pushState: React.PropTypes.func.isRequired
 };
 
 class FavoritesManager extends React.Component {

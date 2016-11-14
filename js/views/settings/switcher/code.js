@@ -32,6 +32,7 @@ class Switcher extends React.Component {
 
 Switcher.propTypes = {
   changeHandler: React.PropTypes.func.isRequired,
+  title: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
   relations: React.PropTypes.string

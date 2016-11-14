@@ -168,7 +168,7 @@ class FeedsItem extends React.Component {
         >
           {cont}
         </Animated.View>
-      )
+      );
     }
     return cont;
   }

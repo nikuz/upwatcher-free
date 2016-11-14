@@ -21,7 +21,6 @@ class Feeds extends React.Component {
       contentSearch: <FeedsList />,
       contentFavorites: null
     };
-    this.pagerChangeHandler = null;
     this.changePage = this.changePage.bind(this);
     this.updateContent = this.updateContent.bind(this);
     this.onPageSelected = this.onPageSelected.bind(this);

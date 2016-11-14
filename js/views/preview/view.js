@@ -52,6 +52,10 @@ class FeedbacksList extends React.Component {
   }
 }
 
+FeedbacksList.propTypes = {
+  feedbacks: React.PropTypes.array.isRequired
+};
+
 class Preview extends React.Component {
   constructor(props) {
     super(props);

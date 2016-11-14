@@ -36,11 +36,13 @@ class List extends React.Component {
       value = props.value;
 
     if (device.isAndroid()) {
-      return <PickerAndroid
-        values={props.values}
-        value={value}
-        onValueChange={this.changeHandler}
-      />
+      return (
+        <PickerAndroid
+          values={props.values}
+          value={value}
+          onValueChange={this.changeHandler}
+        />
+      );
     } else {
       return (
         <Picker
@@ -81,12 +83,14 @@ class List extends React.Component {
     appStore.dispatch(overlayActions.open({
       navigator: false,
       transparent: true,
-      component: <Selector
-        title={props.title}
-        content={selectorContent}
-        saveHandler={this.saveHandler}
-        cancelHandler={this.cancelHandler}
-      />
+      component: (
+        <Selector
+          title={props.title}
+          content={selectorContent}
+          saveHandler={this.saveHandler}
+          cancelHandler={this.cancelHandler}
+        />
+      )
     }));
 
     if (props.getCategories && !props.values.length) {
@@ -167,6 +171,7 @@ List.propTypes = {
     React.PropTypes.number
   ]),
   values: React.PropTypes.array.isRequired,
+  disabled: React.PropTypes.bool,
   changeHandler: React.PropTypes.func.isRequired,
   getCategories: React.PropTypes.func
 };

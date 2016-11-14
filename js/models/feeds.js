@@ -42,4 +42,4 @@ async function set(data) {
 export {
   get,
   set
-}
+};

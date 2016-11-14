@@ -23,4 +23,4 @@ async function set(value) {
 export {
   get,
   set
-}
+};

@@ -63,10 +63,12 @@ class Main extends React.Component {
       case 'inbox':
         return <Feeds />;
       case 'preview':
-        return <Preview
-          navigator={navigator}
-          data={route.data}
-        />;
+        return (
+          <Preview
+            navigator={navigator}
+            data={route.data}
+          />
+        );
       case 'settings':
         return <Settings />;
     }

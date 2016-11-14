@@ -8,7 +8,7 @@ function parseBigNumber(value){
   if (!value) {
     return;
   }
-  return value.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1\u2009')
+  return value.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1\u2009');
 }
 
 // ---------

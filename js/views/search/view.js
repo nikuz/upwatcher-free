@@ -72,6 +72,7 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
+  search: React.PropTypes.object.isRequired,
   addFeedsRequest: React.PropTypes.func.isRequired
 };
 
