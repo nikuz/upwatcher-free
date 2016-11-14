@@ -103,11 +103,11 @@ class FeedsList extends React.Component {
   openHandler(item) {
     this.props.pushState('preview', item);
   }
-  onFavoriteClick(item) {
-    if (item.favorite) {
-      this.props.removeFromFavorites(item.id);
-    } else {
+  onFavoriteClick(item, toFavorite) {
+    if (toFavorite) {
       this.props.addToFavorites(item);
+    } else {
+      this.props.removeFromFavorites(item.id);
     }
   }
   refresh() {
@@ -215,6 +215,10 @@ class FeedsListManager extends React.Component {
         this.props.refresh();
       });
     }
+  }
+  shouldComponentUpdate(newProps) {
+    return !newProps.feeds.shouldBeRefresh
+      && !_.isEqual(newProps.feeds, this.props.feeds);
   }
   render() {
     var props = this.props;

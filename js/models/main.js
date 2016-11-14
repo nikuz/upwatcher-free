@@ -19,6 +19,6 @@ export default async function() {
 
   store.dispatch(settingsActions.defaultSet(settings));
   store.dispatch(searchActions.defaultSet(feedsRequest));
-  store.dispatch(feedsActions.defaultSet(feeds));
   store.dispatch(favoritesActions.defaultSet(favorites));
+  store.dispatch(feedsActions.defaultSet(feeds));
 }

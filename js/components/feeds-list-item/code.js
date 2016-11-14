@@ -19,6 +19,7 @@ class FeedsItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      favorite: props.data.favorite,
       animHeight: null,
       created_time: timeAgo(props.data.date_created),
     };
@@ -40,10 +41,12 @@ class FeedsItem extends React.Component {
     }
   }
   onFavoriteClick() {
-    var props = this.props;
+    var props = this.props,
+      state = this.state;
+
     if (props.animatedAnnihilation) {
       Animated.timing(
-        this.state.animHeight,
+        state.animHeight,
         {toValue: 0}
       ).start(() => {
         if (!this.componentUnmounted) {
@@ -51,12 +54,15 @@ class FeedsItem extends React.Component {
         }
       });
     } else {
-      props.onFavoriteClick(props.data);
+      this.setState({
+        favorite: !state.favorite
+      });
+      props.onFavoriteClick(props.data, !state.favorite);
     }
   }
-  getFavoriteButton(data) {
+  getFavoriteButton() {
     var icon = 'favorite-border';
-    if (data.favorite) {
+    if (this.state.favorite) {
       icon = 'favorite';
     }
     return (
@@ -66,7 +72,7 @@ class FeedsItem extends React.Component {
       >
         <MaterialIcons
           name={icon}
-          style={[styles.favorite_icon, data.favorite && styles.favorite_icon_active]}
+          style={[styles.favorite_icon, this.state.favorite && styles.favorite_icon_active]}
         />
       </TouchableOpacity>
     );
@@ -83,6 +89,12 @@ class FeedsItem extends React.Component {
       });
     }
     this.updateTimer = setTimeout(this.updateCreatedTime, 6e4 - new Date().getSeconds() * 1000);
+  }
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      favorite: newProps.data.favorite,
+      created_time: timeAgo(newProps.data.date_created),
+    });
   }
   componentDidMount() {
     this.updateCreatedTime();
@@ -140,7 +152,7 @@ class FeedsItem extends React.Component {
               />
             </View>
             <View style={styles.favorite}>
-              {this.getFavoriteButton(data)}
+              {this.getFavoriteButton()}
             </View>
           </View>
         </View>

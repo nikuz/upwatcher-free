@@ -13,6 +13,7 @@ async function get() {
 }
 
 async function set(data) {
+  // TODO: add trimmer for each job fields
   return await storage.set(storageCollectionName, data);
 }
 
