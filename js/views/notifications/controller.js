@@ -17,32 +17,24 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     registration: async function() {
-      // PushNotifications.configure({
-      //   onRegister: function(token) {
-      //     console.log(token);
-      //     // this.registerHandler(token);
-      //   },
-      //   onNotification: function(notification) {
-      //     console.log(notification);
-      //     dispatch(feedsActions.refresh());
-      //     // dispatch(notificationsActions.show());
-      //   },
-      //   senderID: process.env.GCM_SENDER_ID
-      // });
-      var token = await FCM.getFCMToken();
+      var token = await FCM.getFCMToken(),
+        initialNotification = await FCM.getInitialNotification();
+
       console.log(token);
 
-      // console.log(initialNotification);
-      // if (await FCM.getInitialNotification()) {
-      //   console.log('adasdasd');
-      //   // dispatch(feedsActions.refresh());
-      // }
+      // collapse_key: "com.upwatcher"
+      // from: "538493948651"
+      // google.message_id: "0:1479240421059848%562bde94562bde94"
+      // google.sent_time: 1479240421033
+      if (initialNotification && initialNotification.collapse_key && initialNotification['google.message_id']) {
+        dispatch(feedsActions.refresh());
+      }
       FCM.on('notification', function() {
         var appState = AppStore.getState();
-        if (appState.state.id === 'inbox') {
+        if (appState.state.id === 'inbox' && appState.tabs.activeTab === 'search') {
           dispatch(notificationsActions.show());
         } else {
-          dispatch(feedsActions.refresh());
+          dispatch(notificationsActions.scheduleAShowing());
         }
       });
     },

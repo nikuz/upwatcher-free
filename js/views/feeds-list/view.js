@@ -217,8 +217,8 @@ class FeedsListManager extends React.Component {
     }
   }
   shouldComponentUpdate(newProps) {
-    return !newProps.feeds.shouldBeRefresh
-      && !_.isEqual(newProps.feeds, this.props.feeds);
+    return newProps.feeds.shouldBeRefresh
+      || !_.isEqual(newProps.feeds, this.props.feeds);
   }
   render() {
     var props = this.props;

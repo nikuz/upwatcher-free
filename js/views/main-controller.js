@@ -25,7 +25,7 @@ const mapDispatchToProps = function(dispatch) {
     },
     popState: function(id) {
       dispatch(AppStateActions.pop(id));
-      dispatch(notificationsActions.hide());
+      dispatch(notificationsActions.checkReceived());
       dispatch(errorActions.hide());
     }
   };
