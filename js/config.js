@@ -13,8 +13,8 @@ export const UPWORK_JOB_URL = '/api/profiles/v1/jobs/{id}.json';
 export const UPWORK_JOBS_DAYS_POSTED = '50';
 
 // proxy
-export const PROXY_URL = 'http://upwork-proxy.4go.mobi';
-//export const PROXY_URL = 'http://192.168.2.4:8020';
+// export const PROXY_URL = 'http://upwatcher.selfproduct.com';
+export const PROXY_URL = 'http://192.168.1.135:8020';
 
 // cache
 export const JOBS_PER_PAGE = 20;
