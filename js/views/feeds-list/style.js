@@ -32,5 +32,12 @@ export default stylesGenerator({
   footer_full_text: {
     fontSize: 15,
     textAlign: 'center'
+  },
+  empty: {
+    padding: 15
+  },
+  empty_text: {
+    fontSize: 16,
+    textAlign: 'center'
   }
 });

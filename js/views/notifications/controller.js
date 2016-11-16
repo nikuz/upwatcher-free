@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import AppStore from '../../store';
 import FCM from 'react-native-fcm';
 import * as notificationsActions from '../../actions/notifications';
+import * as overlayActions from '../../actions/overlay';
 import * as feedsActions from '../../actions/feeds';
 import * as userController from '../../controllers/user';
 import NotificationsView from './view';
@@ -35,7 +36,8 @@ const mapDispatchToProps = function(dispatch) {
       // google.message_id: "0:1479240421059848%562bde94562bde94"
       // google.sent_time: 1479240421033
       let initialNotification = await FCM.getInitialNotification();
-      if (initialNotification && initialNotification.collapse_key && initialNotification['google.message_id']) {
+      if (initialNotification && initialNotification.collapse_key) {
+        dispatch(overlayActions.close());
         dispatch(feedsActions.refresh());
       }
       notificationUnsubscribe = FCM.on('notification', function() {

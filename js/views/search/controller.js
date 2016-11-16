@@ -41,10 +41,13 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(searchActions.feedsUpdateFinished());
 
         if (response && response.jobs) {
-          dispatch(feedsActions.update(response.jobs));
+          dispatch(errorActions.hide());
           feedsModel.set(response.jobs);
           if (response.jobs.length) {
+            dispatch(feedsActions.update(response.jobs));
             userController.lastJobDateSave(response.jobs[0].date_created)
+          } else {
+            dispatch(feedsActions.markAsEmpty());
           }
         } else {
           dispatch(errorActions.show(this.addFeedsRequest.bind(this)));

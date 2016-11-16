@@ -37,10 +37,12 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(feedsActions.refreshStop());
 
       if (response && response.jobs) {
-        dispatch(feedsActions.update(response.jobs));
         feedsModel.set(response.jobs);
         if (response.jobs.length) {
+          dispatch(feedsActions.update(response.jobs));
           userController.lastJobDateSave(response.jobs[0].date_created)
+        } else {
+          dispatch(feedsActions.markAsEmpty());
         }
       } else {
         dispatch(errorActions.show(this.refresh.bind(this)));

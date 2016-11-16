@@ -64,6 +64,12 @@ function markAsFull() {
   };
 }
 
+function markAsEmpty() {
+  return {
+    type: 'FEEDS_MARK_AS_EMPTY'
+  };
+}
+
 export {
   defaultSet,
   update,
@@ -74,5 +80,6 @@ export {
   refresh,
   loadMoreJobsStart,
   loadMoreJobsStop,
-  markAsFull
+  markAsFull,
+  markAsEmpty
 };

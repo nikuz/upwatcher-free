@@ -7,6 +7,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import * as config from '../config';
+import * as InteractionManager from '../modules/interactions';
 import Feeds from './feeds/controller';
 import Preview from './preview/controller';
 import Settings from './settings/controller';
@@ -32,6 +33,9 @@ class Main extends React.Component {
   }
   back() {
     this.props.popState(this.state.prevId);
+  }
+  onNavigatorTransitionEnd() {
+    InteractionManager.clearInteractionHandle('navigatorTransitionEnd');
   }
   componentWillReceiveProps(nextProps) {
     var stateId = nextProps.state.id,
@@ -97,6 +101,7 @@ class Main extends React.Component {
               backHandler={this.back}
             />
           }
+          onDidFocus={this.onNavigatorTransitionEnd}
           style={styles.navigator}
         />
         <OverlaysManager />

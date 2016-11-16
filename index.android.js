@@ -15,9 +15,11 @@ import Main from './js/views/main-controller';
 
 class App extends React.Component {
   componentDidMount() {
-    initialModelsSet();
-    SplashScreen.hide();
     StatusBar.setBackgroundColor('#67be44');
+    initialModelsSet();
+    setTimeout(function() {
+      SplashScreen.hide();
+    }, 1000);
   }
   render() {
     return (

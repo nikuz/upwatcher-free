@@ -6,7 +6,8 @@ const DEFAULT = {
   refreshing: false,
   loading_more: false,
   shouldBeRefresh: false,
-  full: false
+  full: false,
+  empty: false
 };
 
 export default function feedsReducers(state = DEFAULT, action) {
@@ -19,7 +20,8 @@ export default function feedsReducers(state = DEFAULT, action) {
     case 'FEEDS_UPDATE':
       return Object.assign({}, state, {
         data: action.data,
-        full: false
+        full: false,
+        empty: false
       });
 
     case 'FEEDS_ADD_MORE':
@@ -62,6 +64,12 @@ export default function feedsReducers(state = DEFAULT, action) {
     case 'FEEDS_MARK_AS_FULL':
       return Object.assign({}, state, {
         full: true
+      });
+
+    case 'FEEDS_MARK_AS_EMPTY':
+      return Object.assign({}, state, {
+        data: [],
+        empty: true
       });
 
     default:

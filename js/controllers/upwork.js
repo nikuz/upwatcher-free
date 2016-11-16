@@ -136,9 +136,8 @@ function getVerifier() {
 
     var stateChanged = async function(state) {
       if (state === 'active') {
-        let url = await Linking.getInitialURL();
         parseLoadedUrl({
-          url
+          url: await Linking.getInitialURL()
         });
       }
     };
@@ -210,8 +209,8 @@ function login() {
       await getToken();
       await getVerifier();
       await getAccess();
-    } catch (e) {
-      return reject(e);
+    } catch (err) {
+      return reject(err);
     }
 
     resolve();

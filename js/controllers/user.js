@@ -66,7 +66,7 @@ async function settingsSave(settings) {
   }
 
   var user = await userModel.get();
-  if (!user.id) {
+  if (!user) {
     return new Error(constants.NOT_REGISTERED());
   }
 
@@ -74,6 +74,7 @@ async function settingsSave(settings) {
     url: config.PROXY_URL + `/accounts/${user.id}/settings`,
     data: settingsParse(settings),
     requestDataType: 'json',
+    responseDataType: 'json',
     error: function(err) {
       logs.captureError(err);
     },
@@ -92,7 +93,7 @@ async function feedsSave(feedsValue) {
   }
 
   var user = await userModel.get();
-  if (!user.id) {
+  if (!user) {
     return new Error(constants.NOT_REGISTERED());
   }
 
@@ -102,6 +103,7 @@ async function feedsSave(feedsValue) {
       feeds: feedsValue
     },
     requestDataType: 'json',
+    responseDataType: 'json',
     error: function(err) {
       logs.captureError(err);
     },
@@ -120,7 +122,7 @@ async function lastJobDateSave(date) {
   }
 
   var user = await userModel.get();
-  if (!user.id) {
+  if (!user) {
     return new Error(constants.NOT_REGISTERED());
   }
 
@@ -130,6 +132,7 @@ async function lastJobDateSave(date) {
       date: date
     },
     requestDataType: 'json',
+    responseDataType: 'json',
     error: function(err) {
       logs.captureError(err);
     },
@@ -151,7 +154,7 @@ async function upworkTokenSave(token, token_secret) {
   }
 
   var user = await userModel.get();
-  if (!user.id) {
+  if (!user) {
     return new Error(constants.NOT_REGISTERED());
   }
 
@@ -162,6 +165,7 @@ async function upworkTokenSave(token, token_secret) {
       token_secret: token_secret
     },
     requestDataType: 'json',
+    responseDataType: 'json',
     error: function(err) {
       logs.captureError(err);
     },

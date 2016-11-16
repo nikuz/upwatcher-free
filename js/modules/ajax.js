@@ -93,6 +93,9 @@ function ajax(options) {
       if (opts.responseDataType === 'json') {
         try {
           response = JSON.parse(response);
+          if (response.error) {
+            return error(response.error);
+          }
         } catch (err) {
           return error(err);
         }

@@ -44,7 +44,7 @@ function captureError(error) {
   if (process.env.NODE_ENV === 'production') {
     track(error, 'error');
   } else {
-    console.log(error);
+    console.error(error);
   }
 }
 

@@ -22,6 +22,9 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     change: function(name, value) {
+      if (name === 'notifyInterval') {
+        value = Number(value);
+      }
       dispatch(settingsActions.change(name, value));
     },
     save: async function(sData) {

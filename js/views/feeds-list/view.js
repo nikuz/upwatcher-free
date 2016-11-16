@@ -7,8 +7,7 @@ import {
   Text,
   ListView,
   RefreshControl,
-  ActivityIndicator,
-  InteractionManager
+  ActivityIndicator
 } from 'react-native';
 import * as _ from 'underscore';
 import * as config from '../../config';
@@ -84,7 +83,8 @@ class FeedsList extends React.Component {
       loading_more: props.feeds.loading_more,
       refreshing: props.feeds.refreshing,
       page: 0,
-      full: props.feeds.full
+      full: props.feeds.full,
+      empty: props.feeds.empty
     };
     this.openHandler = this.openHandler.bind(this);
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
@@ -132,7 +132,8 @@ class FeedsList extends React.Component {
       dataSource: this.state.dataSource.cloneWithRows(feeds),
       loading_more: newProps.feeds.loading_more,
       refreshing: newProps.feeds.refreshing,
-      full: newProps.feeds.full
+      full: newProps.feeds.full,
+      empty: newProps.feeds.empty
     });
     if (newProps.feeds.shouldBeRefresh) {
       this.refs.contList.scrollTo({
@@ -171,6 +172,15 @@ class FeedsList extends React.Component {
         </View>
       );
     }
+    if (state.empty) {
+      content = (
+        <View style={styles.empty}>
+          <Text style={styles.empty_text}>
+            Upwork didn't find any jobs that match your search. Please modify your search request or settings.
+          </Text>
+        </View>
+      );
+    }
 
     return content;
   }
@@ -193,6 +203,7 @@ class FeedsList extends React.Component {
           />
         }
         style={styles.list_container}
+        enableEmptySections={true}
       />
     );
   }
@@ -211,9 +222,7 @@ FeedsList.propTypes = {
 class FeedsListManager extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.feeds.shouldBeRefresh) {
-      InteractionManager.runAfterInteractions(() => {
-        this.props.refresh();
-      });
+      this.props.refresh();
     }
   }
   shouldComponentUpdate(newProps) {
@@ -224,7 +233,7 @@ class FeedsListManager extends React.Component {
     var props = this.props;
     return (
       <View style={styles.container}>
-        {!props.feeds.data.length ?
+        {!props.feeds.data.length && !props.feeds.empty ?
           <FeedsListBlank />
           :
           <FeedsList {...props} />
