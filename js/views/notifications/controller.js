@@ -24,19 +24,12 @@ const mapDispatchToProps = function(dispatch) {
   return {
     registration: async function() {
       token = await FCM.getFCMToken();
-      // TODO: remove it:
-      // token = 'fwQY8JdV2fw:APA91bF-z6QWwotN7fPWkO27swM0_KYNNrNbrzc1-5KDzyUlmEXqlDBi2HQ1TtgYGU_88w-RF5rJpZtUgXOZsUaYFvcRHt8zZFo0JqqS9bZLrQqBTPBNwRHm7219-daO19z2kJ43Jo1c';
       if (token) {
-        // console.log(token);
         userController.registration(token); // registration on backend
       }
 
-      // collapse_key: "com.upwatcher"
-      // from: "538493948651"
-      // google.message_id: "0:1479240421059848%562bde94562bde94"
-      // google.sent_time: 1479240421033
       let initialNotification = await FCM.getInitialNotification();
-      if (initialNotification && initialNotification.collapse_key) {
+      if (initialNotification && initialNotification.fcm && initialNotification.fcm.action) {
         dispatch(overlayActions.close());
         dispatch(feedsActions.refresh());
       }
