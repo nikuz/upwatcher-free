@@ -2,8 +2,9 @@
 
 import * as _ from 'underscore';
 
-var dictionary = {
-  REQUIRED: '`%s` parameter is required'
+const dictionary = {
+  REQUIRED: '`%s` parameter is required',
+  NOT_REGISTERED: 'User not registered for this operation',
 };
 var dictionaryActions;
 

@@ -51,7 +51,7 @@ class Overlay extends React.Component {
       transparent: props.transparent,
       title: props.title,
       animationType: props.animationType,
-      component: null
+      component: (!props.visible || !this.state.visible) ? null : props.component
     });
   }
   render() {

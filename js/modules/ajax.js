@@ -47,6 +47,7 @@ function ajax(options) {
     request = new XMLHttpRequest,
     success = opts.success || _.noop,
     error = opts.error || _.noop,
+    final = opts.final || _.noop,
     rType = opts.type,
     rUrl = opts.url,
     dataString = null;
@@ -100,6 +101,7 @@ function ajax(options) {
     } else {
       error(request.status || response);
     }
+    final();
   };
 
   request.onerror = function(response) {

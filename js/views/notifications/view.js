@@ -68,6 +68,9 @@ class Notifications extends React.Component {
   componentDidMount() {
     this.props.registration();
   }
+  componentWillUnmount() {
+    this.props.destroyEvents();
+  }
   render() {
     return (
       <Animated.View
@@ -91,7 +94,8 @@ class Notifications extends React.Component {
 Notifications.propTypes = {
   notifications: React.PropTypes.object.isRequired,
   registration: React.PropTypes.func.isRequired,
-  onPress: React.PropTypes.func.isRequired
+  onPress: React.PropTypes.func.isRequired,
+  destroyEvents: React.PropTypes.func.isRequired
 };
 
 export default Notifications;
