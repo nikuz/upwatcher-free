@@ -71,7 +71,7 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(feedsActions.markAsFull());
         }
       } else {
-        dispatch(errorActions.show(this.loadMoreJobs.bind(this)));
+        dispatch(errorActions.show(this.loadMoreJobs.bind(this, page)));
         if (responseErr) {
           logsController.captureError(responseErr);
         } else {
@@ -87,11 +87,12 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(favoritesActions.remove(id));
       favoritesModel.remove(id);
     },
-    pushState: function(id, data) {
+    pushState: function(id, data, onFavoriteHandler) {
       dispatch(AppStateActions.push({
         id,
         name: id,
-        data
+        data,
+        onFavoriteHandler
       }));
       dispatch(notificationsActions.hide());
       dispatch(errorActions.hide());

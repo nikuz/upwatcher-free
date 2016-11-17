@@ -21,11 +21,12 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(favoritesActions.remove(id));
       favoritesModel.remove(id);
     },
-    pushState: function(id, data) {
+    pushState: function(id, data, onFavoriteHandler) {
       dispatch(AppStateActions.push({
         id,
         name: id,
-        data
+        data,
+        onFavoriteHandler
       }));
       dispatch(notificationsActions.hide());
       dispatch(errorActions.hide());

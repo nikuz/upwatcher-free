@@ -1,11 +1,14 @@
 'use strict';
 
 import stylesGenerator from '../../../styles/generator';
+import * as device from '../../modules/device';
 
 export default stylesGenerator({
   container: {
     backgroundColor: '#FFF',
-    elevation: 1
+    elevation: 1,
+    borderBottomWidth: device.platformVersion() < 21 ? 1 : 0,
+    borderBottomColor: '#e0e0e0'
   },
   field: {
     height: 40,

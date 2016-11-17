@@ -3,8 +3,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as previewActions from '../../actions/preview';
-import * as favoritesActions from '../../actions/favorites';
-import * as favoritesModel from '../../models/favorites';
 import * as overlayActions from '../../actions/overlay';
 import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
@@ -32,21 +30,13 @@ const mapDispatchToProps = function(dispatch) {
       if (response && response.profile) {
         dispatch(previewActions.update(response.profile));
       } else {
-        dispatch(errorActions.show(this.getJobInfo.bind(this)));
+        dispatch(errorActions.show(this.getJobInfo.bind(this, id)));
         if (responseErr) {
           logsController.captureError(responseErr);
         } else {
           logsController.captureMessage('Preview Controller `getJobInfo` empty response');
         }
       }
-    },
-    addToFavorites: function(item) {
-      dispatch(favoritesActions.add(item));
-      favoritesModel.add(item);
-    },
-    removeFromFavorites: function(id) {
-      dispatch(favoritesActions.remove(id));
-      favoritesModel.remove(id);
     },
     openFeedbackOverlay: function(title, cont) {
       dispatch(overlayActions.open({

@@ -48,8 +48,8 @@ class Favorites extends React.Component {
     });
     return favorites;
   }
-  openHandler(item) {
-    this.props.pushState('preview', item);
+  openHandler(item, onFavoriteHandler) {
+    this.props.pushState('preview', item, onFavoriteHandler);
   }
   onFavoriteClick(item) {
     this.props.removeFromFavorites(item.id);

@@ -31,6 +31,7 @@ class FeedsItem extends React.Component {
     this.getFavoriteButton = this.getFavoriteButton.bind(this);
     this.onFavoriteClick = this.onFavoriteClick.bind(this);
     this.updateCreatedTime = this.updateCreatedTime.bind(this);
+    this.openHandler = this.openHandler.bind(this);
   }
   onLayout(e) {
     if (this.props.animatedAnnihilation && this.state.animHeight === null) {
@@ -90,6 +91,14 @@ class FeedsItem extends React.Component {
     }
     this.updateTimer = setTimeout(this.updateCreatedTime, 6e4 - new Date().getSeconds() * 1000);
   }
+  openHandler() {
+    var props = this.props,
+      data = Object.assign({}, props.data, {
+        favorite: this.state.favorite
+      });
+
+    props.openHandler(data, this.onFavoriteClick);
+  }
   componentWillReceiveProps(newProps) {
     this.setState({
       favorite: newProps.data.favorite,
@@ -111,7 +120,7 @@ class FeedsItem extends React.Component {
     cont = (
       <TouchableHighlight
         style={styles.container}
-        onPress={this.props.openHandler.bind(null, data)}
+        onPress={this.openHandler}
         underlayColor="#f9f9f9"
         onLayout={this.onLayout}
       >

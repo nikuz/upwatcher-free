@@ -42,7 +42,6 @@ export default stylesGenerator({
   },
   at_label: {
     fontSize: 11,
-    lineHeight: 12,
     color: '#666'
   },
   column: {

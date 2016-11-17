@@ -48,6 +48,7 @@ class SliderEl extends React.Component {
           maximumTrackTintColor="#6fda44"
           onValueChange={this.changeHandler}
           onSlidingComplete={this.completeHandler}
+          style={styles.slider}
         />
       </View>
     );

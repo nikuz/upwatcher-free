@@ -39,8 +39,7 @@ class Main extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     var stateId = nextProps.state.id,
-      stateName = nextProps.state.name,
-      stateData = nextProps.state.data;
+      stateName = nextProps.state.name;
 
     if (nextProps.state.type === 'push') {
       this.setState({
@@ -51,7 +50,8 @@ class Main extends React.Component {
         title: stateName.substring(0, 1).toUpperCase() + stateName.substring(1, stateName.length),
         id: stateId,
         backButton: true,
-        data: stateData
+        data: nextProps.state.data,
+        onFavoriteHandler: nextProps.state.onFavoriteHandler
       });
     } else if (nextProps.state.type === 'pop') {
       this.setState({
@@ -71,6 +71,7 @@ class Main extends React.Component {
           <Preview
             navigator={navigator}
             data={route.data}
+            onFavoriteHandler={route.onFavoriteHandler}
           />
         );
       case 'settings':

@@ -5,7 +5,8 @@ const DEFAULT = {
   name: 'inbox',
   type: null,
   data: null,
-  rightButton: null
+  rightButton: null,
+  onFavoriteHandler: null
 };
 
 export default function appStateReducers(state = DEFAULT, action) {
@@ -16,14 +17,17 @@ export default function appStateReducers(state = DEFAULT, action) {
         name: action.name,
         type: 'push',
         data: action.data,
-        rightButton: action.rightButton
+        rightButton: action.rightButton,
+        onFavoriteHandler: action.onFavoriteHandler
       });
 
     case 'APP_STATE_POP':
       return Object.assign({}, state, {
         id: action.id,
         type: 'pop',
-        data: null
+        data: null,
+        rightButton: null,
+        onFavoriteHandler: null
       });
 
     default:

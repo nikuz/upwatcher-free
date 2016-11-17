@@ -107,6 +107,10 @@ function statusBarHeight() {
   return StatusBar.currentHeight;
 }
 
+function platformVersion() {
+  return Platform.Version;
+}
+
 // ---------
 // interface
 // ---------
@@ -121,5 +125,6 @@ export {
   dimensions,
   staticDimensions,
   orientation,
-  statusBarHeight
+  statusBarHeight,
+  platformVersion
 };

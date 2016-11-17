@@ -7,6 +7,7 @@ import FCM from 'react-native-fcm';
 import * as notificationsActions from '../../actions/notifications';
 import * as overlayActions from '../../actions/overlay';
 import * as feedsActions from '../../actions/feeds';
+import * as searchModel from '../../models/search';
 import * as upworkModel from '../../models/upwork';
 import * as userController from '../../controllers/user';
 import NotificationsView from './view';
@@ -30,7 +31,7 @@ const mapDispatchToProps = function(dispatch) {
       }
 
       let initialNotification = await FCM.getInitialNotification();
-      if (initialNotification && initialNotification.fcm && initialNotification.fcm.action && !(await upworkModel.getVerifierWaiter())) {
+      if (initialNotification && initialNotification.fcm && initialNotification.fcm.action && await searchModel.get() && !(await upworkModel.getVerifierWaiter())) {
         dispatch(overlayActions.close());
         dispatch(feedsActions.refresh());
       }

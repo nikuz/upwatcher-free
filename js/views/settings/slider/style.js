@@ -1,6 +1,7 @@
 'use strict';
 
 import stylesGenerator from '../../../../styles/generator';
+import * as device from '../../../modules/device';
 
 export default stylesGenerator({
   wrapper: {
@@ -14,4 +15,8 @@ export default stylesGenerator({
     paddingRight: 13,
     paddingBottom: 5
   },
+  slider: {
+    marginLeft: device.platformVersion() < 20 ? 7 : 0,
+    marginRight: device.platformVersion() < 20 ? 7 : 0
+  }
 });

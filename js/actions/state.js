@@ -6,7 +6,8 @@ function push(options = {}) {
     id: options.id,
     name: options.name,
     data: options.data,
-    rightButton: options.rightButton
+    rightButton: options.rightButton,
+    onFavoriteHandler: options.onFavoriteHandler
   };
 }
 

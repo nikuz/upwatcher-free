@@ -11,9 +11,11 @@ import {
   ButtonBlue,
   ButtonGray
 } from '../../components/buttons/code';
+import AppStore from '../../store';
 import styles from './style';
 
-const positionOnScreen = 83,
+const positionOnScreen = 43,
+  positionOnScreenLow = 83,
   hiddenPosition = -100,
   animationDuration = 300;
 
@@ -30,9 +32,10 @@ class Error extends React.Component {
     this.hide = this.hide.bind(this);
   }
   show() {
+    var appState = AppStore.getState();
     Animated.parallel([
       Animated.timing(this.state.animTop, {
-        toValue: positionOnScreen,
+        toValue: appState.state.id === 'inbox' ? positionOnScreenLow : positionOnScreen,
         duration: animationDuration
       }),
       Animated.timing(this.state.animOpacity, {

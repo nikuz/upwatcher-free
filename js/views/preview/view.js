@@ -86,19 +86,14 @@ class Preview extends React.Component {
     this.updateCreatedTime = this.updateCreatedTime.bind(this);
   }
   onFavoriteClick() {
-    var props = this.props,
-      state = this.state,
-      favorite = state.favorite;
+    var props = this.props;
 
-    if (favorite) {
-      props.removeFromFavorites(state.shortData.id);
-      favorite = false;
-    } else {
-      props.addToFavorites(state.shortData);
-      favorite = true;
+    if (props.onFavoriteHandler) {
+      props.onFavoriteHandler();
     }
+
     this.setState({
-      favorite
+      favorite: !this.state.favorite
     });
   }
   onShareClick() {
@@ -509,8 +504,6 @@ Preview.propTypes = {
   preview: React.PropTypes.object.isRequired,
   navigator: React.PropTypes.object.isRequired,
   getJobInfo: React.PropTypes.func.isRequired,
-  addToFavorites: React.PropTypes.func.isRequired,
-  removeFromFavorites: React.PropTypes.func.isRequired,
   openFeedbackOverlay: React.PropTypes.func.isRequired
 };
 

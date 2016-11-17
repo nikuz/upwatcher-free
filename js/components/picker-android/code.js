@@ -38,7 +38,7 @@ class PickerAndroid extends Component {
     var selectedItemIndex = _.findIndex(this.state.values, {
       current: true
     });
-    var itemHeight = 45;
+    var itemHeight = 50;
 
     this.refs.container.scrollTo({
       x: 0,

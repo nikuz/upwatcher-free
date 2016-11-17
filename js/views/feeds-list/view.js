@@ -102,8 +102,8 @@ class FeedsList extends React.Component {
     });
     return feeds;
   }
-  openHandler(item) {
-    this.props.pushState('preview', item);
+  openHandler(item, onFavoriteHandler) {
+    this.props.pushState('preview', item, onFavoriteHandler);
   }
   onFavoriteClick(item, toFavorite) {
     if (toFavorite) {

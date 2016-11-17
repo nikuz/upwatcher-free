@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as _ from 'underscore';
 import { connect } from 'react-redux';
 import * as settingsModel from '../../models/settings';
+import * as searchModel from '../../models/search';
 import * as settingsActions from '../../actions/settings';
 import * as feedsActions from '../../actions/feeds';
 import * as overlayActions from '../../actions/overlay';
@@ -42,7 +43,7 @@ const mapDispatchToProps = function(dispatch) {
       if (changed) {
         settingsModel.set(sData);
       }
-      if (needToUpdateCache) {
+      if (needToUpdateCache && await searchModel.get()) {
         dispatch(feedsActions.refresh());
       }
     },
