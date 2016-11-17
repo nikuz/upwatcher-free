@@ -7,10 +7,13 @@ import {
   Animated,
   TouchableOpacity
 } from 'react-native';
-import {ButtonBlue} from '../../components/buttons/code';
+import {
+  ButtonBlue,
+  ButtonGray
+} from '../../components/buttons/code';
 import styles from './style';
 
-const positionOnScreen = 43,
+const positionOnScreen = 83,
   hiddenPosition = -100,
   animationDuration = 300;
 
@@ -74,17 +77,24 @@ class Error extends React.Component {
           styles.wrap,
           {
             top: state.animTop,
-            //opacity: state.animOpacity
+            opacity: state.animOpacity
           }
         ]}
       >
         <Text style={styles.text}>
           Something went wrong, please try again.
         </Text>
-        <ButtonBlue
-          text="Try again"
-          onPress={this.onPressRetry}
-        />
+        <View style={styles.buttons}>
+          <ButtonBlue
+            text="Try again"
+            onPress={this.onPressRetry}
+          />
+          <View style={styles.gap} />
+          <ButtonGray
+            text="Cancel"
+            onPress={this.hide}
+          />
+        </View>
       </Animated.View>
     );
   }

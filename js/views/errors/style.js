@@ -24,8 +24,18 @@ export default stylesGenerator({
     }
   },
   text: {
-    marginBottom: 5,
+    marginBottom: 10,
     fontSize: 15,
     color: '#FFF'
+  },
+  buttons: {
+    flexDirection: 'row'
+  },
+  gap: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  button_small: {
+    marginTop: 2
   }
 });

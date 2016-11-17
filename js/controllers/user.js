@@ -72,7 +72,9 @@ async function settingsSave(settings) {
 
   activeRequests.settings = ajax.put({
     url: config.PROXY_URL + `/accounts/${user.id}/settings`,
-    data: settingsParse(settings),
+    data: _.extend(settingsParse(settings), {
+      timezone: new Date().getTimezoneOffset()
+    }),
     requestDataType: 'json',
     responseDataType: 'json',
     error: function(err) {
