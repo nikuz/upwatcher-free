@@ -214,6 +214,32 @@ function login() {
   });
 }
 
+// if first response will return 401 or 403 error, try to flush upwork tokens and send new request
+function loginHelper() {
+  return new Promise(async function(resolve, reject) {
+    var response,
+      responseErr;
+
+    try {
+      response = await login();
+    } catch (err) {
+      responseErr = err;
+    }
+    if (responseErr === 401 || responseErr === 403) {
+      await flushAccess();
+      try {
+        response = await login();
+      } catch (err) {
+        return reject(err);
+      }
+    } else if (responseErr) {
+      return reject(responseErr);
+    }
+
+    return resolve(response);
+  });
+}
+
 function settingsFieldPrepare(field) {
   field = field.toLowerCase();
   return field === 'all' ? '' : field.replace(/\s+/g, '_');
@@ -226,11 +252,12 @@ function settingsFieldPrepare(field) {
 function getFeeds(value, page) {
   return new Promise(async function(resolve, reject) {
     var loginAttempt;
+
     try {
       await network.check();
-      loginAttempt = await login();
-    } catch (e) {
-      return reject(e);
+      loginAttempt = await loginHelper();
+    } catch (err) {
+      return reject(err);
     }
 
     if (loginAttempt === null) {
@@ -280,9 +307,9 @@ function getJobInfo(id) {
   return new Promise(async function(resolve, reject) {
     try {
       await network.check();
-      await login();
-    } catch (e) {
-      return reject(e);
+      await loginHelper();
+    } catch (err) {
+      return reject(err);
     }
 
     request({
@@ -302,9 +329,9 @@ function getCategories() {
   return new Promise(async function(resolve, reject) {
     try {
       await network.check();
-      await login();
-    } catch (e) {
-      return reject(e);
+      await loginHelper();
+    } catch (err) {
+      return reject(err);
     }
 
     request({

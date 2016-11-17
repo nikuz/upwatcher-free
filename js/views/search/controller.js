@@ -27,8 +27,11 @@ const mapDispatchToProps = function(dispatch) {
       // for initial search, when user will get an upwork token
       // search request should be repeated
       if (curFeedsValue !== value || isVerifierWaiterActive) {
-        if (!isVerifierWaiterActive) {
+        if (!isVerifierWaiterActive && value) {
           await searchModel.set(value);
+        }
+        if (!value) {
+          value = curFeedsValue;
         }
         dispatch(searchActions.addFeeds(value));
 
