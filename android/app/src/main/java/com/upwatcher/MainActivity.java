@@ -1,4 +1,4 @@
-package com.upwatcher;
+package com.selfproduct.upwatcher;
 
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;

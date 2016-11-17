@@ -1,4 +1,4 @@
-package com.upwatcher;
+package com.selfproduct.upwatcher;
 
 import android.app.Application;
 import android.util.Log;

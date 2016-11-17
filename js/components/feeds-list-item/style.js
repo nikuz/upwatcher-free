@@ -44,7 +44,7 @@ export default stylesGenerator({
     right: 0,
     width: 50,
     marginTop: 7,
-    alignItems: 'center'
+    alignItems: 'flex-end'
   },
   job_budget_text: {
     color: '#494949'

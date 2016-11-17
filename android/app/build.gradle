@@ -87,7 +87,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.upwatcher"
+        applicationId "com.selfproduct.upwatcher"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

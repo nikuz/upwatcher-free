@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:538493948651:android:63fd429b14a2a187",
+        "mobilesdk_app_id": "1:538493948651:android:673122d90cae07cb",
         "android_client_info": {
-          "package_name": "com.upwatcher"
+          "package_name": "com.selfproduct.upwatcher"
         }
       },
       "oauth_client": [
