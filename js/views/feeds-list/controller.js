@@ -11,7 +11,6 @@ import * as errorActions from '../../actions/error';
 import * as notificationsActions from '../../actions/notifications';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
-import * as userController from '../../controllers/user';
 import FeedsListView from './view';
 
 const mapStateToProps = function(state) {
@@ -40,7 +39,6 @@ const mapDispatchToProps = function(dispatch) {
         feedsModel.set(response.jobs);
         if (response.jobs.length) {
           dispatch(feedsActions.update(response.jobs));
-          userController.lastJobDateSave(response.jobs[0].date_created)
         } else {
           dispatch(feedsActions.markAsEmpty());
         }

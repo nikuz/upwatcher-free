@@ -3,6 +3,7 @@
 import * as _ from 'underscore';
 import constants from '../modules/constants';
 import * as storage from '../modules/storage';
+import * as userController from '../controllers/user';
 import {deepClone} from '../modules/object';
 
 const storageCollectionName = 'settings';
@@ -106,6 +107,7 @@ async function set(field, data) {
   if (!data) {
     return new Error(constants.REQUIRED('data'));
   }
+  userController.settingsSave(data); // save settings on backend
   if (field) {
     let settings = await get();
     _.each(settings, function(item, key) {

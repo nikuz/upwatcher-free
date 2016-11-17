@@ -5,8 +5,15 @@ import stylesGenerator from '../../../styles/generator';
 export default stylesGenerator({
   blank_wrap: {
     flex: 1,
-    alignItems: 'center',
-    paddingTop: 50
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  blank_cont: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  blank_icon_wrap: {
+    marginTop: -35
   },
   blank_icon: {
     fontSize: 70,

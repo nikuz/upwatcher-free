@@ -41,6 +41,11 @@ class Search extends React.Component {
       feeds: newProps.search.feeds
     });
   }
+  componentDidMount = async () => {
+    if (await this.props.checkPreviousRequest()) {
+      this.props.addFeedsRequest(this.state.feeds);
+    }
+  };
   render() {
     var props = this.props;
 
@@ -73,7 +78,8 @@ class Search extends React.Component {
 
 Search.propTypes = {
   search: React.PropTypes.object.isRequired,
-  addFeedsRequest: React.PropTypes.func.isRequired
+  addFeedsRequest: React.PropTypes.func.isRequired,
+  checkPreviousRequest: React.PropTypes.func.isRequired
 };
 
 export default Search;

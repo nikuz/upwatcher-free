@@ -8,9 +8,14 @@ export default stylesGenerator({
   },
   blank_wrap: {
     flex: 1,
-    paddingTop: 30,
     paddingLeft: 30,
-    paddingRight: 30
+    paddingRight: 30,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  blank_cont: {
+    flex: 1,
+    alignItems: 'center'
   },
   blank_text: {
     fontSize: 21,

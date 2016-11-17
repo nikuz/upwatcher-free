@@ -10,7 +10,6 @@ import * as overlayActions from '../../actions/overlay';
 import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
-import * as userController from '../../controllers/user';
 import SettingsView from './view';
 
 const mapStateToProps = function(state) {
@@ -41,7 +40,6 @@ const mapDispatchToProps = function(dispatch) {
         }
       });
       if (changed) {
-        userController.settingsSave(sData); // save settings on backend
         settingsModel.set(sData);
       }
       if (needToUpdateCache) {

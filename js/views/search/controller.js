@@ -6,10 +6,10 @@ import * as searchActions from '../../actions/search';
 import * as feedsActions from '../../actions/feeds';
 import * as searchModel from '../../models/search';
 import * as feedsModel from '../../models/feeds';
+import * as upworkModel from '../../models/upwork';
 import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
-import * as userController from '../../controllers/user';
 import SearchView from './view';
 
 const mapStateToProps = function(state) {
@@ -21,12 +21,15 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     addFeedsRequest: async function(value) {
-      var curFeedsValue = await searchModel.get();
+      var curFeedsValue = await searchModel.get(),
+        isVerifierWaiterActive = await upworkModel.getVerifierWaiter();
 
-      if (curFeedsValue !== value) {
-        userController.feedsSave(value); // save feeds value on backend
-
-        await searchModel.set(value);
+      // for initial search, when user will get an upwork token
+      // search request should be repeated
+      if (curFeedsValue !== value || isVerifierWaiterActive) {
+        if (!isVerifierWaiterActive) {
+          await searchModel.set(value);
+        }
         dispatch(searchActions.addFeeds(value));
 
         let response,
@@ -40,12 +43,13 @@ const mapDispatchToProps = function(dispatch) {
 
         dispatch(searchActions.feedsUpdateFinished());
 
-        if (response && response.jobs) {
+        if (response === null) {
+          return; // when user doesn't have an upwork token and upwork website was opened, controller will return null
+        } else if (response && response.jobs) {
           dispatch(errorActions.hide());
           feedsModel.set(response.jobs);
           if (response.jobs.length) {
             dispatch(feedsActions.update(response.jobs));
-            userController.lastJobDateSave(response.jobs[0].date_created)
           } else {
             dispatch(feedsActions.markAsEmpty());
           }
@@ -58,6 +62,9 @@ const mapDispatchToProps = function(dispatch) {
           }
         }
       }
+    },
+    checkPreviousRequest: async function() {
+      return await upworkModel.getVerifierWaiter();
     }
   };
 };

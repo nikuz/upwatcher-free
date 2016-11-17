@@ -53,18 +53,20 @@ class FeedsListBlank extends React.Component {
   render() {
     return (
       <View style={styles.blank_wrap}>
-        <Animated.View
-          style={{
-            transform: [{
-              translateY: this.state.animShiftTop
-            }]
-          }}
-          renderToHardwareTextureAndroid={true}
-        >
-          <MaterialIcons name="arrow-upward" style={styles.blank_icon} />
-        </Animated.View>
-        <Text style={styles.blank_text}>Please write your query </Text>
-        <Text style={styles.blank_text}>to the field above</Text>
+        <View style={styles.blank_cont}>
+          <Animated.View
+            style={[styles.blank_icon_wrap, {
+              transform: [{
+                translateY: this.state.animShiftTop
+              }]
+            }]}
+            renderToHardwareTextureAndroid={true}
+          >
+            <MaterialIcons name="arrow-upward" style={styles.blank_icon} />
+          </Animated.View>
+          <Text style={styles.blank_text}>Please write your query </Text>
+          <Text style={styles.blank_text}>to the field above</Text>
+        </View>
       </View>
     );
   }

@@ -16,10 +16,12 @@ class FavoritesBlank extends React.Component {
   render() {
     return (
       <View style={styles.blank_wrap}>
-        <Text style={styles.blank_text}>
-          To add work here, choose a work offer
-          which you like by <MaterialIcons name="favorite" style={styles.blank_icon} /> icon
-        </Text>
+        <View style={styles.blank_cont}>
+          <Text style={styles.blank_text}>
+            To add work here, choose a work offer
+            which you like by <MaterialIcons name="favorite" style={styles.blank_icon} /> icon
+          </Text>
+        </View>
       </View>
     );
   }

@@ -1,8 +1,7 @@
 'use strict';
 
 import {
-  Linking,
-  AppState
+  Linking
 } from 'react-native';
 import * as _ from 'underscore';
 import * as config from '../config';
@@ -10,6 +9,7 @@ import * as storage from '../modules/storage';
 import * as OAuth from '../modules/oauth';
 import * as settingsModel from '../models/settings';
 import * as searchModel from '../models/search';
+import * as upworkModel from '../models/upwork';
 import * as network from '../modules/network';
 import * as ajax from '../modules/ajax';
 
@@ -116,53 +116,35 @@ function getToken() {
 
 function getVerifier() {
   return new Promise(async function(resolve, reject) {
-    var {verifier, token} = await storage.get(['verifier', 'token']),
-      gotVerifier;
+    var {verifier, token} = await storage.get(['verifier', 'token']);
 
     if (verifier) {
+      await upworkModel.removeVerifierWaiter();
       return resolve(verifier);
     }
 
-    var finish = async function(verifier) {
-      // Linking.removeEventListener('url', parseLoadedUrl);
-      AppState.removeEventListener('change', stateChanged);
-      if (verifier) {
-        await storage.set('verifier', verifier);
-        resolve();
-      } else {
-        reject(`Can't get Upwork verifier`);
-      }
-    };
-
-    var stateChanged = async function(state) {
-      if (state === 'active') {
-        parseLoadedUrl({
-          url: await Linking.getInitialURL()
-        });
-      }
-    };
-
-    var parseLoadedUrl = function(event) {
-      if (gotVerifier) {
-        return;
-      }
-      var url = (event && event.url && event.url.split('&')) || [],
-        verifier;
-
-      _.each(url, function(item) {
+    let initialUrl = await Linking.getInitialURL();
+    if (initialUrl) {
+      _.each(initialUrl.split('&'), function(item) {
         if (item.indexOf('oauth_verifier') !== -1) {
           item = item.split('=');
           verifier = item[1];
-          gotVerifier = true;
         }
       });
-      finish(verifier);
-    };
+      if (verifier) {
+        await storage.set('verifier', verifier);
+        await upworkModel.removeVerifierWaiter();
+        return resolve(verifier);
+      }
+    }
+
+    await upworkModel.setVerifierWaiter();
 
     let url = `${config.UPWORK_URL}${config.UPWORK_VERIFIER_URL}?oauth_token=${token}`;
-    // Linking.addEventListener('url', parseLoadedUrl);
-    AppState.addEventListener('change', stateChanged);
-    Linking.openURL(url);
+    Linking.openURL(url).catch(function(err) {
+      reject(err);
+    });
+    resolve(null);
   });
 }
 
@@ -207,7 +189,22 @@ function login() {
 
     try {
       await getToken();
-      await getVerifier();
+    } catch (err) {
+      return reject(err);
+    }
+
+    let verifier;
+    try {
+      verifier = await getVerifier();
+    } catch (err) {
+      return reject(err);
+    }
+
+    if (verifier === null) {
+      return resolve(null);
+    }
+
+    try {
       await getAccess();
     } catch (err) {
       return reject(err);
@@ -228,11 +225,16 @@ function settingsFieldPrepare(field) {
 
 function getFeeds(value, page) {
   return new Promise(async function(resolve, reject) {
+    var loginAttempt;
     try {
       await network.check();
-      await login();
+      loginAttempt = await login();
     } catch (e) {
       return reject(e);
+    }
+
+    if (loginAttempt === null) {
+      return resolve(null);
     }
 
     if (!value) {
