@@ -16,7 +16,7 @@ class Ads extends React.Component {
   }
   request() {
     AdMobInterstitial.requestAd((err) => {
-      if (err) {
+      if (err && err.toString() !== 'Ad is already loaded.') { // most popular error
         this.props.errorHandler(err);
       }
     });
