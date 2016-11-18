@@ -54,5 +54,13 @@ export default stylesGenerator({
   logo: {
     width: 138,
     height: 30
+  },
+  title_logo: {
+    flexDirection: 'row'
+  },
+  free_text: {
+    marginLeft: 6,
+    fontSize: 14,
+    color: '#FFF'
   }
 });

@@ -69,11 +69,12 @@ class NavigatorBar extends Component {
   titleRender(route) {
     if (route.id === 'inbox') {
       return (
-        <View style={styles.title}>
+        <View style={[styles.title, styles.title_logo]}>
           <Image
             style={styles.logo}
             source={logo}
           />
+          <Text style={styles.free_text}>FREE</Text>
         </View>
       );
     } else {
