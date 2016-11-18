@@ -58,12 +58,17 @@ const mapDispatchToProps = function(dispatch) {
     getCategories: async function() {
       var response,
         responseErr,
+        networkError,
         categories = [];
 
       try {
         response = await upworkController.getCategories();
       } catch (err) {
-        responseErr = err;
+        if (err === 'network') {
+          networkError = err;
+        } else {
+          responseErr = err;
+        }
       }
 
       if (response && response.categories) {
@@ -76,9 +81,11 @@ const mapDispatchToProps = function(dispatch) {
         dispatch(settingsActions.updateCategories(categories));
       } else {
         dispatch(overlayActions.close());
-        dispatch(errorActions.show(this.getCategories.bind(this)));
         if (responseErr) {
+          dispatch(errorActions.show(this.getCategories.bind(this)));
           logsController.captureError(responseErr);
+        } else if (networkError) {
+          dispatch(errorActions.showNetwork());
         } else {
           logsController.captureMessage('Settings `getCategories` empty response');
         }

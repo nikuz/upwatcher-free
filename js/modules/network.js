@@ -10,7 +10,7 @@ function check() {
       if (isConnected) {
         resolve();
       } else {
-        reject('Internet connection error');
+        reject('network');
       }
     });
   });

@@ -22,20 +22,27 @@ const mapDispatchToProps = function(dispatch) {
   return {
     getJobInfo: async function(id) {
       var response,
-        responseErr;
+        responseErr,
+        networkError;
 
       try {
         response = await upworkController.getJobInfo(id);
       } catch (err) {
-        responseErr = err;
+        if (err === 'network') {
+          networkError = err;
+        } else {
+          responseErr = err;
+        }
       }
 
       if (response && response.profile) {
         dispatch(previewActions.update(response.profile));
       } else {
-        dispatch(errorActions.show(this.getJobInfo.bind(this, id)));
         if (responseErr) {
+          dispatch(errorActions.show(this.getJobInfo.bind(this, id)));
           logsController.captureError(responseErr);
+        } else if (networkError) {
+          dispatch(errorActions.showNetwork());
         } else {
           logsController.captureMessage('Preview Controller `getJobInfo` empty response');
         }

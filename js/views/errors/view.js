@@ -30,6 +30,7 @@ class Error extends React.Component {
     this.onPressRetry = this.onPressRetry.bind(this);
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this.onPressOk = this.onPressOk.bind(this);
   }
   show() {
     var appState = AppStore.getState();
@@ -60,6 +61,9 @@ class Error extends React.Component {
       this.props.error.retryHandler();
     }
   }
+  onPressOk() {
+    this.hide();
+  }
   componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.error.visible
@@ -73,20 +77,23 @@ class Error extends React.Component {
     }
   }
   render() {
-    var state = this.state;
-    return (
-      <Animated.View
-        style={[
-          styles.wrap,
-          {
-            top: state.animTop,
-            opacity: state.animOpacity
-          }
-        ]}
-      >
-        <Text style={styles.text}>
-          Something went wrong, please try again.
-        </Text>
+    var state = this.state,
+      text,
+      buttons;
+
+    if (this.props.error.type === 'network') {
+      text = 'Check your internet connection, then try again.';
+      buttons = (
+        <View style={styles.buttons}>
+          <ButtonBlue
+            text="Ok"
+            onPress={this.onPressOk}
+          />
+        </View>
+      );
+    } else {
+      text = 'Something went wrong, please try again.';
+      buttons = (
         <View style={styles.buttons}>
           <ButtonBlue
             text="Try again"
@@ -98,6 +105,21 @@ class Error extends React.Component {
             onPress={this.hide}
           />
         </View>
+      );
+    }
+
+    return (
+      <Animated.View
+        style={[
+          styles.wrap,
+          {
+            top: state.animTop,
+            opacity: state.animOpacity
+          }
+        ]}
+      >
+        <Text style={styles.text}>{text}</Text>
+        {buttons}
       </Animated.View>
     );
   }

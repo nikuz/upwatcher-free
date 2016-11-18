@@ -24,12 +24,17 @@ const mapDispatchToProps = function(dispatch) {
     refresh: async function() {
       dispatch(feedsActions.refreshStart());
       var response,
-        responseErr;
+        responseErr,
+        networkError;
 
       try {
         response = await upworkController.getFeeds();
       } catch (err) {
-        responseErr = err;
+        if (err === 'network') {
+          networkError = err;
+        } else {
+          responseErr = err;
+        }
       }
 
       dispatch(feedsActions.refreshStop());
@@ -42,9 +47,11 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(feedsActions.markAsEmpty());
         }
       } else {
-        dispatch(errorActions.show(this.refresh.bind(this)));
         if (responseErr) {
+          dispatch(errorActions.show(this.refresh.bind(this)));
           logsController.captureError(responseErr);
+        } else if (networkError) {
+          dispatch(errorActions.showNetwork());
         } else {
           logsController.captureMessage('Feeds list `refresh` empty response');
         }
@@ -53,12 +60,17 @@ const mapDispatchToProps = function(dispatch) {
     loadMoreJobs: async function(page) {
       dispatch(feedsActions.loadMoreJobsStart());
       var response,
-        responseErr;
+        responseErr,
+        networkError;
 
       try {
         response = await upworkController.getFeeds(null, page);
       } catch (err) {
-        responseErr = err;
+        if (err === 'network') {
+          networkError = err;
+        } else {
+          responseErr = err;
+        }
       }
 
       dispatch(feedsActions.loadMoreJobsStop());
@@ -70,9 +82,11 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(feedsActions.markAsFull());
         }
       } else {
-        dispatch(errorActions.show(this.loadMoreJobs.bind(this, page)));
         if (responseErr) {
+          dispatch(errorActions.show(this.loadMoreJobs.bind(this, page)));
           logsController.captureError(responseErr);
+        } else if (networkError) {
+          dispatch(errorActions.showNetwork());
         } else {
           logsController.captureMessage('Feeds list `loadMoreJobs` empty response');
         }

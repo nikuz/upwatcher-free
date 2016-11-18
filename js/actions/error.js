@@ -7,6 +7,12 @@ function show(handler) {
   };
 }
 
+function showNetwork() {
+  return {
+    type: 'ERROR_SHOW_NETWORK'
+  };
+}
+
 function hide() {
   return {
     type: 'ERROR_HIDE'
@@ -15,5 +21,6 @@ function hide() {
 
 export {
   show,
+  showNetwork,
   hide
 };
