@@ -27,7 +27,6 @@ class Switcher extends React.Component {
           <Switch
             value={props.checked}
             onValueChange={this.changeHandler}
-            disabled={props.disabled}
           />
         </View>
       </TouchableHighlight>
@@ -40,7 +39,6 @@ Switcher.propTypes = {
   title: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
-  disabled: React.PropTypes.bool,
   relations: React.PropTypes.string
 };
 

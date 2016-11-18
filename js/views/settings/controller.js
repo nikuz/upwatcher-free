@@ -28,8 +28,12 @@ const mapDispatchToProps = function(dispatch) {
       }
       dispatch(settingsActions.change(name, value));
     },
-    changeNotifications: function() {
+    changeNotifications: function(name, value) {
       dispatch(notificationsActions.show('settings'));
+      dispatch(settingsActions.change(name, value));
+      setTimeout(function() {
+        dispatch(settingsActions.change(name, false));
+      }, 500);
     },
     save: async function(sData) {
       var curSavedSettings = await settingsModel.get(),

@@ -60,7 +60,6 @@ class Settings extends React.Component {
           title="Notifications"
           name="notifyAllow"
           checked={sData.notifyAllow.value}
-          disabled={true}
         />
         <List
           changeHandler={props.change}
