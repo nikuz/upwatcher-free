@@ -56,10 +56,11 @@ class Settings extends React.Component {
           values={sData.workload.values}
         />
         <Switcher
-          changeHandler={props.change}
-          title="Allow notifications"
+          changeHandler={props.changeNotifications}
+          title="Notifications"
           name="notifyAllow"
           checked={sData.notifyAllow.value}
+          disabled={true}
         />
         <List
           changeHandler={props.change}
@@ -85,6 +86,7 @@ class Settings extends React.Component {
 Settings.propTypes = {
   settings: React.PropTypes.object.isRequired,
   change: React.PropTypes.func.isRequired,
+  changeNotifications: React.PropTypes.func.isRequired,
   save: React.PropTypes.func.isRequired,
   getCategories: React.PropTypes.func.isRequired
 };

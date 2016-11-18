@@ -8,6 +8,7 @@ import * as searchModel from '../../models/search';
 import * as settingsActions from '../../actions/settings';
 import * as feedsActions from '../../actions/feeds';
 import * as overlayActions from '../../actions/overlay';
+import * as notificationsActions from '../../actions/notifications';
 import * as errorActions from '../../actions/error';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
@@ -26,6 +27,9 @@ const mapDispatchToProps = function(dispatch) {
         value = Number(value);
       }
       dispatch(settingsActions.change(name, value));
+    },
+    changeNotifications: function() {
+      dispatch(notificationsActions.show());
     },
     save: async function(sData) {
       var curSavedSettings = await settingsModel.get(),

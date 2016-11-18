@@ -19,11 +19,16 @@ class Switcher extends React.Component {
     props.changeHandler(props.name, !props.checked);
   }
   render() {
+    var props = this.props;
     return (
       <TouchableHighlight style={styles.wrap} onPress={this.changeHandler} underlayColor="#EDEDED">
         <View style={styles.cont}>
-          <Text style={styles.title}>{this.props.title}</Text>
-          <Switch value={this.props.checked} onValueChange={this.changeHandler} />
+          <Text style={styles.title}>{props.title}</Text>
+          <Switch
+            value={props.checked}
+            onValueChange={this.changeHandler}
+            disabled={props.disabled}
+          />
         </View>
       </TouchableHighlight>
     );
@@ -35,6 +40,7 @@ Switcher.propTypes = {
   title: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   checked: React.PropTypes.bool.isRequired,
+  disabled: React.PropTypes.bool,
   relations: React.PropTypes.string
 };
 

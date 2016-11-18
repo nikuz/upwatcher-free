@@ -14,7 +14,12 @@ if (!session_id) {
 }
 
 function track(data, type) {
-  if(_.isString(data)) {
+  if (_.isError(data)) {
+    data = {
+      text: data.toString(),
+      type
+    };
+  } else if (_.isString(data)) {
     data = {
       text: data,
       type

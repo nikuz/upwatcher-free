@@ -1,6 +1,7 @@
 'use strict';
 
 export const APP_NAME = 'Upwatcher';
+export const PAID_APP_ID = 'com.selfproduct.upwatcher';
 
 // UPWORK
 export const UPWORK_URL = 'https://www.upwork.com';
@@ -18,4 +19,4 @@ export const FAVORITES_LIMIT = 50;
 
 // LOGGLY
 export const LOGGLY_URL = 'https://logs-01.loggly.com';
-export const LOGGLY_TAG = 'upwatcher-native';
+export const LOGGLY_TAG = 'upwatcher-free';
