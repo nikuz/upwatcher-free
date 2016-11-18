@@ -225,7 +225,7 @@ function loginHelper() {
     } catch (err) {
       responseErr = err;
     }
-    if (responseErr === 401 || responseErr === 403) {
+    if (responseErr == 401 || responseErr == 403) { // not strict comparison, because error can be string
       await flushAccess();
       try {
         response = await login();
