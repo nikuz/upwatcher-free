@@ -11,7 +11,7 @@ import android.content.res.Configuration;
 public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this);  // here
+        SplashScreen.show(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -21,7 +21,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "upwatcher";
+        return "upwatcher-free";
     }
 
     @Override

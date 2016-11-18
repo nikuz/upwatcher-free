@@ -33,7 +33,6 @@
 		C77FC29C205940B28A794F8C /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36122C5EDF26422D87C6C549 /* Foundation.ttf */; };
 		D93E5455241F4F99A0F234B0 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09252D0A28DF45769153BD44 /* EvilIcons.ttf */; };
 		7605B8107AE6458E8148BAE2 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDFB67456D8424A93F28A46 /* libSplashScreen.a */; };
-		EB739F341891474CA2CD5A8B /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C843A15BCAA5434ABD2D9527 /* libRNFIRMessaging.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,8 +214,6 @@
 		FEC1F1B18BCA41B4A64E07A5 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		4A52B4BBA1B249BAB6398310 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; name = "SplashScreen.xcodeproj"; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		3BDFB67456D8424A93F28A46 /* libSplashScreen.a */ = {isa = PBXFileReference; name = "libSplashScreen.a"; path = "libSplashScreen.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		3EFDEBF87C944E989AE212B9 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; name = "RNFIRMessaging.xcodeproj"; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		C843A15BCAA5434ABD2D9527 /* libRNFIRMessaging.a */ = {isa = PBXFileReference; name = "libRNFIRMessaging.a"; path = "libRNFIRMessaging.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,7 +242,6 @@
 				B8DB1582EE5541AC8B4F22BC /* libRCTOrientation.a in Frameworks */,
 				84989D805456468DA191BE42 /* libRNVectorIcons.a in Frameworks */,
 				7605B8107AE6458E8148BAE2 /* libSplashScreen.a in Frameworks */,
-				EB739F341891474CA2CD5A8B /* libRNFIRMessaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +388,6 @@
 				3187B2ECA5014249BAD9EFF3 /* RCTOrientation.xcodeproj */,
 				18C7A2F56BBF48B2BE45DFED /* RNVectorIcons.xcodeproj */,
 				4A52B4BBA1B249BAB6398310 /* SplashScreen.xcodeproj */,
-				3EFDEBF87C944E989AE212B9 /* RNFIRMessaging.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -844,7 +839,6 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = upwatcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -870,7 +864,6 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = upwatcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -925,7 +918,6 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -969,7 +961,6 @@
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

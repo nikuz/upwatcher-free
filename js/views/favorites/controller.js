@@ -6,7 +6,6 @@ import * as AppStateActions from '../../actions/state';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
 import * as errorActions from '../../actions/error';
-import * as notificationsActions from '../../actions/notifications';
 import FavoritesView from './view';
 
 const mapStateToProps = function(state) {
@@ -28,7 +27,6 @@ const mapDispatchToProps = function(dispatch) {
         data,
         onFavoriteHandler
       }));
-      dispatch(notificationsActions.hide());
       dispatch(errorActions.hide());
     }
   };

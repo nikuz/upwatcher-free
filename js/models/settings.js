@@ -34,7 +34,7 @@ const DEFAULT = {
     value: 5
   },
   notifyAllow: {
-    value: true
+    value: false
   },
   dndFrom: {
     value: '00:00'

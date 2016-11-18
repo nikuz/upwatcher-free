@@ -8,7 +8,6 @@ import * as feedsModel from '../../models/feeds';
 import * as favoritesActions from '../../actions/favorites';
 import * as favoritesModel from '../../models/favorites';
 import * as errorActions from '../../actions/error';
-import * as notificationsActions from '../../actions/notifications';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
 import FeedsListView from './view';
@@ -94,7 +93,6 @@ const mapDispatchToProps = function(dispatch) {
         data,
         onFavoriteHandler
       }));
-      dispatch(notificationsActions.hide());
       dispatch(errorActions.hide());
     }
   };

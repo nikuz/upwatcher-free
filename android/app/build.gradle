@@ -135,7 +135,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-fcm')
     compile project(':react-native-splash-screen')
     compile project(':react-native-vector-icons')
     compile project(':react-native-orientation')
@@ -153,5 +152,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
   from configurations.compile
   into 'libs'
 }
-
-apply plugin: 'com.google.gms.google-services'

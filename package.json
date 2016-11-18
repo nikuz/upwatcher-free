@@ -11,7 +11,6 @@
     "linkify-it": "^2.0.2",
     "react": "15.3.2",
     "react-native": "0.37.0",
-    "react-native-fcm": "^2.3.2",
     "react-native-orientation": "git+https://github.com/yamill/react-native-orientation",
     "react-native-share": "^1.0.17",
     "react-native-splash-screen": "^1.0.9",
