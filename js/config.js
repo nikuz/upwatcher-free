@@ -12,11 +12,6 @@ export const UPWORK_JOBS_CATEGORIES = '/api/profiles/v2/metadata/categories.json
 export const UPWORK_JOB_URL = '/api/profiles/v1/jobs/{id}.json';
 export const UPWORK_JOBS_DAYS_POSTED = '50';
 
-// proxy
-export const PROXY_URL = process.env.NODE_ENV === 'production'
-  ? 'http://upwatcher.selfproduct.com'
-  : 'http://192.168.1.135:8020';
-
 // cache
 export const JOBS_PER_PAGE = 20;
 export const FAVORITES_LIMIT = 50;

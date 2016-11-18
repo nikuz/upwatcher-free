@@ -1,4 +1,4 @@
-rootProject.name = 'upwatcher'
+rootProject.name = 'upwatcherfree'
 
 include ':app'
 include ':react-native-splash-screen'

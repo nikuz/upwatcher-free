@@ -1,4 +1,4 @@
-package com.selfproduct.upwatcher;
+package com.selfproduct.upwatcherfree;
 
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -21,7 +21,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "upwatcher-free";
+        return "upwatcherfree";
     }
 
     @Override

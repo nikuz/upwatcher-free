@@ -91,7 +91,7 @@ function getToken() {
         method: 'POST',
         format: 'text',
         data: {
-          oauth_callback: 'oauth2upwatcher://foo'
+          oauth_callback: 'oauth2upwatcherfree://foo'
         }
       }, async function(err, response) {
         if (err) {

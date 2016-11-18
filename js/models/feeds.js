@@ -2,7 +2,6 @@
 
 import * as _ from 'underscore';
 import * as storage from '../modules/storage';
-import * as userController from '../controllers/user';
 
 const storageCollectionName = 'feeds';
 
@@ -33,9 +32,6 @@ async function set(data) {
   _.each(data, (item, key) => {
     data[key] = _.pick(item, allowedFields);
   });
-  if (data.length) {
-    userController.lastJobDateSave(data[0].date_created)
-  }
   return await storage.set(storageCollectionName, data);
 }
 

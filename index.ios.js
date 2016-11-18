@@ -17,4 +17,4 @@ class App extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('upwatcher', () => App);
+AppRegistry.registerComponent('upwatcherfree', () => App);
