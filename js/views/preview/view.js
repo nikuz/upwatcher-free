@@ -281,7 +281,7 @@ class Preview extends React.Component {
     var props = this.props;
     if (await props.adsGetPermit()) {
       AdMobInterstitial.requestAd((err) => {
-        if (!err) {
+        if (!err && !this.componentUnmounted) {
           AdMobInterstitial.showAd((err) => {
             if (err) {
               props.adsErrorHandler(err);
