@@ -45,27 +45,52 @@ class Notifications extends React.Component {
     }
   }
   renderCont() {
-    return (
-      <View style={styles.wrap}>
-        <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
-        <View style={styles.cont}>
-
-          <Text style={styles.text}>
-            This option available only in paid version of &nbsp;
-            <Text style={styles.link_text} onPress={this.onPress}>
-              {config.APP_NAME}
-            </Text>
-          </Text>
-          <TouchableOpacity style={styles.badge} onPress={this.onPress}>
-            <Image
-              style={styles.badge_icon}
-              source={GooglePlayBadge}
-            />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
-      </View>
+    var button = (
+      <TouchableOpacity style={styles.badge} onPress={this.onPress}>
+        <Image
+          style={styles.badge_icon}
+          source={GooglePlayBadge}
+        />
+      </TouchableOpacity>
     );
+    switch (this.props.notifications.id) {
+      case 'settings':
+        return (
+          <View style={styles.wrap}>
+            <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
+            <View style={styles.cont}>
+              <Text style={styles.text}>
+                This option available only in the full version of &nbsp;
+                <Text style={styles.link_text} onPress={this.onPress}>
+                  {config.APP_NAME}
+                </Text>
+              </Text>
+              {button}
+            </View>
+            <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
+          </View>
+        );
+      default:
+        return (
+          <View style={styles.wrap}>
+            <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
+            <View style={styles.cont}>
+              <Text style={styles.text}>
+                Get the full version of &nbsp;
+                <Text style={styles.link_text} onPress={this.onPress}>
+                  {config.APP_NAME}
+                </Text>
+              </Text>
+              <View style={styles.options}>
+                <Text> - and you will get notifications about new work</Text>
+                <Text> - and ads will be disabled</Text>
+              </View>
+              {button}
+            </View>
+            <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
+          </View>
+        );
+    }
   }
   render() {
     return null;

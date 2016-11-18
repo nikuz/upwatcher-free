@@ -56,7 +56,7 @@ async function set(name, data) {
   if (!name) {
     errors.push(constants.REQUIRED(name));
   }
-  if (!_.isObject(name) && !data) {
+  if (!_.isObject(name) && _.isUndefined(data)) {
     errors.push(constants.REQUIRED(data));
   }
   if (errors.length) {

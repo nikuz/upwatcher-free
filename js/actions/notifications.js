@@ -1,8 +1,9 @@
 'use strict';
 
-function show() {
+function show(id) {
   return {
-    type: 'NOTIFICATIONS_SHOW'
+    type: 'NOTIFICATIONS_SHOW',
+    id
   };
 }
 

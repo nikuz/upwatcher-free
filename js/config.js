@@ -20,3 +20,6 @@ export const FAVORITES_LIMIT = 50;
 // LOGGLY
 export const LOGGLY_URL = 'https://logs-01.loggly.com';
 export const LOGGLY_TAG = 'upwatcher-free';
+
+// Adds
+export const ADDS_LIMIT = process.env.NODE_ENV === 'production' ? 10 : 2;

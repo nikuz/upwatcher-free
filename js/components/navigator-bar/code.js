@@ -9,8 +9,10 @@ import {
   Animated,
   BackAndroid
 } from 'react-native';
+import AppStore from '../../store';
 import * as _ from 'underscore';
 import * as device from '../../modules/device';
+import * as notificationsActions from '../../actions/notifications';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
 
@@ -47,6 +49,9 @@ class NavigatorBar extends Component {
     }
     return false;
   }
+  logoOnPress() {
+    AppStore.dispatch(notificationsActions.show());
+  }
   leftButtonRender(route) {
     if (route.backButton) {
       return (
@@ -69,12 +74,14 @@ class NavigatorBar extends Component {
   titleRender(route) {
     if (route.id === 'inbox') {
       return (
-        <View style={[styles.title, styles.title_logo]}>
-          <Image
-            style={styles.logo}
-            source={logo}
-          />
-          <Text style={styles.free_text}>FREE</Text>
+        <View style={styles.title}>
+          <TouchableOpacity onPress={this.logoOnPress} style={styles.title_logo}>
+            <Image
+              style={styles.logo}
+              source={logo}
+            />
+            <Text style={styles.free_text}>FREE</Text>
+          </TouchableOpacity>
         </View>
       );
     } else {

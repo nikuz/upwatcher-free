@@ -12,6 +12,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import cl.json.RNSharePackage;
+import com.sbugert.rnadmob.RNAdMobPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
           new SplashScreenReactPackage(),
           new OrientationPackage(),
           new VectorIconsPackage(),
-          new RNSharePackage()
+          new RNSharePackage(),
+          new RNAdMobPackage()
       );
     }
   };

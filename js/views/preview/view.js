@@ -22,9 +22,12 @@ import PaymentComponent from '../../components/payment/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
+import { AdMobInterstitial } from 'react-native-admob'
 import styles from './style';
 
 const linkify = Linkify();
+AdMobInterstitial.setTestDeviceID('EMULATOR');
+AdMobInterstitial.setAdUnitID(process.env.ADMOB_ID);
 
 class FeedbacksList extends React.Component {
   render() {
@@ -274,6 +277,24 @@ class Preview extends React.Component {
       candidates: (data.candidates && data.candidates.candidate.length) || 0
     });
   }
+  async showAdd() {
+    var props = this.props;
+    if (await props.adsGetPermit()) {
+      AdMobInterstitial.requestAd((err) => {
+        if (!err) {
+          AdMobInterstitial.showAd((err) => {
+            if (err) {
+              props.adsErrorHandler(err);
+            } else {
+              props.adsIncrementViewsCounter();
+            }
+          });
+        }
+      });
+    } else {
+      props.adsOpenPromoOverlay();
+    }
+  }
   componentWillReceiveProps(newProps) {
     if (newProps.preview) {
       this.setState({
@@ -289,6 +310,7 @@ class Preview extends React.Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       if (!this.componentUnmounted) {
+        this.showAdd();
         this.updateNavBarRightButton();
         if (!this.state.data.op_description) {
           this.props.getJobInfo(this.props.data.id);
@@ -504,7 +526,11 @@ Preview.propTypes = {
   preview: React.PropTypes.object.isRequired,
   navigator: React.PropTypes.object.isRequired,
   getJobInfo: React.PropTypes.func.isRequired,
-  openFeedbackOverlay: React.PropTypes.func.isRequired
+  openFeedbackOverlay: React.PropTypes.func.isRequired,
+  adsErrorHandler: React.PropTypes.func.isRequired,
+  adsGetPermit: React.PropTypes.func.isRequired,
+  adsIncrementViewsCounter: React.PropTypes.func.isRequired,
+  adsOpenPromoOverlay: React.PropTypes.func.isRequired
 };
 
 export default Preview;

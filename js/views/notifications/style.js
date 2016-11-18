@@ -28,6 +28,9 @@ export default stylesGenerator({
   badge: {
     marginTop: 12,
     alignItems: 'center'
+  },
+  options: {
+    marginTop: 10
   }
 });
 

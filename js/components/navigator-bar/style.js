@@ -56,7 +56,8 @@ export default stylesGenerator({
     height: 30
   },
   title_logo: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: 35
   },
   free_text: {
     marginLeft: 6,
