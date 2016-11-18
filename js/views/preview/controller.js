@@ -2,12 +2,10 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as config from '../../config';
-import * as adsModel from '../../models/ads';
 import * as previewActions from '../../actions/preview';
 import * as overlayActions from '../../actions/overlay';
 import * as errorActions from '../../actions/error';
-import * as notificationsActions from '../../actions/notifications';
+import * as adsActions from '../../actions/ads';
 import * as upworkController from '../../controllers/upwork';
 import * as logsController from '../../controllers/logs';
 import PreviewView from './view';
@@ -57,24 +55,8 @@ const mapDispatchToProps = function(dispatch) {
         component: cont
       }));
     },
-    adsErrorHandler: function(err) {
-      logsController.captureError(err);
-    },
-    adsGetPermit: async function() {
-      var counter = await adsModel.get(),
-        allow = counter < config.ADDS_LIMIT;
-
-      if (!allow) {
-        adsModel.refresh();
-      }
-
-      return allow;
-    },
-    adsIncrementViewsCounter: function() {
-      adsModel.increment();
-    },
-    adsOpenPromoOverlay: function() {
-      dispatch(notificationsActions.show('preview'));
+    showAdd: function() {
+      dispatch(adsActions.show());
     }
   };
 };

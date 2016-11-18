@@ -14,6 +14,7 @@ import Settings from './settings/controller';
 import OverlaysManager from './../views/overlays-manager/controller';
 import ErrorManager from './../views/errors/controller';
 import NotificationsManager from './../views/notifications/controller';
+import AdsManager from './../views/ads/controller';
 import NavigatorBar from './../components/navigator-bar/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
@@ -108,6 +109,7 @@ class Main extends React.Component {
         <OverlaysManager />
         <ErrorManager />
         <NotificationsManager />
+        <AdsManager />
       </View>
     );
   }

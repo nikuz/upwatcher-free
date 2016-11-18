@@ -11,6 +11,7 @@ import tabs from './tabs';
 import preview from './preview';
 import error from './error';
 import notifications from './notifications';
+import ads from './ads';
 
 const todoApp = combineReducers({
   state: appState,
@@ -22,7 +23,8 @@ const todoApp = combineReducers({
   tabs,
   preview,
   error,
-  notifications
+  notifications,
+  ads
 });
 
 export default todoApp;
