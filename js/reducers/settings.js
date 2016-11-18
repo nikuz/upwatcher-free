@@ -1,5 +1,6 @@
 'use strict';
 
+import * as _ from 'underscore';
 import * as settingsModel from '../models/settings';
 import {deepClone} from '../modules/object';
 
@@ -18,7 +19,9 @@ export default function settingsReducers(state = DEFAULT, action) {
 
     case 'SETTINGS_UPDATE_CATEGORIES': {
       let newState = deepClone(state);
-      newState.category2.values = action.data;
+      _.each(action.data, function(item) {
+        newState.category2.values[item] = item;
+      });
       return newState;
     }
 

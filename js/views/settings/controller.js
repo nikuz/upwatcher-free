@@ -64,16 +64,11 @@ const mapDispatchToProps = function(dispatch) {
 
       if (response && response.categories) {
         _.each(response.categories, item => {
-          categories.push({
-            [item.title]: item.title
-          });
+          categories.push(item.title);
         });
       }
 
       if (categories.length) {
-        categories.unshift({
-          'All': 'All',
-        });
         dispatch(settingsActions.updateCategories(categories));
       } else {
         dispatch(overlayActions.close());

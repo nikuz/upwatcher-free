@@ -60,7 +60,7 @@ class Notifications extends React.Component {
             <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
             <View style={styles.cont}>
               <Text style={styles.text}>
-                This option available only in the full version of &nbsp;
+                This option available only in the full version of&nbsp;
                 <Text style={styles.link_text} onPress={this.onPress}>
                   {config.APP_NAME}
                 </Text>
@@ -76,14 +76,14 @@ class Notifications extends React.Component {
             <TouchableOpacity style={styles.overlay_gap} onPress={this.hide} />
             <View style={styles.cont}>
               <Text style={styles.text}>
-                Get the full version of &nbsp;
+                Get the full version of&nbsp;
                 <Text style={styles.link_text} onPress={this.onPress}>
                   {config.APP_NAME}
                 </Text>
               </Text>
               <View style={styles.options}>
-                <Text> - and you will get notifications about new work</Text>
-                <Text> - and ads will be disabled</Text>
+                <Text style={styles.options_text}> - notifications about new work</Text>
+                <Text style={styles.options_text}> - no ads</Text>
               </View>
               {button}
             </View>

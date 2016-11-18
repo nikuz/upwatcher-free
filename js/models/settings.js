@@ -9,7 +9,9 @@ const storageCollectionName = 'settings';
 
 const DEFAULT = {
   category2: {
-    values: [],
+    values: {
+      'All': 'All'
+    },
     value: 'All',
     search: true // it is mean, that change this field will refresh search results
   },
@@ -22,14 +24,14 @@ const DEFAULT = {
     search: true
   },
   notifyInterval: {
-    values: [
-      {5: '5 minutes'},
-      {10: '10 minutes'},
-      {20: '20 minutes'},
-      {30: '30 minutes'},
-      {60: '1 hour'},
-      {180: '3 hours'}
-    ],
+    values: {
+      5: '5 minutes',
+      10: '10 minutes',
+      20: '20 minutes',
+      30: '30 minutes',
+      60: '1 hour',
+      180: '3 hours'
+    },
     value: 5
   },
   notifyAllow: {
@@ -42,33 +44,33 @@ const DEFAULT = {
     value: '06:00'
   },
   duration: {
-    values: [
-      {'All': 'All'},
-      {'Week': 'Week'},
-      {'Month': 'Month'},
-      {'Quarter': 'Quarter'},
-      {'Semester': 'Semester'},
-      {'Ongoing': 'Ongoing'}
-    ],
+    values: {
+      'All': 'All',
+      'Week': 'Week',
+      'Month': 'Month',
+      'Quarter': 'Quarter',
+      'Semester': 'Semester',
+      'Ongoing': 'Ongoing'
+    },
     value: 'All',
     search: true
   },
   jobType: {
-    values: [
-      {'All': 'All'},
-      {'Hourly': 'Hourly'},
-      {'Fixed': 'Fixed'}
-    ],
+    values: {
+      'All': 'All',
+      'Hourly': 'Hourly',
+      'Fixed': 'Fixed'
+    },
     value: 'All',
     search: true
   },
   workload: {
-    values: [
-      {'All': 'All'},
-      {'As needed': 'As needed'},
-      {'Part time': 'Part time'},
-      {'Full time': 'Full time'}
-    ],
+    values: {
+      'All': 'All',
+      'As needed': 'As needed',
+      'Part time': 'Part time',
+      'Full time': 'Full time'
+    },
     value: 'All',
     search: true
   },

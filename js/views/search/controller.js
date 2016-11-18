@@ -21,9 +21,12 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
     addFeedsRequest: async function(value) {
-      var curFeedsValue = await searchModel.get(),
-        isVerifierWaiterActive = await upworkModel.getVerifierWaiter();
+      let curFeedsValue = await searchModel.get();
+      if (!value && !curFeedsValue) {
+        return;
+      }
 
+      let isVerifierWaiterActive = await upworkModel.getVerifierWaiter();
       // for initial search, when user will get an upwork token
       // search request should be repeated
       if (!isVerifierWaiterActive && value) {

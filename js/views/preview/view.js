@@ -22,7 +22,7 @@ import PaymentComponent from '../../components/payment/code';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
-import { AdMobInterstitial } from 'react-native-admob'
+import { AdMobInterstitial } from 'react-native-admob';
 import styles from './style';
 
 const linkify = Linkify();

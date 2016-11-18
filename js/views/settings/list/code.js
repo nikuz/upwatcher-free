@@ -70,7 +70,7 @@ class List extends React.Component {
       values = props.values,
       selectorContent;
 
-    if (!values.length) {
+    if (props.name === 'category2' && _.size(values) === 1) {
       selectorContent = (
         <View style={styles.waiting}>
           <ActivityIndicator color="#43AC12" size="large" />
@@ -140,7 +140,7 @@ class List extends React.Component {
   }
   render() {
     var props = this.props,
-      value = props.value,
+      value = props.values[props.value],
       previewCont,
       disabled = this.props.disabled;
 
@@ -171,7 +171,7 @@ List.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number
   ]),
-  values: React.PropTypes.array.isRequired,
+  values: React.PropTypes.object.isRequired,
   disabled: React.PropTypes.bool,
   changeHandler: React.PropTypes.func.isRequired,
   getCategories: React.PropTypes.func

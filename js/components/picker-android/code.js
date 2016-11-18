@@ -16,11 +16,12 @@ class PickerAndroid extends Component {
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var values = deepClone(props.values);
-    _.each(values, function(item) {
-      if (_.keys(item)[0] == props.value) {
-        item.current = true;
-      }
+    var values = [];
+    _.each(props.values, function(value, key) {
+      values.push({
+        [key]: value,
+        current: key === props.value
+      });
     });
     this.state = {
       values,
@@ -82,7 +83,7 @@ class PickerAndroid extends Component {
 }
 
 PickerAndroid.propTypes = {
-  values: React.PropTypes.array.isRequired,
+  values: React.PropTypes.object.isRequired,
   value: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number

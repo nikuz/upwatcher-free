@@ -30,7 +30,11 @@ export default stylesGenerator({
     alignItems: 'center'
   },
   options: {
+    alignItems: 'center',
     marginTop: 10
+  },
+  options_text: {
+    width: 220
   }
 });
 
