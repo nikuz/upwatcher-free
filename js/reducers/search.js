@@ -1,6 +1,7 @@
 'use strict';
 
 const DEFAULT = {
+  visible: true,
   feeds: '',
   loading: false
 };
@@ -21,6 +22,16 @@ export default function searchReducers(state = DEFAULT, action) {
     case 'SEARCH_FEEDS_UPDATE_FINISHED':
       return Object.assign({}, state, {
         loading: false
+      });
+
+    case 'SEARCH_SHOW':
+      return Object.assign({}, state, {
+        visible: true
+      });
+
+    case 'SEARCH_HIDE':
+      return Object.assign({}, state, {
+        visible: false
       });
 
     default:

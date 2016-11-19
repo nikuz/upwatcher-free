@@ -4,7 +4,8 @@ import stylesGenerator from '../../../styles/generator';
 import * as device from '../../modules/device';
 
 export default stylesGenerator({
-  container: {
+  wrap: {
+    overflow: 'hidden',
     backgroundColor: '#FFF',
     elevation: 1,
     borderBottomWidth: device.platformVersion() < 21 ? 1 : 0,

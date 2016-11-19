@@ -20,8 +20,22 @@ function feedsUpdateFinished() {
   };
 }
 
+function show() {
+  return {
+    type: 'SEARCH_SHOW'
+  };
+}
+
+function hide() {
+  return {
+    type: 'SEARCH_HIDE'
+  };
+}
+
 export {
   defaultSet,
   addFeeds,
-  feedsUpdateFinished
+  feedsUpdateFinished,
+  show,
+  hide
 };
