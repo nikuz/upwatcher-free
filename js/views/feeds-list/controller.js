@@ -37,8 +37,6 @@ const mapDispatchToProps = function(dispatch) {
         }
       }
 
-      dispatch(feedsActions.refreshStop());
-
       if (response && response.jobs) {
         feedsModel.set(response.jobs);
         if (response.jobs.length) {
@@ -47,6 +45,7 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(feedsActions.markAsEmpty());
         }
       } else {
+        dispatch(feedsActions.refreshStop());
         if (responseErr) {
           dispatch(errorActions.show(this.refresh.bind(this)));
           logsController.captureError(responseErr);
@@ -73,8 +72,6 @@ const mapDispatchToProps = function(dispatch) {
         }
       }
 
-      dispatch(feedsActions.loadMoreJobsStop());
-
       if (response && response.jobs) {
         if (response.jobs.length) {
           dispatch(feedsActions.addMore(response.jobs));
@@ -82,6 +79,7 @@ const mapDispatchToProps = function(dispatch) {
           dispatch(feedsActions.markAsFull());
         }
       } else {
+        dispatch(feedsActions.loadMoreJobsStop());
         if (responseErr) {
           dispatch(errorActions.show(this.loadMoreJobs.bind(this, page)));
           logsController.captureError(responseErr);

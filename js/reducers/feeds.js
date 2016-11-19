@@ -21,12 +21,15 @@ export default function feedsReducers(state = DEFAULT, action) {
       return Object.assign({}, state, {
         data: action.data,
         full: false,
-        empty: false
+        empty: false,
+        refreshing: false
       });
 
     case 'FEEDS_ADD_MORE':
       return Object.assign({}, state, {
-        data: state.data.concat(action.data)
+        data: state.data.concat(action.data),
+        refreshing: false,
+        loading_more: false
       });
 
     case 'FEEDS_FILTER':
@@ -63,13 +66,15 @@ export default function feedsReducers(state = DEFAULT, action) {
 
     case 'FEEDS_MARK_AS_FULL':
       return Object.assign({}, state, {
-        full: true
+        full: true,
+        loading_more: false
       });
 
     case 'FEEDS_MARK_AS_EMPTY':
       return Object.assign({}, state, {
         data: [],
-        empty: true
+        empty: true,
+        refreshing: false
       });
 
     default:

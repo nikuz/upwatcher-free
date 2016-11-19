@@ -128,20 +128,27 @@ class FeedsList extends React.Component {
     }
   }
   componentWillReceiveProps(newProps) {
-    var feeds = this.checkFavorites(newProps.feeds.data, newProps.favorites);
+    var feeds = this.checkFavorites(newProps.feeds.data, newProps.favorites),
+      loadingMore = newProps.feeds.loading_more,
+      full = newProps.feeds.full,
+      empty = newProps.feeds.empty,
+      refreshing = newProps.feeds.refreshing;
+
     this.setState({
       feeds_count: feeds.length,
       dataSource: this.state.dataSource.cloneWithRows(feeds),
-      loading_more: newProps.feeds.loading_more,
-      refreshing: newProps.feeds.refreshing,
-      full: newProps.feeds.full,
-      empty: newProps.feeds.empty
+      loading_more: loadingMore,
+      refreshing: refreshing,
+      full: full,
+      empty: empty
     });
-    if (newProps.feeds.shouldBeRefresh) {
+
+    let updateBySearch = feeds.length <= config.JOBS_PER_PAGE && !loadingMore && !full && !empty && !refreshing;
+    if (newProps.feeds.shouldBeRefresh || updateBySearch) {
       this.refs.contList.scrollTo({
         x: 0,
         y: 0,
-        animated: true
+        animated: !updateBySearch && true
       });
     }
   }
