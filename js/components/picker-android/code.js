@@ -8,7 +8,6 @@ import {
   TouchableHighlight
 } from 'react-native';
 import * as _ from 'underscore';
-import {deepClone} from '../../modules/object';
 import * as device from '../../modules/device';
 import styles from './style';
 
@@ -20,7 +19,7 @@ class PickerAndroid extends Component {
     _.each(props.values, function(value, key) {
       values.push({
         [key]: value,
-        current: key === props.value
+        current: key == props.value
       });
     });
     this.state = {
